@@ -1,0 +1,29 @@
+.container {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto 1fr;
+
+    grid-template-areas:
+        "logo header"
+        "web  app";
+
+    width: 100%;
+    height: 100vh;
+}
+
+.logo {
+    grid-area: logo;
+}
+
+.header {
+    grid-area: header;
+}
+
+.web-content {
+    grid-area: web;
+}
+
+.app-content {
+    grid-area: app;
+}
