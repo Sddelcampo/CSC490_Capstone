@@ -1,4 +1,4 @@
-package com.capstone.Political.Pioneer;
+package com.politicalpioneer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
