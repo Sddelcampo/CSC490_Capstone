@@ -1,5 +1,11 @@
 package com.politicalpioneer.Party;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.politicalpioneer.Announcement.Announcement;
+import com.politicalpioneer.ForumPost.ForumPost;
+import com.politicalpioneer.PartyMember.PartyMember;
 import com.politicalpioneer.User.User;
 
 import jakarta.persistence.Column;
@@ -9,6 +15,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Party {
@@ -30,16 +37,29 @@ public class Party {
     @Column
     private String status;
 
+    @OneToMany(mappedBy="party")
+    private List<PartyMember> partyMember = new ArrayList<>();
+
+    @OneToMany(mappedBy="party")
+    private List<Announcement> ann = new ArrayList<>();
+
+    //Form post are made by the owner but through the party
+    @OneToMany(mappedBy="party")
+    private List<ForumPost> forumPost = new ArrayList<>();
+
     public Party() {};
    
     public Party(Long party_id, User user, String description, Float partyIdeology,
-        String status
+        String status, List<PartyMember> partyMembers, List<Announcement> ann, List<ForumPost> forumPost
      ) {
         this.party_id = party_id;
         this.user = user;
         this.description = description;
         this.party_ideology = partyIdeology;
         this.status = status;
+        this.partyMember = partyMembers;
+        this.ann = ann;
+        this.forumPost = forumPost;
     }
 
 
@@ -77,7 +97,29 @@ public class Party {
     }
 
 
-    
+    public List<PartyMember> getPartyMembers() {
+        return partyMember;
+    }
 
+    public void setPartyMember(List<PartyMember> partyMembers) {
+        this.partyMember = partyMembers;
+    }
+
+
+    public List<Announcement> getAnn() {
+        return ann;
+    }
+
+    public void setAnn(List<Announcement> ann) {
+        this.ann = ann;
+    }
+
+     public List<ForumPost> getForumPost() {
+        return forumPost;
+    }
+
+    public void setForumPost(List<ForumPost> forumPost) {
+        this.forumPost = forumPost;
+    }
 
 }
