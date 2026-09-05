@@ -2,6 +2,8 @@ package com.politicalpioneer.PartyMember;
 import java.io.DataOutput;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import org.springframework.data.auditing.DateTimeProvider;
@@ -18,6 +20,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import tools.jackson.databind.cfg.DateTimeFeature;
 
@@ -75,12 +78,14 @@ public class PartyMember {
     @Column
     private String status;
 
+
     public PartyMember(PartyMemberId id, User user, Party party, LocalDateTime joinDate, String status) {
         this.id = id;
         this.user = user;
         this.party = party;
         this.joinDate = joinDate;
         this.status = status;
+       
     }
 
     public PartyMemberId getId() {
@@ -123,8 +128,6 @@ public class PartyMember {
     public void setStatus(String status) {
         this.status = status;
     }
-
-
 
 
 

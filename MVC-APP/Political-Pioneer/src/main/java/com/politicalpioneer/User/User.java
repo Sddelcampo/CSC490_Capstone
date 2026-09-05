@@ -45,11 +45,11 @@ public class User {
     @Column(name = "role")
     private String role;
 
+    //Has no db representation
     @OneToMany(mappedBy = "user")
     private List<Party> parties = new ArrayList<>();
 
    
-
 
     // public User() {};
     public User(Long user_id, String first_name, String last_name , 
@@ -139,12 +139,12 @@ public class User {
         this.role = role;
     }
 
-    public List<Party> getParties() {
+    public List<Party> getParty() {
         return parties;
     }
 
-    public void setParties(List<Party> parties) {
-        this.parties = parties;
+    public void setParty(List<Party> party) {
+        this.parties = party;
     }
  
 }
