@@ -4,6 +4,8 @@ import com.politicalpioneer.User.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -12,16 +14,17 @@ import jakarta.persistence.ManyToOne;
 public class Party {
     @Id
     @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long party_id;
 
     @ManyToOne
-    @JoinColumn(name = "users")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column
+    @Column(name = "description", nullable = false)
     private String description;
 
-    @Column
+    @Column(name = "party_idology", nullable = false)
     private Float party_ideology;
 
     @Column
@@ -75,9 +78,6 @@ public class Party {
 
 
     
-
-    
-
 
 
 }

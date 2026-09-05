@@ -14,11 +14,11 @@ import jakarta.persistence.Table;
 
 //user can not be used as a table name
 @Entity
-@Table(name = "users")
+@Table(name = "\"user\"")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "users_id")
+    @Column(name = "user_id")
     private Long userId;
 
     @Column(name = "first_name", nullable = false)
