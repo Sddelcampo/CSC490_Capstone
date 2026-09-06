@@ -1,12 +1,8 @@
 package com.politicalpioneer.PartyMember;
-import java.io.DataOutput;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
-import org.springframework.data.auditing.DateTimeProvider;
 
 import com.politicalpioneer.Party.Party;
 import com.politicalpioneer.User.User;
@@ -58,18 +54,19 @@ class PartyMemberId implements Serializable {
 public class PartyMember {
     //References PartyMemberId class
     @Id
+    @Column(name="party_mem_id")
     private PartyMemberId id;
 
     //Passes / Maps User and Party Id to the composite id
     //of the partymember class
     @ManyToOne
     @MapsId("userId")
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "\"user\"")
     private User user;
 
     @ManyToOne
     @MapsId("partyId")
-    @JoinColumn(name = "party_id")
+    @JoinColumn(name = "party")
     private Party party;
 
     @Column(name="date_join", nullable = false)
@@ -77,6 +74,8 @@ public class PartyMember {
 
     @Column
     private String status;
+
+    protected PartyMember() {}
 
 
     public PartyMember(PartyMemberId id, User user, Party party, LocalDateTime joinDate, String status) {
@@ -128,11 +127,6 @@ public class PartyMember {
     public void setStatus(String status) {
         this.status = status;
     }
-
-
-
-
-
 
 
 }

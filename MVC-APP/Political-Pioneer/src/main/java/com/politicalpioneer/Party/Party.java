@@ -20,18 +20,21 @@ import jakarta.persistence.OneToMany;
 @Entity
 public class Party {
     @Id
-    @Column
+    @Column(name="party_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long party_id;
+    private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "\"user\"", nullable = false)
     private User user;
+
+    @Column
+    private String partyName;
 
     @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "party_idology", nullable = false)
+    @Column(name = "party_ideology", nullable = false)
     private Float party_ideology;
 
     @Column
@@ -49,11 +52,12 @@ public class Party {
 
     public Party() {};
    
-    public Party(Long party_id, User user, String description, Float partyIdeology,
+    public Party(Long id, User user, String partyName, String description, Float partyIdeology,
         String status, List<PartyMember> partyMembers, List<Announcement> ann, List<ForumPost> forumPost
      ) {
-        this.party_id = party_id;
+        this.id = id;
         this.user = user;
+        this.partyName = partyName;
         this.description = description;
         this.party_ideology = partyIdeology;
         this.status = status;
@@ -64,11 +68,11 @@ public class Party {
 
 
     public Long getPartyId() {
-        return party_id;
+        return id;
     }
 
-    public void setPartyId(Long partyId) {
-        this.party_id = partyId;
+    public void setPartyId(Long id) {
+        this.id = id;
     }
 
 
@@ -78,6 +82,14 @@ public class Party {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getPartyName() {
+        return partyName;
+    }
+
+    public void setPartyName(String partyName) {
+        this.partyName = partyName;
     }
 
     public String getDescription() {

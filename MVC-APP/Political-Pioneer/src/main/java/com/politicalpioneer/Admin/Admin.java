@@ -14,7 +14,7 @@ public class Admin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "admin_id")
-    private Long adminId;
+    private Long id;
 
     @Column(name = "fist_name", nullable = false)
     private String firstName;
@@ -30,8 +30,8 @@ public class Admin {
 
     public Admin() {}
 
-    public Admin(Long adminId, String firstName, String lastName, String userName, String password) {
-        this.adminId = adminId;
+    public Admin(Long id, String firstName, String lastName, String userName, String password) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
@@ -40,11 +40,11 @@ public class Admin {
 
 
     public Long getAdminId() {
-        return this.adminId;
+        return this.id;
     }
 
-    public void setAdminId(Long adminId) {
-        this.adminId = adminId;
+    public void setAdminId(Long id) {
+        this.id = id;
     }
 
     public String getFirstName() {
