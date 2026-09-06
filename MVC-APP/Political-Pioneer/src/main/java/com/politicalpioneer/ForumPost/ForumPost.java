@@ -1,7 +1,10 @@
 package com.politicalpioneer.ForumPost;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.politicalpioneer.Comment.Comment;
 import com.politicalpioneer.Party.Party;
 import com.politicalpioneer.User.User;
 
@@ -12,22 +15,27 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 
 @Entity
 public class ForumPost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long formPostId;
+    @Column(name="column_id")
+    private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "party_id", nullable = false)
+    @JoinColumn(name = "party", nullable = false)
     private Party party;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "\"user\"", nullable = false)
     private User user;
 
+    @OneToMany(mappedBy="forumPost")
+    private List<Comment> comment = new ArrayList<>();
+    
     private String title;
 
     private String content;
@@ -36,11 +44,12 @@ public class ForumPost {
 
     private boolean visibility;
 
+    protected ForumPost() {}
 
-    public ForumPost(Long formPostId, Party party, User user, String title, String content,
+    public ForumPost(Long id, Party party, User user, String title, String content,
         LocalDateTime createdTime, boolean visibility
     ) {
-        this.formPostId = formPostId;
+        this.id = id;
         this.party = party;
         this.user = user;
         this.title = title;
@@ -50,11 +59,11 @@ public class ForumPost {
     }
 
     public Long getFormPostId() {
-        return formPostId;
+        return id;
     }
 
-    public void setFormPostId(Long formPostId) {
-        this.formPostId = formPostId;
+    public void setFormPostId(Long id) {
+        this.id = id;
     }
 
     public Party getParty () {

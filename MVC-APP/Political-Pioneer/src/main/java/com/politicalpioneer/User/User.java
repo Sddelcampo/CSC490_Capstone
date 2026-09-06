@@ -2,6 +2,8 @@ package com.politicalpioneer.User;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.politicalpioneer.Comment.Comment;
+import com.politicalpioneer.ForumPost.ForumPost;
 import com.politicalpioneer.Party.Party;
 
 import jakarta.persistence.Column;
@@ -19,7 +21,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private Long userId;
+    private Long id;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -49,15 +51,22 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Party> parties = new ArrayList<>();
 
-   
+    @OneToMany(mappedBy = "user")
+    private List<ForumPost> forumPost = new ArrayList<>();
 
-    // public User() {};
-    public User(Long user_id, String first_name, String last_name , 
+    @OneToMany(mappedBy = "user")
+    private List<Comment> comment = new ArrayList<>();
+
+   
+    protected User() {};
+
+    public User(Long id, String first_name, String last_name , 
         String user_name, String password, String email, 
         Float user_ideology,String status, String role,
-        List<Party> parties
+        List<Party> parties, List<ForumPost> forumPost,
+        List<Comment> comment
     ) {
-        this.userId = user_id;
+        this.id = id;
         this.firstName = first_name;
         this.lastName = last_name;
         this.userName = user_name;
@@ -67,15 +76,18 @@ public class User {
         this.status = status;
         this.role = role;
         this.parties = parties;
+        this.forumPost = forumPost;
+        this.comment = comment;
+
 
     }
 
     public Long getUserId() {
-        return this.userId;
+        return this.id;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUserId(Long id) {
+        this.id = id;
     }
 
      public String getFirstName() {
@@ -147,5 +159,16 @@ public class User {
         this.parties = party;
     }
  
+    public List<ForumPost> getForumPost() {
+        return forumPost;
+    }
+
+    public List<Comment> getComment() {
+        return comment;
+    }
+
+    public void setComment(List<Comment> comment) {
+        this.comment = comment;
+    }
 }
 
