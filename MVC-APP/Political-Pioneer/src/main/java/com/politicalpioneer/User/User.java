@@ -170,5 +170,11 @@ public class User {
     public void setComment(List<Comment> comment) {
         this.comment = comment;
     }
+
+    @Override
+    public String toString() {
+        return "User [id = " + id + ", first name = " + firstName + ", last name = " + lastName + "email = " + email +
+        "status = " + status + "]";
+    }
 }
 

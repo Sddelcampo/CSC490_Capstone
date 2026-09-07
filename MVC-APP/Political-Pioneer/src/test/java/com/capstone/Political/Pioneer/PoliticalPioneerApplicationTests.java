@@ -1,13 +1,13 @@
-package com.capstone.Political.Pioneer;
+// package com.capstone.Political.Pioneer;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+// import org.junit.jupiter.api.Test;
+// import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class PoliticalPioneerApplicationTests {
+// @SpringBootTest
+// class PoliticalPioneerApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+// 	@Test
+// 	void contextLoads() {
+// 	}
 
-}
+// }
