@@ -3,6 +3,7 @@ package com.politicalpioneer.Party;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.politicalpioneer.Announcement.Announcement;
 import com.politicalpioneer.ForumPost.ForumPost;
 import com.politicalpioneer.PartyMember.PartyMember;
@@ -24,6 +25,7 @@ public class Party {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonBackReference("user-parties")
     @ManyToOne
     @JoinColumn(name = "\"user\"", nullable = false)
     private User user;
@@ -40,13 +42,16 @@ public class Party {
     @Column
     private String status;
 
+   
     @OneToMany(mappedBy="party")
     private List<PartyMember> partyMember = new ArrayList<>();
 
+    
     @OneToMany(mappedBy="party")
     private List<Announcement> ann = new ArrayList<>();
 
     //Form post are made by the owner but through the party
+   
     @OneToMany(mappedBy="party")
     private List<ForumPost> forumPost = new ArrayList<>();
 
@@ -132,6 +137,14 @@ public class Party {
 
     public void setForumPost(List<ForumPost> forumPost) {
         this.forumPost = forumPost;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
 }

@@ -1,7 +1,6 @@
 package com.politicalpioneer.User;
 
 import java.util.List;
-import java.util.Optional;
 
 
 import org.springframework.stereotype.Service;
@@ -54,6 +53,7 @@ public class UserService {
     }
 
 
+    
     public void deleteUserById(Long userId) {
     if (!userRepo.existsById(userId)) {
         throw new ResourceNotFoundException("User with ID " + userId + " not found");

@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.politicalpioneer.Comment.Comment;
 import com.politicalpioneer.Party.Party;
 import com.politicalpioneer.User.User;
@@ -29,6 +30,7 @@ public class ForumPost {
     @JoinColumn(name = "party", nullable = false)
     private Party party;
 
+    @JsonBackReference("user-posts")
     @ManyToOne
     @JoinColumn(name = "\"user\"", nullable = false)
     private User user;

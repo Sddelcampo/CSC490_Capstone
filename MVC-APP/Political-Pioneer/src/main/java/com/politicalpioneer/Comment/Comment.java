@@ -1,6 +1,7 @@
 package com.politicalpioneer.Comment;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.politicalpioneer.ForumPost.ForumPost;
 import com.politicalpioneer.User.User;
 
@@ -26,6 +27,7 @@ public class Comment {
     @JoinColumn(name="post", nullable = false)
     private ForumPost forumPost;
 
+    @JsonBackReference("user-comments")
     @ManyToOne
     @JoinColumn(name= "\"user\"", nullable = false)
     private User user;

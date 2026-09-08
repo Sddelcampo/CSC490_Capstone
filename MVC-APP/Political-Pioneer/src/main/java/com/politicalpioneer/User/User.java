@@ -2,6 +2,7 @@ package com.politicalpioneer.User;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.politicalpioneer.Comment.Comment;
 import com.politicalpioneer.ForumPost.ForumPost;
 import com.politicalpioneer.Party.Party;
@@ -13,7 +14,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-
+//Still need to implement
+//DTO, Security, Annotations for constraints, Exception Handling, Lomok
 //user can not be used as a table name
 @Entity
 @Table(name = "\"user\"")
@@ -48,12 +50,15 @@ public class User {
     private String role;
 
     //Has no db representation
+    @JsonManagedReference("user-parties")
     @OneToMany(mappedBy = "user")
     private List<Party> parties = new ArrayList<>();
 
+    @JsonManagedReference("user-posts")
     @OneToMany(mappedBy = "user")
     private List<ForumPost> forumPost = new ArrayList<>();
 
+    @JsonManagedReference("user-comments")
     @OneToMany(mappedBy = "user")
     private List<Comment> comment = new ArrayList<>();
 
@@ -78,7 +83,6 @@ public class User {
         this.parties = parties;
         this.forumPost = forumPost;
         this.comment = comment;
-
 
     }
 
