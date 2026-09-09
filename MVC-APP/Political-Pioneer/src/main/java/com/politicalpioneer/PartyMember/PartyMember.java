@@ -7,18 +7,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.politicalpioneer.Party.Party;
 import com.politicalpioneer.User.User;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapsId;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import tools.jackson.databind.cfg.DateTimeFeature;
+import jakarta.persistence.*;
 
 //Creates composite primary key for partymembers
 @Embeddable
