@@ -35,7 +35,7 @@ public class PartyController {
         }
         return ResponseEntity.ok(party);
     }
-
+    
     @GetMapping("/party/status/{status}")
     public ResponseEntity<List<Party>> getPartyByStatus(@PathVariable("status") String status) {
         List<Party> party = partyService.getPartyByStatus(status);
@@ -65,8 +65,8 @@ public class PartyController {
     }
 
    @PutMapping("/party/{id}")
-public ResponseEntity<Party> updatePartyById(@PathVariable("id") Long partyId, @RequestBody Party updatedParty) {
-    Party savedParty = partyService.updateParty(partyId, updatedParty);
+        public ResponseEntity<Party> updatePartyById(@PathVariable("id") Long partyId, @RequestBody Party updatedParty) {
+        Party savedParty = partyService.updateParty(partyId, updatedParty);
     return ResponseEntity.ok(savedParty);
 }
 }

@@ -3,7 +3,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.politicalpioneer.Party.Party;
 import com.politicalpioneer.User.User;
 
@@ -59,11 +59,13 @@ public class PartyMember {
 
     //Passes / Maps User and Party Id to the composite id
     //of the partymember class
+    
     @ManyToOne
     @MapsId("userId")
     @JoinColumn(name = "\"user\"")
     private User user;
 
+    @JsonBackReference("party-member")
     @ManyToOne
     @MapsId("partyId")
     @JoinColumn(name = "party")

@@ -2,6 +2,9 @@ package com.politicalpioneer.User;
 import java.util.ArrayList;
 import java.util.List;
 
+// import org.hibernate.annotations.CascadeType;
+import jakarta.persistence.CascadeType;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.politicalpioneer.Comment.Comment;
 import com.politicalpioneer.ForumPost.ForumPost;
@@ -49,9 +52,11 @@ public class User {
     @Column(name = "role")
     private String role;
 
+    //Temporary Cascade effect 
+    //Will delete the user party announcement etc
     //Has no db representation
     @JsonManagedReference("user-parties")
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Party> parties = new ArrayList<>();
 
     @JsonManagedReference("user-posts")

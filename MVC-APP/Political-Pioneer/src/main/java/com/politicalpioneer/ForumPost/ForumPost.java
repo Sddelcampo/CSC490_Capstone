@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.politicalpioneer.Comment.Comment;
 import com.politicalpioneer.Party.Party;
 import com.politicalpioneer.User.User;
@@ -26,6 +27,7 @@ public class ForumPost {
     @Column(name="column_id")
     private Long id;
 
+    @JsonBackReference("party-forum")
     @ManyToOne
     @JoinColumn(name = "party", nullable = false)
     private Party party;
@@ -35,6 +37,7 @@ public class ForumPost {
     @JoinColumn(name = "\"user\"", nullable = false)
     private User user;
 
+    @JsonManagedReference("post-ann")
     @OneToMany(mappedBy="forumPost")
     private List<Comment> comment = new ArrayList<>();
     

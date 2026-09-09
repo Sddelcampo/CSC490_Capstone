@@ -22,8 +22,9 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="commment_id")
     private Long id;
-
+    
     @ManyToOne
+    @JsonBackReference("post-ann")
     @JoinColumn(name="post", nullable = false)
     private ForumPost forumPost;
 

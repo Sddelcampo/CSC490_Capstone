@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.politicalpioneer.Announcement.Announcement;
 import com.politicalpioneer.ForumPost.ForumPost;
 import com.politicalpioneer.PartyMember.PartyMember;
 import com.politicalpioneer.User.User;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -43,16 +45,18 @@ public class Party {
     private String status;
 
    
+    @JsonManagedReference("party-member")
     @OneToMany(mappedBy="party")
     private List<PartyMember> partyMember = new ArrayList<>();
 
-    
-    @OneToMany(mappedBy="party")
+    @JsonManagedReference("party-ann")
+    @OneToMany(mappedBy="party", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Announcement> ann = new ArrayList<>();
 
     //Form post are made by the owner but through the party
    
-    @OneToMany(mappedBy="party")
+    @JsonManagedReference("party-forum")
+    @OneToMany(mappedBy="party", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ForumPost> forumPost = new ArrayList<>();
 
     public Party() {};
