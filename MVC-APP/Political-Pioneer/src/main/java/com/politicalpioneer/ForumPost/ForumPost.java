@@ -10,14 +10,7 @@ import com.politicalpioneer.Comment.Comment;
 import com.politicalpioneer.Party.Party;
 import com.politicalpioneer.User.User;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 
 @Entity
