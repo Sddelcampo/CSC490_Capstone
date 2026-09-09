@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.politicalpioneer.Party.Party;
 
 import jakarta.persistence.Column;
@@ -21,6 +22,7 @@ public class Announcement {
     @Column(name="annn_id")
     private Long id;
 
+    @JsonBackReference("party-ann")
     @ManyToOne()
     @JoinColumn(name="party", nullable = false)
     private Party party;
