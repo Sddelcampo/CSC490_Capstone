@@ -33,13 +33,15 @@ public class Comment {
     
     private String status;
 
-    @Column(nullable = false)
-    private boolean visibility;
+    //Manage in the future
+    //Provide a default to prevent json input 
+    // @Column(nullable = false)
+    private Boolean visibility;
 
     protected Comment() {}
 
     public Comment(Long id, ForumPost forumPost, User user, String content, LocalDateTime createdDate, 
-        String status, boolean visibility
+        String status, Boolean visibility
     ) {
         this.id = id;
         this.forumPost = forumPost;
@@ -99,11 +101,11 @@ public class Comment {
         this.status = status;
     }
 
-    public boolean getVisiblity() {
+    public Boolean getVisiblity() {
         return visibility;
     }
 
-    public void setVisibility(boolean visibility) {
+    public void setVisibility(Boolean visibility) {
         this.visibility = visibility;
     }
 

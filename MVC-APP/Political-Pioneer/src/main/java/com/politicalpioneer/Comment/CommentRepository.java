@@ -8,4 +8,5 @@ public interface CommentRepository extends JpaRepository<Comment, Long>{
     List<Comment> findByForumPostId(Long postId);
     List<Comment> findByStatus(String status);
     List<Comment> findByVisibility(boolean visibility);
+    List<Comment> findByUserId(Long id);
 }
