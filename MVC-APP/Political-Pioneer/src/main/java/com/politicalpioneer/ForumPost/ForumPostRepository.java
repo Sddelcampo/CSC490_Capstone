@@ -12,8 +12,9 @@ public interface ForumPostRepository extends JpaRepository<ForumPost, Long>{
     List<ForumPost> findByUserId(Long user);
     List<ForumPost> findByUserIdAndPartyId(Long userId, Long partyId);
 
-    List<ForumPost> findByPartyId(Long party);
+    ForumPost findByPartyId(Long party);
     List<ForumPost> findByTitle(String title);
+    
     
 }
 
