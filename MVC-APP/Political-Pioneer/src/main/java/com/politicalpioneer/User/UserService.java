@@ -43,21 +43,21 @@ public class UserService {
     }
 
     public User updateUser(Long userId, User updatedUser) {
-    User existingUser = userRepo.findById(userId)
-            .orElseThrow(() -> new ResourceNotFoundException("User with ID " + userId + " not found"));
-    existingUser.setFirstName(updatedUser.getFirstName());
-    existingUser.setLastName(updatedUser.getLastName());
-    existingUser.setPassword(updatedUser.getPassword());
-    existingUser.setEmail(updatedUser.getEmail());
-    return userRepo.save(existingUser);
+        User existingUser = userRepo.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User with ID " + userId + " not found"));
+        existingUser.setFirstName(updatedUser.getFirstName());
+        existingUser.setLastName(updatedUser.getLastName());
+        existingUser.setPassword(updatedUser.getPassword());
+        existingUser.setEmail(updatedUser.getEmail());
+        return userRepo.save(existingUser);
     }
 
 
     
     public void deleteUserById(Long userId) {
-    if (!userRepo.existsById(userId)) {
-        throw new ResourceNotFoundException("User with ID " + userId + " not found");
+        if (!userRepo.existsById(userId)) {
+            throw new ResourceNotFoundException("User with ID " + userId + " not found");
+        }
+        userRepo.deleteById(userId);
     }
-    userRepo.deleteById(userId);
-}
 }

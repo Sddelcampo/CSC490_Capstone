@@ -5,14 +5,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.politicalpioneer.ForumPost.ForumPost;
 import com.politicalpioneer.User.User;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 
 @Entity
@@ -40,13 +33,15 @@ public class Comment {
     
     private String status;
 
-    @Column(nullable = false)
-    private boolean visibility;
+    //Manage in the future
+    //Provide a default to prevent json input 
+    // @Column(nullable = false)
+    private Boolean visibility;
 
     protected Comment() {}
 
     public Comment(Long id, ForumPost forumPost, User user, String content, LocalDateTime createdDate, 
-        String status, boolean visibility
+        String status, Boolean visibility
     ) {
         this.id = id;
         this.forumPost = forumPost;
@@ -106,11 +101,11 @@ public class Comment {
         this.status = status;
     }
 
-    public boolean getVisiblity() {
+    public Boolean getVisiblity() {
         return visibility;
     }
 
-    public void setVisibility(boolean visibility) {
+    public void setVisibility(Boolean visibility) {
         this.visibility = visibility;
     }
 

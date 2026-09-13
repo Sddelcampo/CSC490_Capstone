@@ -10,15 +10,9 @@ import com.politicalpioneer.ForumPost.ForumPost;
 import com.politicalpioneer.PartyMember.PartyMember;
 import com.politicalpioneer.User.User;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import org.locationtech.jts.geom.Point;
+
+import jakarta.persistence.*;
 
 @Entity
 public class Party {
@@ -44,6 +38,8 @@ public class Party {
     @Column
     private String status;
 
+    @Column(name = "location", columnDefinition = "geography(Point, 4326)", nullable = false)
+    private Point location;
    
     @JsonManagedReference("party-member")
     @OneToMany(mappedBy="party")
@@ -53,7 +49,7 @@ public class Party {
     @OneToMany(mappedBy="party", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Announcement> ann = new ArrayList<>();
 
-    //Form post are made by the owner but through the party
+    //Forum post are made by the owner but through the party
    
     @JsonManagedReference("party-forum")
     @OneToMany(mappedBy="party", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -62,12 +58,13 @@ public class Party {
     public Party() {};
    
     public Party(Long id, User user, String partyName, String description, Float partyIdeology,
-        String status, List<PartyMember> partyMembers, List<Announcement> ann, List<ForumPost> forumPost
+        String status, Point location, List<PartyMember> partyMembers, List<Announcement> ann, List<ForumPost> forumPost
      ) {
         this.id = id;
         this.user = user;
         this.partyName = partyName;
         this.description = description;
+        this.location = location;
         this.party_ideology = partyIdeology;
         this.status = status;
         this.partyMember = partyMembers;
