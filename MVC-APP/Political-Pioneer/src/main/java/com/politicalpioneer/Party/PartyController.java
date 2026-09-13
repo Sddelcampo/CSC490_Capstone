@@ -1,5 +1,11 @@
 package com.politicalpioneer.Party;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -9,9 +15,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import jakarta.websocket.server.PathParam;
 
 @RestController 
 public class PartyController {
@@ -68,5 +73,15 @@ public class PartyController {
         public ResponseEntity<Party> updatePartyById(@PathVariable("id") Long partyId, @RequestBody Party updatedParty) {
         Party savedParty = partyService.updateParty(partyId, updatedParty);
     return ResponseEntity.ok(savedParty);
-}
+    }
+
+    @GetMapping("/party/search/location")
+    public ResponseEntity<List<Party>> searchPartiesByLocation(
+        @RequestParam double lat, 
+        @RequestParam double lng, 
+        @RequestParam(required = false, defaultValue = "1000000") double radius // Default radius is 1,000,000 meters (1,000 km, or ~621 miles)
+    ) {
+        List<Party> partiesNearby = partyService.getPartiesByLocation(lat, lng, radius);
+        return ResponseEntity.ok(partiesNearby);
+    }
 }

@@ -66,6 +66,10 @@ public class PartyService {
         }
     }
 
+    public List<Party> getPartiesByLocation(double lat, double lng, double radius) {
+        return partyRepo.findByLocationWithin(lat, lng, radius);
+    }
+
     public Party addParty(Party party) {
         if (party == null) {
             throw new BadRequestException("Party object null");
