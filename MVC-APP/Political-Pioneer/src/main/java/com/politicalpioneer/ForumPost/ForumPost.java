@@ -40,12 +40,12 @@ public class ForumPost {
 
     private LocalDateTime createdTime;
 
-    private boolean visibility;
+    private Boolean visibility;
 
     protected ForumPost() {}
 
     public ForumPost(Long id, Party party, User user, String title, String content,
-        LocalDateTime createdTime, boolean visibility
+        LocalDateTime createdTime, Boolean visibility
     ) {
         this.id = id;
         this.party = party;
@@ -96,11 +96,11 @@ public class ForumPost {
         this.createdTime = createdTime;
     }
 
-    public boolean getVisiblity() {
+    public Boolean getVisiblity() {
         return visibility;
     }
 
-    public void setVisibility(boolean visibility) {
+    public void setVisibility(Boolean visibility) {
         this.visibility = visibility;
     }
 }

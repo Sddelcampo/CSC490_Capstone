@@ -1,9 +1,12 @@
 package com.politicalpioneer.PartyMember;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.politicalpioneer.Party.Party;
 import com.politicalpioneer.User.User;
 
@@ -14,6 +17,10 @@ import jakarta.persistence.*;
 class PartyMemberId implements Serializable {
     private Long userId;
     private Long partyId;
+
+    public PartyMemberId() {
+
+    }
 
     public PartyMemberId(Long userId, Long partyId ) {
         this.userId = userId;
@@ -41,14 +48,16 @@ class PartyMemberId implements Serializable {
 @Entity
 @Table(name = "party_member")
 public class PartyMember {
+   
     //References PartyMemberId class
-    @Id
-    @Column(name="party_mem_id")
+    @JsonIgnore
+    @EmbeddedId
     private PartyMemberId id;
 
     //Passes / Maps User and Party Id to the composite id
     //of the partymember class
-    
+
+    @JsonBackReference("user-member")
     @ManyToOne
     @MapsId("userId")
     @JoinColumn(name = "\"user\"")
@@ -60,7 +69,7 @@ public class PartyMember {
     @JoinColumn(name = "party")
     private Party party;
 
-    @Column(name="date_join", nullable = false)
+    @Column(name = "date_join", nullable = false)
     private LocalDateTime joinDate;
 
     @Column
@@ -68,6 +77,7 @@ public class PartyMember {
 
     protected PartyMember() {}
 
+    
 
     public PartyMember(PartyMemberId id, User user, Party party, LocalDateTime joinDate, String status) {
         this.id = id;
@@ -78,6 +88,8 @@ public class PartyMember {
        
     }
 
+    //Allows jackson to parse through composite key
+    //get and return the user and party info
     public PartyMemberId getId() {
         return id;
     }
@@ -86,6 +98,8 @@ public class PartyMember {
         this.id = id;
     }
 
+    public Long getUserId() { return user.getUserId(); }
+    public Long getPartyId() { return party.getPartyId() ; }
 
     public User getUser() {
         return user;
