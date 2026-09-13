@@ -47,8 +47,6 @@ public class PartyService {
         }
         else {
             parties.sort((p1, p2) -> {
-                float p1Similarity;
-                float p2Similarity;
                 float p1IdeologySimilarity = p1.getPartyIdeology() - user.getUserIdeology();
                 float p2IdeologySimilarity = p2.getPartyIdeology() - user.getUserIdeology();
                 // Add section for weighting location
@@ -64,6 +62,10 @@ public class PartyService {
                 });
             return parties;
         }
+    }
+
+    public List<Party> getPartiesByLocation(double lat, double lng, double radius) {
+        return partyRepo.findByLocationWithin(lat, lng, radius);
     }
 
     public Party addParty(Party party) {
