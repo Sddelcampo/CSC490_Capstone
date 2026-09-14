@@ -67,6 +67,8 @@ public class Party {
         this.forumPost = forumPost;
     }
 
+   
+
 
     public Long getPartyId() {
         return id;
