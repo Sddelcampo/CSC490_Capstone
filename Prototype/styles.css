@@ -3,7 +3,7 @@
 .container {
     display: grid;
 
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: auto 1fr;
     grid-template-rows: auto 1fr;
 
     grid-template-areas:
@@ -16,6 +16,8 @@
 
 .logo {
     grid-area: logo;
+    background-image: url('images/deSebastian_perfect_hue_167.jpg');
+    padding: 5px;
 }
 
 .header {
