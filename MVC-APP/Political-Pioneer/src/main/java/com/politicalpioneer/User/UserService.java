@@ -23,15 +23,23 @@ public class UserService {
         this.userRepo = userRep;
     }
 
+    //Throw nothing [] not an error
     public List<User> getAllUsers() {
         return userRepo.findAll();
     }
 
+    //Fix status issue
     public List<User> getUserByStatus(String status) {
+        if(userRepo.findByRole(status) == null) {
+            throw new ResourceNotFoundException("User not found with");
+        }
         return userRepo.findByRole(status);
     }
 
     public User getUserById(Long userId) {
+        if(!userRepo.existsById(userId)) {
+            throw new ResourceNotFoundException("User not found with id: " + userId);
+        }
         return userRepo.findById(userId).orElse(null);
     }
 

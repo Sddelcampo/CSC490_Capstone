@@ -38,8 +38,8 @@ public class Party {
     @Column
     private String status;
 
-    @Column(name = "location", columnDefinition = "geography(Point, 4326)", nullable = false)
-    private Point location;
+    // @Column(name = "location", columnDefinition = "geography(Point, 4326)", nullable = false)
+    // private Point location;
    
     @JsonManagedReference("party-member")
     @OneToMany(mappedBy="party")
@@ -58,13 +58,14 @@ public class Party {
     public Party() {};
    
     public Party(Long id, User user, String partyName, String description, Float partyIdeology,
-        String status, Point location, List<PartyMember> partyMembers, List<Announcement> ann, List<ForumPost> forumPost
+        String status, //Point location
+         List<PartyMember> partyMembers, List<Announcement> ann, List<ForumPost> forumPost
      ) {
         this.id = id;
         this.user = user;
         this.partyName = partyName;
         this.description = description;
-        this.location = location;
+        // this.location = location;
         this.party_ideology = partyIdeology;
         this.status = status;
         this.partyMember = partyMembers;

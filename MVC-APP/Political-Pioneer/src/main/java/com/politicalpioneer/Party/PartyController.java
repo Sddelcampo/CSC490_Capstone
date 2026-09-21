@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+
 @RestController 
 public class PartyController {
     private final PartyService partyService;
@@ -69,13 +70,15 @@ public class PartyController {
     return ResponseEntity.ok(savedParty);
     }
 
-    @GetMapping("/party/search/location")
-    public ResponseEntity<List<Party>> searchPartiesByLocation(
-        @RequestParam double lat, 
-        @RequestParam double lng, 
-        @RequestParam(required = false, defaultValue = "1000000") double radius // Default radius is 1,000,000 meters (1,000 km, or ~621 miles)
-    ) {
-        List<Party> partiesNearby = partyService.getPartiesByLocation(lat, lng, radius);
-        return ResponseEntity.ok(partiesNearby);
-    }
+    // @GetMapping("/party/search/location")
+    // public ResponseEntity<List<Party>> searchPartiesByLocation(
+    //     @RequestParam double lat, 
+    //     @RequestParam double lng, 
+    //     @RequestParam(required = false, defaultValue = "1000000") double radius // Default radius is 1,000,000 meters (1,000 km, or ~621 miles)
+    // ) {
+    //     List<Party> partiesNearby = partyService.getPartiesByLocation(lat, lng, radius);
+    //     return ResponseEntity.ok(partiesNearby);
+    // }
+
+    
 }

@@ -21,15 +21,12 @@ public class ForumPostService {
     }
 
     public List<ForumPost> getAllForumPosts() {
-        if(forumRepo.findAll() == null) {
-            throw new ResourceNotFoundException("Forum Posts not found");
-        }
         return forumRepo.findAll();
     }
 
     public ForumPost getForumPostById(Long id) {
         if(!forumRepo.existsById(id)) {
-            throw new BadRequestException("Forum Post not found");
+            throw new ResourceNotFoundException("Forum Post not found");
         }
 
         return forumRepo.findById(id).orElse(null);
@@ -67,7 +64,5 @@ public class ForumPostService {
     }
 
     
-
-
 
 }

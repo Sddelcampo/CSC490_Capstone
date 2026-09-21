@@ -26,6 +26,10 @@ public class AnnouncementService {
     }
 
     public Announcement getAnnById(Long annId) {
+        if(!annRepo.existsById(annId)) {
+            throw new ResourceNotFoundException("Announcement does not exist with id " + annId);
+
+        }
        return annRepo.findById(annId).orElse(null);
     }
 
@@ -38,6 +42,9 @@ public class AnnouncementService {
     }
 
     public List<Announcement> getByTitle(String annTitle) {
+        if(annRepo.findByTitle(annTitle) == null) {
+            throw new ResourceNotFoundException("Announcement does not exist");
+        }
         return annRepo.findByTitle(annTitle);
     }
 
