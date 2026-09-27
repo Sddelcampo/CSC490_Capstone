@@ -30,18 +30,12 @@ public class PartyController {
     @GetMapping("/party/{id}")
     public ResponseEntity<Party> getPartyById(@PathVariable("id") Long id) {
         Party party = partyService.getPartyById(id);
-        if (party == null) {
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok(party);
     }
     
     @GetMapping("/party/status/{status}")
     public ResponseEntity<List<Party>> getPartyByStatus(@PathVariable("status") String status) {
         List<Party> party = partyService.getPartyByStatus(status);
-        if (party == null) {
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok(party);
     }
 
@@ -54,11 +48,6 @@ public class PartyController {
     @DeleteMapping("/party/delete/{id}")
     public ResponseEntity<Void> deletePartyById(@PathVariable("id") Long id){
         Party party = partyService.getPartyById(id);
-
-        if (party == null) {
-            return ResponseEntity.notFound().build();
-        }
-
         partyService.deletePartyById(id);
         return ResponseEntity.noContent().build();
 
@@ -67,7 +56,7 @@ public class PartyController {
    @PutMapping("/party/{id}")
         public ResponseEntity<Party> updatePartyById(@PathVariable("id") Long partyId, @RequestBody Party updatedParty) {
         Party savedParty = partyService.updateParty(partyId, updatedParty);
-    return ResponseEntity.ok(savedParty);
+        return ResponseEntity.ok(savedParty);
     }
 
     // @GetMapping("/party/search/location")
