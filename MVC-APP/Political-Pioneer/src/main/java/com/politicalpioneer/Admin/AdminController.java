@@ -3,15 +3,19 @@ package com.politicalpioneer.Admin;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+import com.politicalpioneer.User.User;
+
+
+@Controller
 public class AdminController {
     private final AdminService adminService;
 
@@ -20,6 +24,15 @@ public class AdminController {
     }
 
     @GetMapping("/admin")
+    public String getAllUsers(Model model) {
+        List<User> user = adminService.getAllUsers();
+        model.addAttribute("users", user);
+        return "admin";
+    }
+
+    
+
+    @GetMapping("/getAllAdmin")
     public ResponseEntity<List<Admin>> getAllAdmin(){
         List<Admin> admins = adminService.getAllAdmin();
         return ResponseEntity.ok(admins);
@@ -31,19 +44,19 @@ public class AdminController {
         return ResponseEntity.ok(admin);
     }
 
-    @PostMapping("/admin")
+    @PostMapping("/createAdmin")
     public ResponseEntity<Admin> addAdmin(@RequestBody Admin admin) {
         adminService.addAdmin(admin);
         return ResponseEntity.ok(admin);
     }
 
-    @PutMapping("/admin/{id}")
+    @PutMapping("/updateAdmin/{id}")
     public ResponseEntity<Admin> updateAdmin(@PathVariable("id") Long id, @RequestBody Admin updatedAdmin) {
         Admin admin = adminService.updateAdminById(id, updatedAdmin);
         return ResponseEntity.ok(admin);
     }
 
-    @DeleteMapping("/admin/{id}")
+    @DeleteMapping("/deleteAdmin/{id}")
     public ResponseEntity<Void> deleteAdminById(@PathVariable("id") Long id) {
         adminService.deleteAdminById(id);
         return ResponseEntity.noContent().build();

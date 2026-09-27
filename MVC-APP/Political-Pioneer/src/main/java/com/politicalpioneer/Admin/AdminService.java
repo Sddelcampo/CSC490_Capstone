@@ -2,14 +2,26 @@ package com.politicalpioneer.Admin;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.politicalpioneer.ResourceNotFoundException;
+import com.politicalpioneer.User.User;
+import com.politicalpioneer.User.UserRepository;
 
 @Service
 public class AdminService {
+
+    @Autowired
+    private UserRepository userRepo;
+
     
     private final AdminRepository adminRepo;
+
+    public List<User> getAllUsers() {
+        return userRepo.findAll();
+    }
+
 
     public Admin saveAdmin(Admin admin) {
         return adminRepo.save(admin);
