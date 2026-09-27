@@ -28,14 +28,25 @@ public class PartyService {
     }
 
     public Party getPartyById(Long partyId) {
+        if(!partyRepo.existsById(partyId)) {
+            throw new  ResourceNotFoundException("Party not found");
+        }
         return partyRepo.findById(partyId).orElse(null);
     }
 
     public List<Party> getPartyByStatus(String status) {
+        if(partyRepo.findByStatus(status) == null) {
+            throw new ResourceNotFoundException("Party not found");
+        }
+
         return partyRepo.findByStatus(status);
     }
 
     public Party getPartyByUserId(Long userId) {
+        if(partyRepo.findByUserId(userId) == null) {
+            throw new ResourceNotFoundException("Party not found");
+        }
+
         return partyRepo.findByUserId(userId);
     }
 
@@ -64,9 +75,9 @@ public class PartyService {
         }
     }
 
-    public List<Party> getPartiesByLocation(double lat, double lng, double radius) {
-        return partyRepo.findByLocationWithin(lat, lng, radius);
-    }
+    // public List<Party> getPartiesByLocation(double lat, double lng, double radius) {
+    //     return partyRepo.findByLocationWithin(lat, lng, radius);
+    // }
 
     public Party addParty(Party party) {
         if (party == null) {

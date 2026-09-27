@@ -21,9 +21,6 @@ public class CommentService {
     }
  
     public List<Comment> getAllComments() {
-        if (commentRepo.findAll() == null) {
-            throw new ResourceNotFoundException("Comments not found");
-        }
         return commentRepo.findAll();
     }
  
@@ -36,10 +33,16 @@ public class CommentService {
     }
  
     public List<Comment> getCommentsByPostId(Long postId) {
+        if(commentRepo.findByForumPostId(postId) == null) {
+            throw new ResourceNotFoundException("Comment not found with post Id " + postId);
+        }
         return commentRepo.findByForumPostId(postId);
     }
  
     public List<Comment> getCommentsByUserId(Long userId) {
+          if(commentRepo.findByUserId(userId) == null) {
+            throw new ResourceNotFoundException("Comment not found with user Id " + userId);
+        }
         return commentRepo.findByUserId(userId);
     }
  

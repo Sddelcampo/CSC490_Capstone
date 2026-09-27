@@ -29,9 +29,6 @@ public class AnnouncmentController {
     @GetMapping("/ann/{id}")
     public ResponseEntity<Announcement> getAnnById(@PathVariable("id") Long id) {
         Announcement ann = annService.getAnnById(id);
-        if (ann == null) {
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok(ann);
     }   
 
@@ -39,10 +36,6 @@ public class AnnouncmentController {
     @GetMapping("/ann/title/{title}")
     public ResponseEntity<List<Announcement>> getAnnByTitle(@PathVariable("title") String title) {
         List<Announcement> ann = annService.getByTitle(title);
-
-        if (ann == null) {
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok(ann);
     }
 

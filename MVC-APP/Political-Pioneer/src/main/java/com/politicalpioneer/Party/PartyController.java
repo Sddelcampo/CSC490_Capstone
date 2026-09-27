@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+
 @RestController 
 public class PartyController {
     private final PartyService partyService;
@@ -29,18 +30,12 @@ public class PartyController {
     @GetMapping("/party/{id}")
     public ResponseEntity<Party> getPartyById(@PathVariable("id") Long id) {
         Party party = partyService.getPartyById(id);
-        if (party == null) {
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok(party);
     }
     
     @GetMapping("/party/status/{status}")
     public ResponseEntity<List<Party>> getPartyByStatus(@PathVariable("status") String status) {
         List<Party> party = partyService.getPartyByStatus(status);
-        if (party == null) {
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok(party);
     }
 
@@ -53,11 +48,6 @@ public class PartyController {
     @DeleteMapping("/party/delete/{id}")
     public ResponseEntity<Void> deletePartyById(@PathVariable("id") Long id){
         Party party = partyService.getPartyById(id);
-
-        if (party == null) {
-            return ResponseEntity.notFound().build();
-        }
-
         partyService.deletePartyById(id);
         return ResponseEntity.noContent().build();
 
@@ -66,16 +56,18 @@ public class PartyController {
    @PutMapping("/party/{id}")
         public ResponseEntity<Party> updatePartyById(@PathVariable("id") Long partyId, @RequestBody Party updatedParty) {
         Party savedParty = partyService.updateParty(partyId, updatedParty);
-    return ResponseEntity.ok(savedParty);
+        return ResponseEntity.ok(savedParty);
     }
 
-    @GetMapping("/party/search/location")
-    public ResponseEntity<List<Party>> searchPartiesByLocation(
-        @RequestParam double lat, 
-        @RequestParam double lng, 
-        @RequestParam(required = false, defaultValue = "1000000") double radius // Default radius is 1,000,000 meters (1,000 km, or ~621 miles)
-    ) {
-        List<Party> partiesNearby = partyService.getPartiesByLocation(lat, lng, radius);
-        return ResponseEntity.ok(partiesNearby);
-    }
+    // @GetMapping("/party/search/location")
+    // public ResponseEntity<List<Party>> searchPartiesByLocation(
+    //     @RequestParam double lat, 
+    //     @RequestParam double lng, 
+    //     @RequestParam(required = false, defaultValue = "1000000") double radius // Default radius is 1,000,000 meters (1,000 km, or ~621 miles)
+    // ) {
+    //     List<Party> partiesNearby = partyService.getPartiesByLocation(lat, lng, radius);
+    //     return ResponseEntity.ok(partiesNearby);
+    // }
+
+    
 }

@@ -1,40 +1,244 @@
+<!-- 
+ CSC 490: The Political Pioneer
+ index.html 
+ Last updated: September 14, 2026
+
+ Description: This is the main HTML file for The Political Pioneer Web App, this will contain the
+ main structure including navigation, user information and login on the left side of the page, and 
+ the dashboard and main content of the app on the bottom right quadrant of the page.
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
-    <script src="script.js" defer></script>
-    <title>Political Pioneer</title>
-    
+<meta charset="UTF-8">
+<title>The Political Pioneer — User Homepage</title>
+<link rel="stylesheet" href="styles.css">
+<script src="script.js" defer></script>
 </head>
+<body class="page-dashboard page-portal">
 
-<body>
-    <div class="container">
-        <div class="logo">
-            <a href="index.html">
-                <img src="images/deSebastian_TPP_Logo.png" alt="The Political Pioneer Logo" width="250" height="250">
-            </a>
+  <!-- Creates a grid class to ensure we can split quadrants for logo, navigation, and the portal -->
+  <div class="grid">
+
+    <!-- Top Left Quadrant: Logo Implementation -->
+    <div class="quadrant q-logo">
+      <a href="index.html">
+        <!-- The Political Pioneer Logo: Created by Sebastian Del Campo -->>
+        <img src="images/deSebastian_TPP_Logo.png" alt="The Political Pioneer Logo">
+      </a>
+    </div>
+
+    <!-- Bottom Left Quadrant: Account, general info, & site navigation links -->
+    <div class="quadrant q-side">
+      <h2>Account &amp; Site Info</h2>
+      <div class="body">
+        <div class="account-block">
+          <div class="avatar-circle">&#128100;</div>
+          <div>
+            <p class="welcome-text">Welcome, User!</p>
+            <div class="account-links">
+              <a href="#">Log In</a>
+              <a href="#">Log Out</a>
+              <a href="#">My Profile</a>
+            </div>
+          </div>
+        </div>
+        <nav>
+          <a href="#">Home</a>
+          <a href="#">About Us</a>
+          <a href="#">Guide</a>
+          <a href="#">Settings</a>
+          <a href="#">Report a Concern</a>
+        </nav>
+        <div class="info-text">
+          <p style="margin-top:0;">The Political Pioneer is an independent, nonpartisan platform for
+             third-party organizing and voter engagement.</p>
+          <ul>
+            <li><a href="#">Report a Bug</a> — something broken? tell us</li>
+            <li><a href="#">Contact the Dev Team</a> — feedback &amp; feature requests</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Quadrant: The Political Pioneer Portal (TP2 Portal)
+     (largest area — Provides portal navigation and user/party usage) -->
+    <div class="quadrant q-portal">
+      <div class="body">
+
+        <!--Provides information for navigation within the portal along with a search bar and button-->
+        <div class="mastbar">
+          <div class="logo">TP2 <span>Portal</span></div>
+          <nav class="tabs">
+            <a href="#" class="active">Directory</a>
+            <a href="#">My Account</a>
+            <a href="#">Platforms</a>
+            <a href="#">Resources</a>
+            <a href="#">Collaborate</a>
+            <a href="#">Events</a>
+            <a href="#">Voter Tools</a>
+            <a href="#">Start a Party!</a>
+          </nav>
+          <div class="search">
+            <input type="text" placeholder="Search parties, platforms, issues...">
+            <button>Search</button>
+          </div>
         </div>
 
-        <header class="header">
-            <h1>Welcome, User!</h1>
-        </header>
+        <!-- Provies a way to navigate within the portal -->
+        <div class="breadcrumb">Home &gt; Directory &gt; Browse All Independent Parties</div>
 
-        <main class="web-content">
-            <br>
-            <dl>
-                <dt>Home</dt>
-                <dt>About Us</dt>
-                <dt>Contact</dt>
-                <dt>Report a Concern</dt>
-            </dl>
-        </main>
+        <!-- Ensures that the portal is formatted in a layout where you can read within 3 column blocks -->
+        <div class="layout">
 
-        <section class="app-content">
-            Application Contents
-        </section>
+          <!-- Left Sidebar -->
+          <div class="col-left">
+            <div class="module">
+              <h2>Browse by Category</h2>
+              <div class="module-body">
+                <ul>
+                  <li><a href="#">Environmental (12)</a></li>
+                  <li><a href="#">Labor &amp; Economy (9)</a></li>
+                  <li><a href="#">Civil Liberties (7)</a></li>
+                  <li><a href="#">Rural &amp; Agriculture (5)</a></li>
+                  <li><a href="#">Tech &amp; Innovation (4)</a></li>
+                  <li><a href="#">Regional / Local (18)</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="module gold">
+              <h2>By Region</h2>
+              <div class="module-body">
+                <ul>
+                  <li><a href="#">Northeast</a></li>
+                  <li><a href="#">Midwest</a></li>
+                  <li><a href="#">South</a></li>
+                  <li><a href="#">West</a></li>
+                  <li><a href="#">National</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="module">
+              <h2>Quick Links</h2>
+              <div class="module-body">
+                <ul>
+                  <li><a href="#">How to register a party</a></li>
+                  <li><a href="#">Ballot access guide</a></li>
+                  <li><a href="#">Collaboration board</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Center Bar -->
+          <div class="col-center">
+
+            <div class="stat-strip">
+              <span>Active parties: <b>52</b></span>
+              <span>Platforms updated this week: <b>14</b></span>
+              <span>Voters engaged: <b>8,204</b></span>
+            </div>
+
+            <div class="module red">
+              <h2>Featured Independent Parties</h2>
+              <div class="module-body" style="padding:0;">
+
+                <div class="party-row">
+                  <div class="party-swatch" style="background:#2E7D32;"></div>
+                  <div class="party-info">
+                    <div class="name">New Horizon Coalition</div>
+                    <div class="meta">Environmental &middot; National &middot; Founded 2019</div>
+                    <div class="tagline">Community-first climate policy and local resource cooperatives.</div>
+                    <a href="#">View platform</a> &nbsp;|&nbsp; <a href="#">Join discussion</a>
+                  </div>
+                </div>
+
+                <div class="party-row">
+                  <div class="party-swatch" style="background:#8E24AA;"></div>
+                  <div class="party-info">
+                    <div class="name">Union of Independent Workers</div>
+                    <div class="meta">Labor &amp; Economy &middot; Midwest &middot; Founded 2021</div>
+                    <div class="tagline">Cooperative ownership models and fair-wage advocacy.</div>
+                    <a href="#">View platform</a> &nbsp;|&nbsp; <a href="#">Join discussion</a>
+                  </div>
+                </div>
+
+                <div class="party-row">
+                  <div class="party-swatch" style="background:#EF6C00;"></div>
+                  <div class="party-info">
+                    <div class="name">Open Ledger Party</div>
+                    <div class="meta">Tech &amp; Innovation &middot; National &middot; Founded 2023</div>
+                    <div class="tagline">Transparent governance tools and civic tech infrastructure.</div>
+                    <a href="#">View platform</a> &nbsp;|&nbsp; <a href="#">Join discussion</a>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="module">
+              <h2>Recently Updated Platforms</h2>
+              <div class="module-body">
+                <ul>
+                  <li><a href="#">Rural Renewal Alliance</a> updated their agriculture policy — 2 hours ago</li>
+                  <li><a href="#">Civic Trust Party</a> added a new resource guide — yesterday</li>
+                  <li><a href="#">Coastal Futures</a> posted an event: town hall, Sept 20 — 2 days ago</li>
+                </ul>
+              </div>
+            </div>
+
+            <div style="text-align:center; margin: 10px 0;">
+              <a href="#" class="btn primary">+ Start a New Party Page</a>
+              <a href="#" class="btn">Browse All 52 Parties &raquo;</a>
+            </div>
+
+          </div>
+
+          <!-- Right Sidebar -->
+          <div class="col-right">
+            <div class="module">
+              <h2>Resources</h2>
+              <div class="module-body">
+                <ul>
+                  <li><a href="#">Petition builder</a></li>
+                  <li><a href="#">Volunteer matcher</a></li>
+                  <li><a href="#">Fundraising toolkit</a></li>
+                  <li><a href="#">Media kit templates</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="module gold">
+              <h2>Collaboration Board</h2>
+              <div class="module-body">
+                <p style="margin-top:0;">Parties looking for partners on shared initiatives:</p>
+                <ul>
+                  <li><a href="#">Water rights coalition (3 parties)</a></li>
+                  <li><a href="#">Small business relief (5 parties)</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="ticker">
+              <b>Ticker:</b> New voter guide published &middot; 3 parties merged resources this week
+              &middot; Registration deadline in 12 days
+            </div>
+          </div>
+
+        </div>
+
+        <div class="footer">
+          The Political Pioneer &mdash; a home for independent political organizing &middot;
+          <a href="#">About</a> &middot; <a href="#">Terms</a> &middot; <a href="#">Contact</a>
+        </div>
+
+      </div>
     </div>
-</body>
 
+  </div>
+
+</body>
 </html>

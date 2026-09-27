@@ -29,19 +29,12 @@ public class UserController {
     @GetMapping("/users/{id}")
     public ResponseEntity<User> getUserById(@PathVariable("id") Long id) {
         User user = userService.getUserById(id);
-        if (user == null) {
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok(user);
     }
 
     @GetMapping("/users/role/{status}")
     public ResponseEntity<List<User>> getUserByRole(@PathVariable("status") String status) {
         List<User> users = userService.getUserByStatus(status);
-
-        if (users == null) {
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok(users);
     }
 

@@ -1,0 +1,167 @@
+<!-- 
+ CSC 490: The Political Pioneer
+ admin.html 
+ Last updated: September 14, 2026
+
+ Description: This is the main HTML file for The Political Pioneer for an admin, this
+ layout will contain database information which can then be added, edited, and deleted
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>The Political Pioneer — Admin Panel</title>
+<link rel="stylesheet" href="styles.css">
+<script src="script.js" defer></script>
+</head>
+<body class="page-dashboard page-admin">
+
+  <!-- Creates grid following index.html style -->
+  <div class="grid">
+
+    <!-- Top Left Quadrant: Logo Implementation -->
+    <div class="quadrant q-logo">
+      <a href="index.html">
+        <img src="images/deSebastian_TPP_Logo.png" alt="The Political Pioneer Logo">
+      </a>
+    </div>
+
+    <!-- Bottom Left Quadrant: Account, general info, & site navigation links -->
+    <div class="quadrant q-side">
+      <h2>Account &amp; Site Info</h2>
+      <div class="body">
+        <div class="account-block">
+          <div class="avatar-circle">&#128100;</div>
+          <div>
+            <p class="welcome-text">Welcome, Admin!</p>
+            <div class="account-links">
+              <a href="#">Log In</a>
+              <a href="#">Log Out</a>
+              <a href="#">My Profile</a>
+            </div>
+          </div>
+        </div>
+        <nav>
+          <a href="#">Home</a>
+          <a href="#">About Us</a>
+          <a href="#">Guide</a>
+          <a href="#">Settings</a>
+          <a href="#">Review a Concern</a>
+        </nav>
+        <div class="info-text">
+          <p style="margin-top:0;">Admin Panel &mdash; internal tools for moderating reports, managing parties, and reviewing platform activity.</p>
+          <ul>
+            <li><a href="#">Escalate to lead admin</a></li>
+            <li><a href="#">Contact the Dev Team</a> — feedback &amp; feature requests</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Right Quadrant: Admin main area -->
+    <div class="quadrant q-portal">
+      <div class="body">
+
+        <!--Provides information for navigation within the portal along with a search bar and button-->
+        <div class="mastbar">
+          <div class="logo">TP2 <span>Admin</span></div>
+          <nav class="tabs">
+            <a href="#" class="active">Dashboard</a>
+            <a href="#">Users</a>
+            <a href="#">Parties</a>
+            <a href="#">Reports</a>
+            <a href="#">Inbox</a>
+          </nav>
+          <div class="search">
+            <input type="text" placeholder="Search users, parties, reports...">
+            <button>Search</button>
+          </div>
+        </div>
+
+        <!-- Provies a way to navigate within the portal -->
+        <div class="breadcrumb">Admin &gt; Dashboard &gt; Reported Concerns</div>
+
+        <!-- Ensure that admin layout is formatted -->
+        <div class="admin-content">
+
+          <!-- Provides information of concerns to view and approve along with party
+           creation verification -->
+          <div class="stat-strip">
+            <span>Open concerns: <b>7</b></span>
+            <span>Resolved today: <b>3</b></span>
+            <span>Pending party approvals: <b>2</b></span>
+          </div>
+
+          <!-- Establishes a table to track information from the database-->
+          <div class="module red">
+            <h2>Reported Concerns</h2>
+            <div class="module-body" style="padding:0;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Reported User</th>
+                    <th>Report Detail</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>0001</td>
+                    <td>jsmith22</td>
+                    <td>partyOrganizer_04</td>
+                    <td>Inappropriate language in platform description</td>
+                    <td class="action-cell"><a href="#">Review</a><a href="#">Dismiss</a></td>
+                  </tr>
+                  <tr>
+                    <td>0002</td>
+                    <td>voter_kelly</td>
+                    <td>coastal_futures</td>
+                    <td>Duplicate party listing</td>
+                    <td class="action-cell"><a href="#">Review</a><a href="#">Dismiss</a></td>
+                  </tr>
+                  <tr>
+                    <td>0003</td>
+                    <td>m.reyes</td>
+                    <td>openledgerparty</td>
+                    <td>Spam links in resource section</td>
+                    <td class="action-cell"><a href="#">Review</a><a href="#">Dismiss</a></td>
+                  </tr>
+                  <tr>
+                    <td>0004</td>
+                    <td>t_nguyen</td>
+                    <td>ruralrenewal</td>
+                    <td>Misleading ballot access claim</td>
+                    <td class="action-cell"><a href="#">Review</a><a href="#">Dismiss</a></td>
+                  </tr>
+                  <tr>
+                    <td>0005</td>
+                    <td>anon_user_88</td>
+                    <td>civictrustparty</td>
+                    <td>Harassment in collaboration board comments</td>
+                    <td class="action-cell"><a href="#">Review</a><a href="#">Dismiss</a></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Logs all admin activities to ensure that operations run smoothly-->
+          <div class="module">
+            <h2>Recent Admin Activity</h2>
+            <div class="module-body">
+              <ul>
+                <li>Admin <b>d.torres</b> approved a new party listing — 1 hour ago</li>
+                <li>Admin <b>k.patel</b> resolved concern #0098 — 3 hours ago</li>
+                <li>Admin <b>j.lee</b> dismissed concern #0095 — yesterday</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
