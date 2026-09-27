@@ -17,15 +17,18 @@ public class PartyMemberService {
     }
 
     public PartyMemberService(PartyMemberRepository memberRepo) {
-         this.memberRepo = memberRepo;
+        this.memberRepo = memberRepo;
     }
 
     public List<PartyMember> getAllPartyMembers() {
-    return memberRepo.findAll();
+        return memberRepo.findAll();
     }
 
     public List<PartyMember> getPMByPartyId(Long partyId) {
         // memberRepo.findByIdPartyId(partyId);
+        if(memberRepo.findByIdPartyId(partyId) == null) {
+            throw new ResourceNotFoundException("Party member does not exist");
+        }
         return memberRepo.findByIdPartyId(partyId);
     }
 
