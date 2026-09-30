@@ -9,6 +9,7 @@ import com.politicalpioneer.Announcement.Announcement;
 import com.politicalpioneer.ForumPost.ForumPost;
 import com.politicalpioneer.PartyMember.PartyMember;
 import com.politicalpioneer.User.User;
+import com.politicalpioneer.Party.PartyAlignment.*;
 
 import org.locationtech.jts.geom.Point;
 
@@ -32,9 +33,10 @@ public class Party {
     @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "party_ideology", nullable = false)
-    private Float party_ideology;
-
+    @JsonManagedReference("party_alignment")
+    @OneToOne(mappedBy = "party", cascade = CascadeType.ALL, orphanRemoval = true)
+    private PartyAlignment partyAlignment;
+    
     @Column
     private String status;
 
@@ -57,7 +59,7 @@ public class Party {
 
     public Party() {};
    
-    public Party(Long id, User user, String partyName, String description, Float partyIdeology,
+    public Party(Long id, User user, String partyName, String description, PartyAlignment partyAlignment,
         String status, //Point location
          List<PartyMember> partyMembers, List<Announcement> ann, List<ForumPost> forumPost
      ) {
@@ -66,7 +68,7 @@ public class Party {
         this.partyName = partyName;
         this.description = description;
         // this.location = location;
-        this.party_ideology = partyIdeology;
+        this.partyAlignment = partyAlignment;
         this.status = status;
         this.partyMember = partyMembers;
         this.ann = ann;
@@ -109,12 +111,12 @@ public class Party {
         this.description = description;
     }
 
-    public Float getPartyIdeology() {
-        return party_ideology;
+    public PartyAlignment getPartyAlignment() {
+        return partyAlignment;
     }
 
-    public void setPartyIdeology(Float partyIdeology) {
-        this.party_ideology = partyIdeology;
+    public void setPartyAlignment(PartyAlignment partyAlignment) {
+        this.partyAlignment = partyAlignment;
     }
 
 

@@ -1,23 +1,23 @@
-package com.politicalpioneer.User.UserAlignment;
+package com.politicalpioneer.Party.PartyAlignment;
 
-import com.politicalpioneer.User.*;
+import com.politicalpioneer.Party.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "\"user-alignment\"")
-public class UserAlignment {
+@Table(name = "\"party-alignment\"")
+public class PartyAlignment {
     @Id
-    @Column(name = "alignment_id")
+    @Column(name = "party_alignment_id")
     private Long id;
     
-    @JsonBackReference("user_alignment")
+    @JsonBackReference("party_alignment")
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "party_id")
+    private Party party;
 
     @Column(name = "freemarket_alignment", nullable = false)
     private int freemarketAlignment;
@@ -40,7 +40,7 @@ public class UserAlignment {
     @Column(name = "technological_advancement_alignment", nullable = false)
     private int technologicalAdvancementAlignment;
 
-    public UserAlignment() {
+    public PartyAlignment() {
         this.freemarketAlignment = 0;
         this.governmentInvolvementAlignment = 0;
         this.socialFreedomAlignment = 0;
@@ -50,7 +50,7 @@ public class UserAlignment {
         this.technologicalAdvancementAlignment = 0;
     };
 
-    public UserAlignment(int freemarketAlignment, int governmentInvolvementAlignment, int socialFreedomAlignment, int foreignInvolvementAlignment, int gunControlAlignment, int environmentalAlignment, int technologicalAdvancementAlignment) {
+    public PartyAlignment(int freemarketAlignment, int governmentInvolvementAlignment, int socialFreedomAlignment, int foreignInvolvementAlignment, int gunControlAlignment, int environmentalAlignment, int technologicalAdvancementAlignment) {
         this.freemarketAlignment = freemarketAlignment;
         this.governmentInvolvementAlignment = governmentInvolvementAlignment;
         this.socialFreedomAlignment = socialFreedomAlignment;
