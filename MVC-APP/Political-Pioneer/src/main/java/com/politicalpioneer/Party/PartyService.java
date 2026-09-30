@@ -50,6 +50,7 @@ public class PartyService {
         return partyRepo.findByUserId(userId);
     }
 
+    /*
     public List<Party> getPartiesDefault(Long userID) {
         User user = userRepository.findById(userID).orElse(null);
         List<Party> parties = getAllParties();
@@ -58,8 +59,8 @@ public class PartyService {
         }
         else {
             parties.sort((p1, p2) -> {
-                float p1IdeologySimilarity = p1.getPartyIdeology() - user.getUserIdeology();
-                float p2IdeologySimilarity = p2.getPartyIdeology() - user.getUserIdeology();
+                List<Integer> p1IdeologySimilarity = p1.getPartyAlignment() - user.getPoliticalAlignment();
+                List<Integer> p2IdeologySimilarity = p2.getPartyAlignment() - user.getPoliticalAlignment();
                 // Add section for weighting location
                 if (p1IdeologySimilarity < p2IdeologySimilarity) {
                         return -1;
@@ -74,6 +75,7 @@ public class PartyService {
             return parties;
         }
     }
+    */
 
     // public List<Party> getPartiesByLocation(double lat, double lng, double radius) {
     //     return partyRepo.findByLocationWithin(lat, lng, radius);
@@ -91,7 +93,7 @@ public class PartyService {
         Party existingParty = partyRepo.findById(partyId).orElseThrow(() ->
         new ResourceNotFoundException("Party with ID " + partyId + " not found"));
 
-        existingParty.setPartyIdeology(updatedParty.getPartyIdeology());
+        existingParty.setPartyAlignment(updatedParty.getPartyAlignment());
         existingParty.setDescription(updatedParty.getDescription());
         existingParty.setStatus(updatedParty.getStatus());
 

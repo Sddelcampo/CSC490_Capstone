@@ -8,6 +8,7 @@ import com.politicalpioneer.Comment.Comment;
 import com.politicalpioneer.ForumPost.ForumPost;
 import com.politicalpioneer.Party.Party;
 import com.politicalpioneer.PartyMember.PartyMember;
+import com.politicalpioneer.User.UserAlignment.UserAlignment;
 
 // import org.hibernate.annotations.CascadeType;
 import jakarta.persistence.*;
@@ -37,8 +38,9 @@ public class User {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "user_ideology")
-    private Float user_ideology;
+    @JsonManagedReference("user_alignment")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private UserAlignment userAlignment;
 
     @Column(name = "status")
     private String status;
@@ -75,7 +77,7 @@ public class User {
 
     public User(Long id, String first_name, String last_name , 
         String user_name, String password, String email, 
-        Float user_ideology,String status, String role,
+        UserAlignment userAlignment, String status, String role,
         List<Party> parties, List<ForumPost> forumPost,
         List<Comment> comment
     ) {
@@ -85,7 +87,7 @@ public class User {
         this.userName = user_name;
         this.password = password;
         this.email = email;
-        this.user_ideology = user_ideology;
+        this.userAlignment = userAlignment;
         this.status = status;
         this.role = role;
         this.parties = parties;
@@ -139,12 +141,12 @@ public class User {
         this.email = email;
     }
     
-    public Float getUserIdeology() {
-        return this.user_ideology;
+    public UserAlignment getUserAlignment() {
+        return this.userAlignment;
     }
 
-    public void setUserIdeology(Float userIdeology) {
-        this.user_ideology = userIdeology;
+    public void setUserAlignment(UserAlignment userAlignment) {
+        this.userAlignment = userAlignment;
     }
 
     public String getStaus() {
