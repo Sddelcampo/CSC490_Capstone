@@ -40,7 +40,11 @@
             <p class="welcome-text">Welcome, Admin!</p>
             <div class="account-links">
               <a href="#">Log In</a>
-              <a href="#">Log Out</a>
+              <#if Session.SPRING_SECURITY_CONTEXT??>
+              <a href="/logout">Log Out</a>
+              <#else>
+              
+              </#if>
               <a href="#">My Profile</a>
             </div>
           </div>
@@ -105,9 +109,10 @@
                   <tr>
                     <th>ID</th>
                     <th>Username</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
                     <th>Status</th>
-                    <th>UserIdeology</th>
-                    <th>Action</th>
                   </tr>
                 </thead>
                
@@ -116,8 +121,11 @@
                   <tr>
                     <td>${user.userId}</td>
                     <td>${user.userName}</td>
-                    <td>${user.staus}</td>
-                    <td>${user.userIdeology}</td>
+                    <td>${user.firstName}</td>
+                    <td>${user.lastName}</td>
+                    <td>${user.email}</td>
+                    <td>${user.status}</td>
+                  
                     <td class="action-cell"><a href="#">Review</a><a href="#">Dismiss</a></td>
                   </tr>
                    </#list>

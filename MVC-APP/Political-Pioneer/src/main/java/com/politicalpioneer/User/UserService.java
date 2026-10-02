@@ -8,20 +8,30 @@ import org.springframework.stereotype.Service;
 import com.politicalpioneer.BadRequestException;
 import com.politicalpioneer.ResourceNotFoundException;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+
+
 //Still need to implement
 //DTO, Security, Annotations for constraints, Exception Handling
 @Service 
 public class UserService {
     
-    private final UserRepository userRepo;
+    @Autowired 
+    private  UserRepository userRepo;
+
+    @Autowired 
+    private  PasswordEncoder passwordEncoder;
 
     public User saveUser(User user) {
         return userRepo.save(user);
     }
 
-    public UserService(UserRepository userRep) {
-        this.userRepo = userRep;
-    }
+    // public UserService(UserRepository userRep) {
+    //     this.userRepo = userRep;
+    // }
 
     //Throw nothing [] not an error
     public List<User> getAllUsers() {
@@ -43,11 +53,22 @@ public class UserService {
         return userRepo.findById(userId).orElse(null);
     }
 
+    
+    public User getUserByUserName(String userName) {
+        if(userRepo.findByUserName(userName) == null) {
+            throw new ResourceNotFoundException("User not found with id: " + userName);
+        }
+        return userRepo.findByUserName(userName);
+    }
+
+    //Add protectionns for similar username****
     public User addUser(User user) {
         if (user == null) {
             throw new BadRequestException("User object null");
         }
-        return userRepo.save(user);
+        User newUser = userRepo.save(user);
+        newUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepo.save(newUser);
     }
 
     public User updateUser(Long userId, User updatedUser) {

@@ -149,7 +149,7 @@ public class User {
         this.userAlignment = userAlignment;
     }
 
-    public String getStaus() {
+    public String getStatus() {
         return this.status;
     }
 
