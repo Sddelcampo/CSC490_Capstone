@@ -15,17 +15,22 @@ public class AdminService {
     @Autowired
     private UserRepository userRepo;
 
-    
+    private String nonAdmin = "user";
     private final AdminRepository adminRepo;
 
-    public List<User> getAllUsers() {
-        return userRepo.findAll();
+    public List<User> getAllNonAdminUsers() {
+        return userRepo.findByRole(nonAdmin);
     }
 
+
+
+    
 
     public Admin saveAdmin(Admin admin) {
         return adminRepo.save(admin);
     }
+
+    
 
     public AdminService(AdminRepository adminRepo) {
         this.adminRepo = adminRepo;
