@@ -1,20 +1,21 @@
 <!-- 
  CSC 490: The Political Pioneer
- index.html 
- Last updated: September 14, 2026
+ questionnaire.ftlh 
+ Last updated: September 28, 2026
 
- Description: This is the main HTML file for The Political Pioneer Web App, this will contain the
- main structure including navigation, user information and login on the left side of the page, and 
- the dashboard and main content of the app on the bottom right quadrant of the page.
+ Description: This is the questionnaire file for The Political Pioneer Web App, this will contain the
+ questionnaire which will be used to determine a user's alignments in political ideologies this will
+ then be processed by the backend to give a user scores depending on their answers to the questions.
 -->
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>The Political Pioneer — User Homepage</title>
-<link rel="stylesheet" href="styles.css">
-<script src="script.js" defer></script>
+<title>The Political Pioneer — Political Questionnaire</title>
+  <link rel="stylesheet" type="text/css" href="/css/styles.css">
+
+<!-- <script src="script.js" defer></script> -->
 </head>
 <body class="page-dashboard page-portal">
 
@@ -23,8 +24,8 @@
 
     <!-- Top Left Quadrant: Logo Implementation -->
     <div class="quadrant q-logo">
-      <a href="index.html">
-        <!-- The Political Pioneer Logo: Created by Sebastian Del Campo -->>
+      <a href="/admin">
+        <!-- The Political Pioneer Logo: Created by Sebastian Del Campo -->
         <img src="images/deSebastian_TPP_Logo.png" alt="The Political Pioneer Logo">
       </a>
     </div>
@@ -72,13 +73,13 @@
           <div class="logo">TP2 <span>Portal</span></div>
           <nav class="tabs">
             <a href="#" class="active">Directory</a>
-            <a href="#">My Account</a>
+            <a href="/account">My Account</a>
             <a href="#">Platforms</a>
             <a href="#">Resources</a>
             <a href="#">Collaborate</a>
             <a href="#">Events</a>
             <a href="#">Voter Tools</a>
-            <a href="#">Start a Party!</a>
+            <a href="/admin">Admin</a>
           </nav>
           <div class="search">
             <input type="text" placeholder="Search parties, platforms, issues...">
@@ -87,7 +88,7 @@
         </div>
 
         <!-- Provies a way to navigate within the portal -->
-        <div class="breadcrumb">Home &gt; Directory &gt; Browse All Independent Parties</div>
+        <div class="breadcrumb">Resources &gt; Political Questionnaire</div>
 
         <!-- Ensures that the portal is formatted in a layout where you can read within 3 column blocks -->
         <div class="layout">

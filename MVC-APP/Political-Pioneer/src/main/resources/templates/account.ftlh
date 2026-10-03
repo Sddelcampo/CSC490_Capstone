@@ -1,11 +1,10 @@
 <!-- 
  CSC 490: The Political Pioneer
- home.ftlh 
+ account.ftlh 
  Last updated: September 28, 2026
 
- Description: This is the main file for The Political Pioneer Web App, this will contain the
- main structure including navigation, user information and login on the left side of the page, and 
- the dashboard and main content of the app on the bottom right quadrant of the page.
+ Description: This is the user account file for The Political Pioneer Web App, this will contain basic
+ info on user information such as political beliefs score, a bio, and general data on the user
 -->
 
 <!DOCTYPE html>
@@ -39,7 +38,7 @@
         <div class="account-block">
           <div class="avatar-circle">&#128100;</div>
           <div>
-            <p class="welcome-text">Welcome, User!</p>
+            <p class="welcome-text">Welcome, User! The real account user, i think ish</p>
             <div class="account-links">
               <a href="#">Log In</a>
               <a href="#">Log Out</a>
@@ -75,7 +74,7 @@
           <div class="logo">TP2 <span>Portal</span></div>
           <nav class="tabs">
             <a href="#" class="active">Directory</a>
-            <a href="/account">My Account</a>
+            <a href="#">My Account</a>
             <a href="#">Platforms</a>
             <a href="#">Resources</a>
             <a href="#">Collaborate</a>
@@ -107,30 +106,6 @@
                   <li><a href="#">Rural &amp; Agriculture (5)</a></li>
                   <li><a href="#">Tech &amp; Innovation (4)</a></li>
                   <li><a href="#">Regional / Local (18)</a></li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="module gold">
-              <h2>By Region</h2>
-              <div class="module-body">
-                <ul>
-                  <li><a href="#">Northeast</a></li>
-                  <li><a href="#">Midwest</a></li>
-                  <li><a href="#">South</a></li>
-                  <li><a href="#">West</a></li>
-                  <li><a href="#">National</a></li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="module">
-              <h2>Quick Links</h2>
-              <div class="module-body">
-                <ul>
-                  <li><a href="#">How to register a party</a></li>
-                  <li><a href="#">Ballot access guide</a></li>
-                  <li><a href="#">Collaboration board</a></li>
                 </ul>
               </div>
             </div>

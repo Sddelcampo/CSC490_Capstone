@@ -17,6 +17,19 @@ public class AppController {
         return "home";
     }
 
-    
+    @GetMapping("/account")
+    public Object showAccountPage(Model model) {
+        return "account";
+    }
+
+    @GetMapping("/questions")
+    public Object showQuestionsPage(Model model) {
+        return "questions";
+    }
+
+    @GetMapping("/questionnaire")
+    public Object showQuestionnairePage(Model model) {
+        return "questionnaire";
+    }
 
 }
