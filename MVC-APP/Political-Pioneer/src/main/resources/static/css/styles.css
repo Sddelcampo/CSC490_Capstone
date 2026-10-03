@@ -326,3 +326,4 @@ a:hover { color: var(--link-hover); }
 .page-admin table.data-table tr:nth-child(even) td { background: #FAFAFA; }
 .page-admin table.data-table .action-cell { white-space: nowrap; }
 .page-admin table.data-table .action-cell a { margin-right: 8px; font-size: 11px; }
+

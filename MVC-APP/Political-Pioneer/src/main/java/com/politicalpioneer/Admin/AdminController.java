@@ -13,11 +13,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.politicalpioneer.User.User;
+import com.politicalpioneer.User.UserService;
 
 
 @Controller
 public class AdminController {
     private final AdminService adminService;
+
+
 
     public AdminController(AdminService adminService) {
         this.adminService = adminService;
@@ -25,10 +28,18 @@ public class AdminController {
 
     @GetMapping("/admin")
     public String getAllUsers(Model model) {
-        List<User> user = adminService.getAllUsers();
+        List<User> user = adminService.getAllNonAdminUsers();
+        // System.out.println(user);
         model.addAttribute("users", user);
         return "admin";
     }
+
+    // @GetMapping("/admin")
+    // public ResponseEntity<List<Admin>> getAllUsers() {
+    //     List<Admin> admin = adminService.getAllAdmin();
+    //    return ResponseEntity.ok(admin);
+    // }
+
 
     
 
