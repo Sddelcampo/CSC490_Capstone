@@ -27,7 +27,6 @@ public class AppController {
         return "questionnaire";
     }
     
-    
     @GetMapping("/accthome")
     public Object showAccthomePage(Model model) {
         return "accthome";
