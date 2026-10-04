@@ -32,7 +32,8 @@ public class SecurityConfig {
             .dispatcherTypeMatchers(DispatcherType.FORWARD,
                 DispatcherType.ERROR)
             .permitAll()
-            .requestMatchers("/", "/home", "/user", "/users", "/user/userName/**", "/parties/**", "/party/**", "/users/role/user").permitAll()
+            .requestMatchers("/", "/home", "/user", "/users", "/user/userName/**", "/parties/**", "/party/**", "/users/role/user", "/questionnaire", "/account", "/admin", 
+            "/accthome", "/acctlogin", "/signup", "/platform", "/resources", "/events", "/aboutus", "/bugreport", "/contactdevteam", "/guide").permitAll()
             .requestMatchers("/css/**", "/images/**").permitAll()
             .requestMatchers(HttpMethod.POST, "/user").permitAll()
              .requestMatchers("/admin").hasAuthority("admin")

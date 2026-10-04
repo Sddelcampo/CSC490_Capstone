@@ -327,3 +327,79 @@ a:hover { color: var(--link-hover); }
 .page-admin table.data-table .action-cell { white-space: nowrap; }
 .page-admin table.data-table .action-cell a { margin-right: 8px; font-size: 11px; }
 
+/* ==========================================================
+   SHARED: generic content wrapper (non-3-column pages)
+   ========================================================== */
+.content-area { padding: 10px; overflow: auto; flex-grow: 1; }
+
+/* ==========================================================
+   SHARED: form fields (login, signup, bug report, contact)
+   ========================================================== */
+.form-field { margin-bottom: 12px; display: flex; flex-direction: column; gap: 4px; }
+.form-field label { font-weight: bold; color: var(--navy); font-size: 12px; }
+.form-field input[type="text"],
+.form-field input[type="password"],
+.form-field input[type="email"],
+.form-field textarea,
+.form-field select {
+  font-family: var(--font-base);
+  font-size: 13px;
+  padding: 5px;
+  border: 1px solid #999;
+}
+.form-field textarea { resize: vertical; min-height: 80px; }
+.form-actions { text-align: center; margin-top: 14px; }
+
+/* ==========================================================
+   SHARED: event row (events.ftlh)
+   ========================================================== */
+.event-row {
+  display: flex;
+  gap: 10px;
+  padding: 8px;
+  border-bottom: 1px dashed var(--hairline);
+}
+.event-row:last-child { border-bottom: none; }
+.event-date-badge {
+  width: 46px;
+  flex-shrink: 0;
+  border: 1px solid var(--navy);
+  text-align: center;
+  font-size: 11px;
+}
+.event-date-badge .month { background: var(--navy); color: #fff; font-weight: bold; padding: 2px 0; }
+.event-date-badge .day { padding: 3px 0; font-size: 15px; font-weight: bold; color: var(--navy); }
+.event-info .name { font-weight: bold; color: var(--navy); font-size: 14px; }
+.event-info .meta { color: #666; font-size: 12px; }
+.event-info .desc { margin: 3px 0 0; font-size: 12px; }
+
+/* ==========================================================
+   PAGE: LOGIN / SIGNUP (standalone, outside the quadrant grid)
+   ========================================================== */
+.page-login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  gap: 16px;
+}
+.page-login .login-brand { text-align: center; }
+.page-login .login-brand img { max-width: 170px; height: auto; }
+.page-login .login-box {
+  background: #FFFFFF;
+  border: 1px solid var(--border-grey);
+  width: 320px;
+  max-width: 100%;
+}
+.page-login .login-box h2 {
+  margin: 0;
+  background: var(--navy);
+  color: #FFFFFF;
+  padding: 6px 10px;
+  font-size: 14px;
+  border-bottom: 3px solid var(--red);
+}
+.page-login .login-box .login-body { padding: 16px; }
+.page-login .divider-link { text-align: center; margin: 10px 0; font-size: 12px; }
