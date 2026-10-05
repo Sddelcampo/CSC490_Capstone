@@ -1,35 +1,30 @@
 <!-- 
  CSC 490: The Political Pioneer
- index.html 
- Last updated: September 14, 2026
+ platform.ftlh 
 
- Description: This is the main HTML file for The Political Pioneer Web App, this will contain the
- main structure including navigation, user information and login on the left side of the page, and 
- the dashboard and main content of the app on the bottom right quadrant of the page.
+ Description: Displays all independent party platforms, with a search bar to find
+ parties by name, category, or region. This is the full party directory.
 -->
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>The Political Pioneer — User Homepage</title>
-<link rel="stylesheet" href="styles.css">
-<script src="script.js" defer></script>
+<title>The Political Pioneer — Platforms</title>
+<link rel="stylesheet" type="text/css" href="/css/styles.css">
 </head>
 <body class="page-dashboard page-portal">
 
-  <!-- Creates a grid class to ensure we can split quadrants for logo, navigation, and the portal -->
   <div class="grid">
 
-    <!-- Top Left Quadrant: Logo Implementation -->
+    <!-- Top Left Quadrant: Logo -->
     <div class="quadrant q-logo">
-      <a href="index.html">
-        <!-- The Political Pioneer Logo: Created by Sebastian Del Campo -->>
+      <a href="/">
         <img src="images/deSebastian_TPP_Logo.png" alt="The Political Pioneer Logo">
       </a>
     </div>
 
-    <!-- Bottom Left Quadrant: Account, general info, & site navigation links -->
+    <!-- Bottom Left Quadrant: Account, general info, & site navigation -->
     <div class="quadrant q-side">
       <h2>Account &amp; Site Info</h2>
       <div class="body">
@@ -38,47 +33,44 @@
           <div>
             <p class="welcome-text">Welcome, User!</p>
             <div class="account-links">
-              <a href="#">Log In</a>
+              <a href="/login">Log In</a>
               <a href="#">Log Out</a>
-              <a href="#">My Profile</a>
+              <a href="/account">My Profile</a>
             </div>
           </div>
         </div>
         <nav>
-          <a href="#">Home</a>
-          <a href="#">About Us</a>
-          <a href="#">Guide</a>
+          <a href="/">Home</a>
+          <a href="/about">About Us</a>
+          <a href="/guide">Guide</a>
           <a href="#">Settings</a>
-          <a href="#">Report a Concern</a>
+          <a href="/report-bug">Report a Concern</a>
         </nav>
         <div class="info-text">
           <p style="margin-top:0;">The Political Pioneer is an independent, nonpartisan platform for
-             third-party organizing and voter engagement.</p>
+            third-party organizing and voter engagement.</p>
           <ul>
-            <li><a href="#">Report a Bug</a> — something broken? tell us</li>
-            <li><a href="#">Contact the Dev Team</a> — feedback &amp; feature requests</li>
+            <li><a href="/report-bug">Report a Bug</a> — something broken? tell us</li>
+            <li><a href="/contact">Contact the Dev Team</a> — feedback &amp; feature requests</li>
           </ul>
         </div>
       </div>
     </div>
 
-    <!-- Right Quadrant: The Political Pioneer Portal (TP2 Portal)
-     (largest area — Provides portal navigation and user/party usage) -->
+    <!-- Right Quadrant: main portal content -->
     <div class="quadrant q-portal">
       <div class="body">
 
-        <!--Provides information for navigation within the portal along with a search bar and button-->
         <div class="mastbar">
           <div class="logo">TP2 <span>Portal</span></div>
           <nav class="tabs">
-            <a href="#" class="active">Directory</a>
-            <a href="#">My Account</a>
-            <a href="#">Platforms</a>
-            <a href="#">Resources</a>
+            <a href="/">Home</a>
+            <a href="/platforms" class="active">Platforms</a>
+            <a href="/resources">Resources</a>
+            <a href="/events">Events</a>
             <a href="#">Collaborate</a>
-            <a href="#">Events</a>
             <a href="#">Voter Tools</a>
-            <a href="#">Start a Party!</a>
+            <a href="/account">My Account</a>
           </nav>
           <div class="search">
             <input type="text" placeholder="Search parties, platforms, issues...">
@@ -86,13 +78,11 @@
           </div>
         </div>
 
-        <!-- Provies a way to navigate within the portal -->
-        <div class="breadcrumb">Home &gt; Directory &gt; Browse All Independent Parties</div>
+        <div class="breadcrumb">Platforms &gt; Browse All Independent Parties</div>
 
-        <!-- Ensures that the portal is formatted in a layout where you can read within 3 column blocks -->
         <div class="layout">
 
-          <!-- Left Sidebar -->
+          <!-- LEFT SIDEBAR -->
           <div class="col-left">
             <div class="module">
               <h2>Browse by Category</h2>
@@ -133,7 +123,7 @@
             </div>
           </div>
 
-          <!-- Center Bar -->
+          <!-- CENTER -->
           <div class="col-center">
 
             <div class="stat-strip">
@@ -197,7 +187,7 @@
 
           </div>
 
-          <!-- Right Sidebar -->
+          <!-- RIGHT SIDEBAR -->
           <div class="col-right">
             <div class="module">
               <h2>Resources</h2>
@@ -223,8 +213,7 @@
             </div>
 
             <div class="ticker">
-              <b>Ticker:</b> New voter guide published &middot; 3 parties merged resources this week
-              &middot; Registration deadline in 12 days
+              <b>Ticker:</b> New voter guide published &middot; 3 parties merged resources this week &middot; Registration deadline in 12 days
             </div>
           </div>
 
@@ -232,7 +221,7 @@
 
         <div class="footer">
           The Political Pioneer &mdash; a home for independent political organizing &middot;
-          <a href="#">About</a> &middot; <a href="#">Terms</a> &middot; <a href="#">Contact</a>
+          <a href="/about">About</a> &middot; <a href="#">Terms</a> &middot; <a href="/contact">Contact</a>
         </div>
 
       </div>

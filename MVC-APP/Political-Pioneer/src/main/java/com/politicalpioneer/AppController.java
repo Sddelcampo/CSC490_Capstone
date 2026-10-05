@@ -17,6 +17,69 @@ public class AppController {
         return "home";
     }
 
-    
+    @GetMapping("/account")
+    public Object showAccountPage(Model model) {
+        return "account";
+    }
 
+    @GetMapping("/questionnaire")
+    public Object showQuestionnairePage(Model model) {
+        return "questionnaire";
+    }
+    
+    @GetMapping("/accthome")
+    public Object showAccthomePage(Model model) {
+        return "accthome";
+    }
+/*
+    @GetMapping("/home")
+    public Object showHomePage(Model model) {
+        return "home";
+    }
+*/
+    @GetMapping("/acctlogin")
+    public Object showAcctloginPage(Model model) {
+        return "acctlogin";
+    }
+
+    @GetMapping("/signup")
+    public Object showSignupPage(Model model) {
+        return "signup";
+    }
+
+    @GetMapping("/platform")
+    public Object showPlatformPage(Model model) {
+        return "platform";
+    }
+
+    @GetMapping("/resources")
+    public Object showResourcesPage(Model model) {
+        return "resources";
+    }
+
+    @GetMapping("/events")
+    public Object showEventsPage(Model model) {
+    return "events";
+    }
+
+    @GetMapping("/aboutus")
+    public Object showAboutusPage(Model model) {
+        return "aboutus";
+    }
+
+    @GetMapping("/bugreport")
+    public Object showBugreportPage(Model model) {
+        return "bugreport";
+    }
+
+    @GetMapping("/contactdevteam")
+    public Object showContactdevteamPage(Model model) {
+        return "contactdevteam";
+    }
+
+    @GetMapping("/guide")
+    public Object showGuidePage(Model model) {
+        return "guide";
+    }
+    
 }

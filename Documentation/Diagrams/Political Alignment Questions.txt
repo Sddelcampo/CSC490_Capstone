@@ -1,0 +1,48 @@
+Free market capitalism questions-
+1) The government should make no effort to pass regulations aimed at controlling the decisions made by private companies.
+2) Individuals should be free to create their own businesses.
+3) Workers unions should exist for most industries. (Inverse weighting)
+4) The government is responsible for regulating monopolistic practices of corporations. (Inverse weighting)
+5) Healthy competition should determine the price of goods, not government regulations. 
+
+Government involvement questions- 
+1) The government should make no effort to regulate the personal beliefs and lifestyles of it's citizens.
+2) It is the role of the government to provide benefits for its citizens such as basic healthcare and education. (Inverse weighting)
+3) No laws should be made regarding the personal bodies of its individual citizens. Citizens should be able to do what they want with their bodies.
+4) The government should ensure that children recieve a basic quality of life. It should make sure that children are not being abused and are recieving a basic level of education. (Inverse weighting)
+5) The government should have a minimal role in the personal lives of its citizens.
+
+Social freedom questions- 
+1) People should be free to practice different religions where they live, regardless of the country that they live in.
+2) Adults should be free to marry any adult that they wish to, regardless of gender or race.
+3) There should be restrictions on what people can change about their bodies. (Inverse weighting)
+4) People should be free to say what they want about the government and other people, so long as it is not actively putting people in harm's way.
+5) Protesting should not be allowed if it impacts the lives of people not involved in the protest, and should be met with legal action. (Inverse weighting)
+
+Foreign involvement questions- 
+1) The government should try its best to remain impartial in any foreign conflict that it is not directly involved in.
+2) The government should not get involved in foreign affairs, including medical problems.
+3) It is not the role of the government to provide assistance to foreign countries or organizations.
+4) The government should get involved in foreign wars if they are a threat to the power of the country. (Inverse weighting)
+5) We should try to keep the production of goods within the country. Goods produced locally should be promoted over imported foreign goods.
+
+Gun control questions- 
+1) To purchase a firearm, people should undergo basic background checks.
+2) There should be additional requirements to purchase a firearm, such as mental health checks or mandatory wait periods.
+3) People who purchase firearms should have to register said firearms with the government.
+4) There should be no restrictions on what types of firearms individuals can own. (Inverse weighting)
+5) Minors (people under 18) should not be able to purchase or own a firearm.
+
+Environment/conservation questions- 
+1) We need to invest more into clean energy such as solar, wind, and hydropower.
+2) There should be increased efforts to develop nuclear energy as a significant part of the energy grid.
+3) We need to reduce our dependence on fossil fuels.
+4) Companies should be held responsible for their environmental impacts and should do their best to minimize their carbon footprint.
+5) There is no need to require companies to make efforts to prevent climate change. (Inverse weighting)
+
+Technological advancement questions-
+1) We should prevent large data centers from being built in local communities.
+2) Surveilance technologies like Flock cameras and other tracking devices should be welcomed in public spaces. (Inverse weighting)
+3) There should not be any efforts made to regulate how technology advances or is used. (Inverse mapping)
+4) The government should not be able to use any predictive models in law enforcement, such as technology that predicts a crime before it happens.
+5) Technology should be used to benefit society and people, not to restrict the lives of the average person.
