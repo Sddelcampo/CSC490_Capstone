@@ -1,6 +1,7 @@
 <!-- 
  CSC 490: The Political Pioneer
  signup.ftlh 
+ Last Updated: October 5, 2026
 
  Description: Standalone account-creation page. First/last name, username, password.
 -->
@@ -46,7 +47,7 @@
         </div>
 
         <div class="divider-link">
-          Already have an account? <a href="/login">Log In</a>
+          Already have an account? <a href="/acctlogin">Log In</a>
         </div>
 
         <div class="form-actions">

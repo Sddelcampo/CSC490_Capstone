@@ -1,7 +1,7 @@
 <!-- 
  CSC 490: The Political Pioneer
  admin.html 
- Last updated: September 14, 2026
+ Last updated: October 5, 2026
 
  Description: This is the main HTML file for The Political Pioneer for an admin, this
  layout will contain database information which can then be added, edited, and deleted
@@ -39,28 +39,28 @@
           <div>
             <p class="welcome-text">Welcome, Admin!</p>
             <div class="account-links">
-              <a href="#">Log In</a>
+              <a href="/acctlogin">Log In</a>
               <#if Session.SPRING_SECURITY_CONTEXT??>
               <a href="/logout">Log Out</a>
               <#else>
               
               </#if>
-              <a href="#">My Profile</a>
+              <a href="/account">My Account</a>
             </div>
           </div>
         </div>
         <nav>
-          <a href="#">Home</a>
-          <a href="#">About Us</a>
-          <a href="#">Guide</a>
-          <a href="#">Settings</a>
+          <a href="/home">Home</a>
+          <a href="/aboutus">About Us</a>
+          <a href="/guide">Guide</a>
+          <!-- <a href="#">Settings</a> Unsure if settings may be necessary for the project-->
           <a href="#">Review a Concern</a>
         </nav>
         <div class="info-text">
           <p style="margin-top:0;">Admin Panel &mdash; internal tools for moderating reports, managing parties, and reviewing platform activity.</p>
           <ul>
             <li><a href="#">Escalate to lead admin</a></li>
-            <li><a href="#">Contact the Dev Team</a> — feedback &amp; feature requests</li>
+            <li><a href="/contactdevteam">Contact the Dev Team</a> — feedback &amp; feature requests</li>
           </ul>
         </div>
       </div>

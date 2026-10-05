@@ -1,7 +1,8 @@
 <!-- 
  CSC 490: The Political Pioneer
  acctlogin.ftlh 
-
+ Last updated: October 5, 2026
+ 
  Description: Standalone login page. Deliberately outside the 2x2 quadrant grid, since
  the account/nav shell assumes a session that doesn't exist yet at this point.
  Field order: username, password, "Create an Account" link, then the Sign In button.

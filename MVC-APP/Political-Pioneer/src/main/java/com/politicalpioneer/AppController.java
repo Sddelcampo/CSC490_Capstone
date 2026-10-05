@@ -13,8 +13,8 @@ public class AppController {
 
 
     @GetMapping("/")
-    public Object showHomePage(Model model) {
-        return "home";
+    public Object showStartPage(Model model) {
+        return "acctlogin";
     }
 
     @GetMapping("/account")
@@ -27,16 +27,11 @@ public class AppController {
         return "questionnaire";
     }
     
-    @GetMapping("/accthome")
-    public Object showAccthomePage(Model model) {
-        return "accthome";
-    }
-/*
     @GetMapping("/home")
     public Object showHomePage(Model model) {
         return "home";
     }
-*/
+
     @GetMapping("/acctlogin")
     public Object showAcctloginPage(Model model) {
         return "acctlogin";

@@ -1,6 +1,7 @@
 <!-- 
  CSC 490: The Political Pioneer
  platform.ftlh 
+ Last updated: October 5, 2026
 
  Description: Displays all independent party platforms, with a search bar to find
  parties by name, category, or region. This is the full party directory.
@@ -33,25 +34,25 @@
           <div>
             <p class="welcome-text">Welcome, User!</p>
             <div class="account-links">
-              <a href="/login">Log In</a>
-              <a href="#">Log Out</a>
-              <a href="/account">My Profile</a>
+              <!-- <a href="/acctlogin">Log In</a> Might be useless if we start at the login page-->
+              <a href="/acctlogin">Log Out</a>
+              <a href="/account">My Account</a>
             </div>
           </div>
         </div>
         <nav>
-          <a href="/">Home</a>
-          <a href="/about">About Us</a>
+          <a href="/home">Home</a>
+          <a href="/aboutus">About Us</a>
           <a href="/guide">Guide</a>
-          <a href="#">Settings</a>
-          <a href="/report-bug">Report a Concern</a>
+          <!-- <a href="#">Settings</a> Unsure if settings may be necessary for the project-->
+          <a href="/contactdevteam">Report a Concern</a>
         </nav>
         <div class="info-text">
           <p style="margin-top:0;">The Political Pioneer is an independent, nonpartisan platform for
             third-party organizing and voter engagement.</p>
           <ul>
-            <li><a href="/report-bug">Report a Bug</a> — something broken? tell us</li>
-            <li><a href="/contact">Contact the Dev Team</a> — feedback &amp; feature requests</li>
+            <li><a href="/bugreport">Report a Bug</a> — something broken? tell us</li>
+            <li><a href="/contactdevteam">Contact the Dev Team</a> — feedback &amp; feature requests</li>
           </ul>
         </div>
       </div>
@@ -64,13 +65,14 @@
         <div class="mastbar">
           <div class="logo">TP2 <span>Portal</span></div>
           <nav class="tabs">
-            <a href="/">Home</a>
-            <a href="/platforms" class="active">Platforms</a>
-            <a href="/resources">Resources</a>
-            <a href="/events">Events</a>
-            <a href="#">Collaborate</a>
-            <a href="#">Voter Tools</a>
+            <a href="/home">Home</a>
             <a href="/account">My Account</a>
+            <a href="/platform" class="active">Platforms</a>
+            <a href="/resources">Resources</a>
+            <!--<a href="#">Collaborate</a> might remove as it could be merged with /account or /events-->
+            <a href="/events">Events</a>
+            <!--<a href="#">Voter Tools</a> may remove as it can be merged with resources-->
+            <a href="/admin">Admin</a> <!-- Temporarily available for demonstration purposes-->
           </nav>
           <div class="search">
             <input type="text" placeholder="Search parties, platforms, issues...">
@@ -221,7 +223,7 @@
 
         <div class="footer">
           The Political Pioneer &mdash; a home for independent political organizing &middot;
-          <a href="/about">About</a> &middot; <a href="#">Terms</a> &middot; <a href="/contact">Contact</a>
+          <a href="/aboutus">About Us</a> &middot; <a href="#">Terms</a> &middot; <a href="/contactdevteam">Contact</a>
         </div>
 
       </div>

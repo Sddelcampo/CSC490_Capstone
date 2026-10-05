@@ -1,7 +1,7 @@
 <!-- 
  CSC 490: The Political Pioneer
  home.ftlh 
- Last updated: September 28, 2026
+ Last updated: October 5, 2026
 
  Description: This is the main file for The Political Pioneer Web App, this will contain the
  main structure including navigation, user information and login on the left side of the page, and 
@@ -41,25 +41,25 @@
           <div>
             <p class="welcome-text">Welcome, User!</p>
             <div class="account-links">
-              <a href="#">Log In</a>
-              <a href="#">Log Out</a>
-              <a href="#">My Profile</a>
+              <!-- <a href="/acctlogin">Log In</a> Might be useless if we start at the login page-->
+              <a href="/acctlogin">Log Out</a>
+              <a href="/account">My Account</a>
             </div>
           </div>
         </div>
         <nav>
-          <a href="#">Home</a>
-          <a href="#">About Us</a>
-          <a href="#">Guide</a>
-          <a href="#">Settings</a>
-          <a href="#">Report a Concern</a>
+          <a href="/home">Home</a>
+          <a href="/aboutus">About Us</a>
+          <a href="/guide">Guide</a>
+          <!-- <a href="#">Settings</a> Unsure if settings may be necessary for the project-->
+          <a href="/contactdevteam">Report a Concern</a>
         </nav>
         <div class="info-text">
           <p style="margin-top:0;">The Political Pioneer is an independent, nonpartisan platform for
              third-party organizing and voter engagement.</p>
           <ul>
-            <li><a href="#">Report a Bug</a> — something broken? tell us</li>
-            <li><a href="#">Contact the Dev Team</a> — feedback &amp; feature requests</li>
+            <li><a href="/bugreport">Report a Bug</a> — something broken? tell us</li>
+            <li><a href="/contactdevteam">Contact the Dev Team</a> — feedback &amp; feature requests</li>
           </ul>
         </div>
       </div>
@@ -74,14 +74,14 @@
         <div class="mastbar">
           <div class="logo">TP2 <span>Portal</span></div>
           <nav class="tabs">
-            <a href="#" class="active">Directory</a>
+            <a href="/home" class="active">Home</a>
             <a href="/account">My Account</a>
-            <a href="#">Platforms</a>
-            <a href="#">Resources</a>
-            <a href="#">Collaborate</a>
-            <a href="#">Events</a>
-            <a href="#">Voter Tools</a>
-            <a href="/admin">Admin</a>
+            <a href="/platform">Platforms</a>
+            <a href="/resources">Resources</a>
+            <!--<a href="#">Collaborate</a> might remove as it could be merged with /account or /events-->
+            <a href="/events">Events</a>
+            <!--<a href="#">Voter Tools</a> may remove as it can be merged with resources-->
+            <a href="/admin">Admin</a> <!-- Temporarily available for demonstration purposes-->
           </nav>
           <div class="search">
             <input type="text" placeholder="Search parties, platforms, issues...">
@@ -90,7 +90,7 @@
         </div>
 
         <!-- Provies a way to navigate within the portal -->
-        <div class="breadcrumb">Home &gt; Directory &gt; Browse All Independent Parties</div>
+        <div class="breadcrumb">Home &gt; Directory</div>
 
         <!-- Ensures that the portal is formatted in a layout where you can read within 3 column blocks -->
         <div class="layout">
@@ -235,7 +235,7 @@
 
         <div class="footer">
           The Political Pioneer &mdash; a home for independent political organizing &middot;
-          <a href="#">About</a> &middot; <a href="#">Terms</a> &middot; <a href="#">Contact</a>
+          <a href="/aboutus">About Us</a> &middot; <a href="#">Terms</a> &middot; <a href="/contactdevteam">Contact</a>
         </div>
 
       </div>
