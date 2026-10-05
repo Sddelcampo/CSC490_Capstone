@@ -61,17 +61,17 @@ public class UserController {
 
     @PutMapping("/user/{userId}")
     public ResponseEntity<User> updateUser(@PathVariable("userId") Long userId, @RequestBody User updatedUser) {
-    User savedUser = userService.updateUser(userId, updatedUser);
-    return ResponseEntity.ok(savedUser);
-}
+        User savedUser = userService.updateUser(userId, updatedUser);
+        return ResponseEntity.ok(savedUser);
+    }
 
 
-@DeleteMapping("/user/{userId}")
-public ResponseEntity<Void> deleteUserById(@PathVariable("userId") Long userId) {
-    // User user = userService.getUserById(userId);
-    userService.deleteUserById(userId);
-    return ResponseEntity.noContent().build();
-}
+    @DeleteMapping("/user/{userId}")
+    public ResponseEntity<Void> deleteUserById(@PathVariable("userId") Long userId) {
+        // User user = userService.getUserById(userId);
+        userService.deleteUserById(userId);
+        return ResponseEntity.noContent().build();
+    }
 
 
 

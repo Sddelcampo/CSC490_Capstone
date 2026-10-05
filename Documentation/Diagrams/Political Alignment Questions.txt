@@ -43,6 +43,6 @@ Environment/conservation questions- 
 Technological advancement questions-
 1) We should prevent large data centers from being built in local communities.
 2) Surveilance technologies like Flock cameras and other tracking devices should be welcomed in public spaces. (Inverse weighting)
-3) There should not be any efforts made to regulate how technology advances or is used. (Inverse mapping)
+3) There should not be any efforts made to regulate how technology advances or is used. (Inverse weighting)
 4) The government should not be able to use any predictive models in law enforcement, such as technology that predicts a crime before it happens.
 5) Technology should be used to benefit society and people, not to restrict the lives of the average person.
