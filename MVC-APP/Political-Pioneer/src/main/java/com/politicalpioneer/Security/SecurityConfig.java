@@ -1,6 +1,6 @@
 package com.politicalpioneer.Security;
 
-import static org.springframework.security.config.Customizer.withDefaults;
+// import static org.springframework.security.config.Customizer.withDefaults;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,15 +32,17 @@ public class SecurityConfig {
             .dispatcherTypeMatchers(DispatcherType.FORWARD,
                 DispatcherType.ERROR)
             .permitAll()
-            .requestMatchers("/", "/home", "/user", "/users", "/user/userName/**", "/parties/**", "/party/**", "/users/role/user", "/questionnaire", "/account", "/admin", 
-            "/accthome", "/acctlogin", "/signup", "/platform", "/resources", "/events", "/aboutus", "/bugreport", "/contactdevteam", "/guide").permitAll()
+            .requestMatchers("/", "/home", "/user", "/users", "/user/userName/**", "/parties/**", "/party/**", "/users/role/user", "/questionnaire",   
+            "/signup", "/platform", "/resources", "/events", "/aboutus", "/bugreport", "/contactdevteam", "/guide", "/userSignup").permitAll()
             .requestMatchers("/css/**", "/images/**").permitAll()
             .requestMatchers(HttpMethod.POST, "/user").permitAll()
              .requestMatchers("/admin").hasAuthority("admin")
+             .requestMatchers("/account").hasAuthority("user")
             .anyRequest().authenticated())
-        .formLogin(form -> form.defaultSuccessUrl("/admin", true).permitAll())
+        .formLogin(form -> form.loginPage("/acctlogin").defaultSuccessUrl("/platform", true).permitAll())
         .exceptionHandling((x) -> x.accessDeniedPage("/403"))
-        .logout(logout -> logout.logoutSuccessUrl("/").permitAll())
+        .logout(logout -> logout
+            .logoutSuccessUrl("/").permitAll())
         .requestCache((cache) -> cache
             .requestCache(requestCache));
 

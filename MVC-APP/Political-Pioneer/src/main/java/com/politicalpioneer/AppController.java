@@ -12,9 +12,12 @@ public class AppController {
     
 
 
+    //When a user enters the page the first place
+    //we want to send them is not to login but rather
+    //the dashboard
     @GetMapping("/")
-    public Object showHomePage(Model model) {
-        return "home";
+    public Object showStartPage(Model model) {
+        return "platform";
     }
 
     @GetMapping("/account")
@@ -27,16 +30,11 @@ public class AppController {
         return "questionnaire";
     }
     
-    @GetMapping("/accthome")
-    public Object showAccthomePage(Model model) {
-        return "accthome";
-    }
-/*
     @GetMapping("/home")
     public Object showHomePage(Model model) {
         return "home";
     }
-*/
+
     @GetMapping("/acctlogin")
     public Object showAcctloginPage(Model model) {
         return "acctlogin";
@@ -77,9 +75,18 @@ public class AppController {
         return "contactdevteam";
     }
 
+
     @GetMapping("/guide")
     public Object showGuidePage(Model model) {
         return "guide";
     }
-    
+
+    @GetMapping("/logout") 
+    public Object returnHomeAfterLogout(Model model) {
+        return "/";
+    }
+    // @GetMapping("/login")
+    // public Object loginToAccount(Model model) {
+    //     return "home";
+    // }
 }
