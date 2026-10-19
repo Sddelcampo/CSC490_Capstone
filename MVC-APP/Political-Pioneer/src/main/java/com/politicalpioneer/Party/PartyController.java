@@ -69,5 +69,13 @@ public class PartyController {
     //     return ResponseEntity.ok(partiesNearby);
     // }
 
+    @GetMapping ("party/search/alignment")
+    public ResponseEntity<List<Party>> searchPartiesByAlignment(
+        @RequestParam long userID
+    ) {
+        List<Party> partiesByAlignment = partyService.getPartiesByAlignment(userID);
+        return ResponseEntity.ok(partiesByAlignment);
+    }
+
     
 }
