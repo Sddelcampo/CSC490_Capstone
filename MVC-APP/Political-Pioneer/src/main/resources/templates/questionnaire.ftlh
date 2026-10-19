@@ -24,7 +24,7 @@
 
     <!-- Top Left Quadrant: Logo Implementation -->
     <div class="quadrant q-logo">
-      <a href="/admin">
+      <a href="/">
         <!-- The Political Pioneer Logo: Created by Sebastian Del Campo -->
         <img src="images/deSebastian_TPP_Logo.png" alt="The Political Pioneer Logo">
       </a>
@@ -79,8 +79,7 @@
             <!--<a href="#">Collaborate</a> might remove as it could be merged with /account or /events-->
             <a href="/events">Events</a>
             <!--<a href="#">Voter Tools</a> may remove as it can be merged with resources-->
-            <a href="/admin">Admin</a> <!-- Temporarily available for demonstration purposes-->
-          </nav>
+         </nav>
           <div class="search">
             <input type="text" placeholder="Search parties, platforms, issues...">
             <button>Search</button>

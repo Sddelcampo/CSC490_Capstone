@@ -26,7 +26,7 @@
   <div class="login-box">
     <h2>Log In</h2>
     <div class="login-body">
-      <form action="/login" method="post">
+      <form action="/acctlogin" method="post">
 
         <div class="form-field">
           <label for="username">Username</label>
@@ -43,7 +43,7 @@
         </div>
 
         <div class="form-actions">
-          <button type="submit" class="btn primary">Sign In</button>
+         <button type="submit" class="btn primary">Sign In</button>
         </div>
 
       </form>

@@ -1,4 +1,5 @@
 package com.politicalpioneer.User;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import com.politicalpioneer.User.UserAlignment.UserAlignment;
 
 // import org.hibernate.annotations.CascadeType;
 import jakarta.persistence.*;
+
 //Still need to implement
 //DTO, Security, Annotations for constraints, Exception Handling, Lomok
 //user can not be used as a table name without ""
@@ -45,12 +47,19 @@ public class User {
     @Column(name = "status")
     private String status;
 
+    @PrePersist
+    private void applyDefaults() {
+        if (this.status == null) {
+            this.status = "active";
+        }
+    }
+
     @Column(name = "role")
     private String role;
 
-    //Temporary Cascade effect 
-    //Will delete the user party announcement etc
-    //Has no db representation
+    // Temporary Cascade effect
+    // Will delete the user party announcement etc
+    // Has no db representation
     @JsonManagedReference("user-parties")
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Party> parties = new ArrayList<>();
@@ -72,15 +81,14 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<PartyMember> partyMembers = new ArrayList<>();
 
-   
-    protected User() {};
+    protected User() {
+    };
 
-    public User(Long id, String first_name, String last_name , 
-        String user_name, String password, String email, 
-        UserAlignment userAlignment, String status, String role,
-        List<Party> parties, List<ForumPost> forumPost,
-        List<Comment> comment
-    ) {
+    public User(Long id, String first_name, String last_name,
+            String user_name, String password, String email,
+            UserAlignment userAlignment, String status, String role,
+            List<Party> parties, List<ForumPost> forumPost,
+            List<Comment> comment) {
         this.id = id;
         this.firstName = first_name;
         this.lastName = last_name;
@@ -104,13 +112,14 @@ public class User {
         this.id = id;
     }
 
-     public String getFirstName() {
+    public String getFirstName() {
         return this.firstName;
     }
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
+
     public String getLastName() {
         return this.lastName;
     }
@@ -118,7 +127,7 @@ public class User {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-    
+
     public String getUserName() {
         return this.userName;
     }
@@ -126,21 +135,23 @@ public class User {
     public void setUserName(String userName) {
         this.userName = userName;
     }
- public String getPassword() {
+
+    public String getPassword() {
         return this.password;
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
- public String getEmail() {
+
+    public String getEmail() {
         return this.email;
     }
 
     public void setEmail(String email) {
         this.email = email;
     }
-    
+
     public UserAlignment getUserAlignment() {
         return this.userAlignment;
     }
@@ -156,7 +167,7 @@ public class User {
     public void setStatus(String status) {
         this.status = status;
     }
-    
+
     public String getRole() {
         return this.role;
     }
@@ -172,7 +183,7 @@ public class User {
     public void setParty(List<Party> party) {
         this.parties = party;
     }
- 
+
     public List<ForumPost> getForumPost() {
         return forumPost;
     }
@@ -188,7 +199,6 @@ public class User {
     @Override
     public String toString() {
         return "User [id = " + id + ", first name = " + firstName + ", last name = " + lastName + "email = " + email +
-        "status = " + status + "]";
+                "status = " + status + "]";
     }
 }
-

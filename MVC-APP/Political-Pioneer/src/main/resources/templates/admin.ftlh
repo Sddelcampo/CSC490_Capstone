@@ -39,13 +39,15 @@
           <div>
             <p class="welcome-text">Welcome, Admin!</p>
             <div class="account-links">
-              <a href="/acctlogin">Log In</a>
+            
               <#if Session.SPRING_SECURITY_CONTEXT??>
               <a href="/logout">Log Out</a>
-              <#else>
-              
-              </#if>
               <a href="/account">My Account</a>
+              <#else>
+              <a href="/acctlogin">Log In</a>
+              <a href="/signup">Sign Up</a>
+              </#if>
+               
             </div>
           </div>
         </div>
@@ -119,12 +121,12 @@
                 <tbody>
                    <#list users as user>
                   <tr>
-                    <td>${user.userId}</td>
-                    <td>${user.userName}</td>
-                    <td>${user.firstName}</td>
-                    <td>${user.lastName}</td>
-                    <td>${user.email}</td>
-                    <td>${user.status}</td>
+                    <td>${user.userId!"N/A"}</td>
+                    <td>${user.userName!"N/A"}</td>
+                    <td>${user.firstName!"N/A"}</td>
+                    <td>${user.lastName!"N/A"}</td>
+                    <td>${user.email!"N/A"}</td>
+                    <td>${user.status!"N/A"}</td>
                   
                     <td class="action-cell"><a href="#">Review</a><a href="#">Dismiss</a></td>
                   </tr>

@@ -24,7 +24,7 @@
   <div class="login-box">
     <h2>Create an Account</h2>
     <div class="login-body">
-      <form action="/signup" method="post">
+      <form action="/userSignup" method="post">
 
         <div class="form-field">
           <label for="firstName">First Name</label>
@@ -36,9 +36,25 @@
           <input type="text" id="lastName" name="lastName" required>
         </div>
 
+      
+
+        <!-- <div class="form-field">
+          <label for="status" value="active">Status</label>
+          <input type="text"  name="status" required>
+        </div> -->
+        <select class="form-field" name="role">
+          <option value="user">User</option>
+          <option value="owner" >Owner</option>
+        </select>
+
+         <div class="form-field">
+          <label for="email">Email</label>
+          <input type="text"  name="email" required>
+        </div>
+
         <div class="form-field">
           <label for="username">Username</label>
-          <input type="text" id="username" name="username" required>
+          <input type="text" id="userName" name="userName" required>
         </div>
 
         <div class="form-field">

@@ -1,20 +1,21 @@
 package com.politicalpioneer;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-
 // import ch.qos.logback.core.model.Model;
 
-@Controller 
+@Controller
 public class AppController {
-    
 
-
+    // When a user enters the page the first place
+    // we want to send them is not to login but rather
+    // the dashboard
     @GetMapping("/")
     public Object showStartPage(Model model) {
-        return "acctlogin";
+        return "platform";
     }
 
     @GetMapping("/account")
@@ -26,9 +27,17 @@ public class AppController {
     public Object showQuestionnairePage(Model model) {
         return "questionnaire";
     }
-    
+
+    // @GetMapping("/home")
+    // public Object showHomePage(Model model) {
+    //     return "home";
+    // }
+
     @GetMapping("/home")
-    public Object showHomePage(Model model) {
+    public String home(Model model, Authentication authentication) {
+        boolean isAdmin = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("admin"));
+        model.addAttribute("isAdmin", isAdmin);
         return "home";
     }
 
@@ -54,7 +63,7 @@ public class AppController {
 
     @GetMapping("/events")
     public Object showEventsPage(Model model) {
-    return "events";
+        return "events";
     }
 
     @GetMapping("/aboutus")
@@ -76,5 +85,13 @@ public class AppController {
     public Object showGuidePage(Model model) {
         return "guide";
     }
-    
+
+    @GetMapping("/logout")
+    public Object returnHomeAfterLogout(Model model) {
+        return "/";
+    }
+    // @GetMapping("/login")
+    // public Object loginToAccount(Model model) {
+    // return "home";
+    // }
 }
