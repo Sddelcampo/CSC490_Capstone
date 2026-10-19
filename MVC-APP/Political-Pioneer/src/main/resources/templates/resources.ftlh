@@ -35,8 +35,16 @@
             <p class="welcome-text">Welcome, User!</p>
             <div class="account-links">
               <!-- <a href="/acctlogin">Log In</a> Might be useless if we start at the login page-->
-              <a href="/acctlogin">Log Out</a>
+                <#if Session.SPRING_SECURITY_CONTEXT??>
+              <a href="/logout">Log Out</a>
               <a href="/account">My Account</a>
+              <#else>
+              <a href="/acctlogin">Log In</a>
+              <a href="/signup">Sign Up</a>
+
+              
+              </#if>
+            
             </div>
           </div>
         </div>
@@ -72,8 +80,7 @@
             <!--<a href="#">Collaborate</a> might remove as it could be merged with /account or /events-->
             <a href="/events">Events</a>
             <!--<a href="#">Voter Tools</a> may remove as it can be merged with resources-->
-            <a href="/admin">Admin</a> <!-- Temporarily available for demonstration purposes-->
-          </nav>
+         </nav>
           <div class="search">
             <input type="text" placeholder="Search parties, platforms, issues...">
             <button>Search</button>

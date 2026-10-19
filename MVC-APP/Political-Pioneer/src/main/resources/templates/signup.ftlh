@@ -38,13 +38,13 @@
 
       
 
-        <div class="form-field">
-          <label for="status">Status</label>
+        <!-- <div class="form-field">
+          <label for="status" value="active">Status</label>
           <input type="text"  name="status" required>
-        </div>
+        </div> -->
         <select class="form-field" name="role">
           <option value="user">User</option>
-          <option value="admin" >Admin</option>
+          <option value="owner" >Owner</option>
         </select>
 
          <div class="form-field">

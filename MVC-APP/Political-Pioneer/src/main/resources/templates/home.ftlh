@@ -10,15 +10,17 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<title>The Political Pioneer — User Homepage</title>
-<!-- <link rel="stylesheet" href="styles.css"> -->
+  <meta charset="UTF-8">
+  <title>The Political Pioneer — User Homepage</title>
+  <!-- <link rel="stylesheet" href="styles.css"> -->
   <!-- <link rel="stylesheet" type="text/css" href="/"> -->
   <link rel="stylesheet" type="text/css" href="/css/styles.css">
 
-<!-- <script src="script.js" defer></script> -->
+  <!-- <script src="script.js" defer></script> -->
 </head>
+
 <body class="page-dashboard page-portal">
 
   <!-- Creates a grid class to ensure we can split quadrants for logo, navigation, and the portal -->
@@ -26,7 +28,7 @@
 
     <!-- Top Left Quadrant: Logo Implementation -->
     <div class="quadrant q-logo">
-      <a href="/admin">
+      <a href="/home">
         <!-- The Political Pioneer Logo: Created by Sebastian Del Campo -->
         <img src="images/deSebastian_TPP_Logo.png" alt="The Political Pioneer Logo">
       </a>
@@ -42,8 +44,13 @@
             <p class="welcome-text">Welcome, User!</p>
             <div class="account-links">
               <!-- <a href="/acctlogin">Log In</a> Might be useless if we start at the login page-->
-              <a href="/acctlogin">Log Out</a>
+               <#if Session.SPRING_SECURITY_CONTEXT??>
+              <a href="/logout">Log Out</a>
               <a href="/account">My Account</a>
+              <#else>
+              <a href="/acctlogin">Log In</a>
+              <a href="/signup">Sign Up</a>
+              </#if>
             </div>
           </div>
         </div>
@@ -56,7 +63,7 @@
         </nav>
         <div class="info-text">
           <p style="margin-top:0;">The Political Pioneer is an independent, nonpartisan platform for
-             third-party organizing and voter engagement.</p>
+            third-party organizing and voter engagement.</p>
           <ul>
             <li><a href="/bugreport">Report a Bug</a> — something broken? tell us</li>
             <li><a href="/contactdevteam">Contact the Dev Team</a> — feedback &amp; feature requests</li>
@@ -81,7 +88,13 @@
             <!--<a href="#">Collaborate</a> might remove as it could be merged with /account or /events-->
             <a href="/events">Events</a>
             <!--<a href="#">Voter Tools</a> may remove as it can be merged with resources-->
-            <a href="/admin">Admin</a> <!-- Temporarily available for demonstration purposes-->
+
+
+            <#if isAdmin!false>
+              <a href="/admin">Admin Dashboard</a>
+            </#if>
+
+
           </nav>
           <div class="search">
             <input type="text" placeholder="Search parties, platforms, issues...">
@@ -244,4 +257,5 @@
   </div>
 
 </body>
+
 </html>

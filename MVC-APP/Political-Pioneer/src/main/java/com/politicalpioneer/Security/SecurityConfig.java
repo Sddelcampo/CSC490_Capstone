@@ -37,7 +37,7 @@ public class SecurityConfig {
             .requestMatchers("/css/**", "/images/**").permitAll()
             .requestMatchers(HttpMethod.POST, "/user").permitAll()
              .requestMatchers("/admin").hasAuthority("admin")
-             .requestMatchers("/account").hasAuthority("user")
+             .requestMatchers("/account").hasAnyAuthority("owner", "user", "admin")
             .anyRequest().authenticated())
         .formLogin(form -> form.loginPage("/acctlogin").defaultSuccessUrl("/platform", true).permitAll())
         .exceptionHandling((x) -> x.accessDeniedPage("/403"))

@@ -79,7 +79,7 @@
             <!--<a href="#">Collaborate</a> might remove as it could be merged with /account or /events-->
             <a href="/events">Events</a>
             <!--<a href="#">Voter Tools</a> may remove as it can be merged with resources-->
-            <a href="/admin">Admin</a> <!-- Temporarily available for demonstration purposes-->
+        
           </nav>
           <div class="search">
             <input type="text" placeholder="Search parties, platforms, issues...">
