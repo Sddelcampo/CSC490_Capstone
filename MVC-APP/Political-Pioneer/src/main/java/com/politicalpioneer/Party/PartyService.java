@@ -8,6 +8,8 @@ import com.politicalpioneer.BadRequestException;
 import com.politicalpioneer.ResourceNotFoundException;
 import com.politicalpioneer.User.*;
 
+import org.locationtech.jts.geom.*;
+
 @Service
 public class PartyService {
     
@@ -50,34 +52,52 @@ public class PartyService {
         return partyRepo.findByUserId(userId);
     }
 
-    /*
-    public List<Party> getPartiesDefault(Long userID) {
+    
+    public List<Party> getPartiesDefault(Long userID, double lng, double lat, double radius) {
         User user = userRepository.findById(userID).orElse(null);
-        List<Party> parties = getAllParties(); // Need to update this to filter by location
+        List<Party> parties = getPartiesByLocation(lng, lat, radius);
         if (parties.isEmpty()) {
             throw new ResourceNotFoundException("No parties found");
         }
         else {
+            // Sort the parties based on alignment difference and their index in the list
             parties.sort((p1, p2) -> {
-                
-                // Add section for weighting location
-                if (p1IdeologySimilarity < p2IdeologySimilarity) {
-                        return -1;
-                    }
-                    else if (p1IdeologySimilarity > p2IdeologySimilarity) {
-                        return 1;
-                    }
-                    else {
-                        return 0;
-                    }
-                });
+                float p1Weight = (float) (p1.getPartyAlignment().getAlignmentDifference(user.getUserAlignment()) * 0.7) + 
+                                 (float) (parties.indexOf(p1) * 0.3);
+                float p2Weight = (float) (p2.getPartyAlignment().getAlignmentDifference(user.getUserAlignment()) * 0.7) +
+                                 (float) (parties.indexOf(p2) * 0.3);
+                return Float.compare(p1Weight, p2Weight);
+            });
             return parties;
         }
     }
-    */
+    
 
-    public List<Party> getPartiesByLocation(double lat, double lng, double radius) {
-        return partyRepo.findByLocationWithin(lat, lng, radius);
+    public List<Party> getPartiesByLocation(double lng, double lat, double radius) {
+        List<Party> parties = getAllParties();
+        if (parties.isEmpty()) {
+            throw new ResourceNotFoundException("No parties found");
+        }
+        else {
+            if (lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+                throw new BadRequestException("Invalid latitude or longitude values");
+            }
+            // Sort the parties based on alignment difference and their index in the list
+            GeometryFactory geoFactory = new GeometryFactory(new PrecisionModel(), 4326);
+            Point userLocation = geoFactory.createPoint(new Coordinate(lng, lat));
+            parties.removeIf(party -> party.getLocation().distance(userLocation) > radius);
+            if (parties.isEmpty()) {
+                throw new ResourceNotFoundException("No parties found within the specified radius");
+            }
+            else {
+                parties.sort((p1, p2) -> {
+                    float p1Distance = (float) (p1.getLocation().distance(userLocation));
+                    float p2Distance = (float) (p2.getLocation().distance(userLocation));
+                    return Float.compare(p1Distance, p2Distance);
+                });
+            }
+            return parties;
+        }
     }
 
     public List<Party> getPartiesByAlignment(Long userID) {
