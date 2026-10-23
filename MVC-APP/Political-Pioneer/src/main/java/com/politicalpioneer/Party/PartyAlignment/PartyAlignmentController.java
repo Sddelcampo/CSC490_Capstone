@@ -11,7 +11,7 @@ public class PartyAlignmentController {
         this.partyAlignmentService = partyAlignmentService;
     }
 
-    @GetMapping("/parties/{id}/alignment")
+    @GetMapping("/party/{id}/alignment")
     public ResponseEntity<PartyAlignment> getPartyAlignment(@PathVariable("id") Long id) {
         PartyAlignment alignment = partyAlignmentService.getPartyAlignmentById(id);
         return ResponseEntity.ok(alignment);

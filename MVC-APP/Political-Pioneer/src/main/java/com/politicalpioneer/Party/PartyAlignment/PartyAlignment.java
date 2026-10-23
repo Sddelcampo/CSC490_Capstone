@@ -1,7 +1,8 @@
 package com.politicalpioneer.Party.PartyAlignment;
 
 import com.politicalpioneer.Party.*;
-
+import com.politicalpioneer.User.*;
+import com.politicalpioneer.User.UserAlignment.UserAlignment;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.*;
@@ -58,6 +59,10 @@ public class PartyAlignment {
         this.gunControlAlignment = gunControlAlignment;
         this.environmentalAlignment = environmentalAlignment;
         this.technologicalAdvancementAlignment = technologicalAdvancementAlignment;
+    }
+
+    public void setParty(Party party) {
+        this.party = party;
     }
 
     public int getFreemarketAlignment() {
@@ -143,5 +148,17 @@ public class PartyAlignment {
     public void addTechnologicalAdvancementAlignment(int questionResponse) {
         this.technologicalAdvancementAlignment += questionResponse;
     } 
-}
 
+    public int getAlignmentDifference(UserAlignment userAlignment) {
+        int absoluteDifference = (
+            Math.abs(this.freemarketAlignment - userAlignment.getFreemarketAlignment()) +
+            Math.abs(this.governmentInvolvementAlignment - userAlignment.getGovernmentInvolvementAlignment()) +
+            Math.abs(this.socialFreedomAlignment - userAlignment.getSocialFreedomAlignment()) +
+            Math.abs(this.foreignInvolvementAlignment - userAlignment.getForeignInvolvementAlignment()) +
+            Math.abs(this.gunControlAlignment - userAlignment.getGunControlAlignment()) +
+            Math.abs(this.environmentalAlignment - userAlignment.getEnvironmentalAlignment()) +
+            Math.abs(this.technologicalAdvancementAlignment - userAlignment.getTechnologicalAdvancementAlignment())
+        );
+        return absoluteDifference;
+    }
+}
