@@ -11,6 +11,8 @@ import com.politicalpioneer.PartyMember.PartyMember;
 import com.politicalpioneer.User.User;
 import com.politicalpioneer.Party.PartyAlignment.*;
 
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import org.locationtech.jts.geom.Point;
 
 import jakarta.persistence.*;
@@ -41,6 +43,7 @@ public class Party {
     private String status;
 
     @Column(name = "location", columnDefinition = "geography(Point, 4326)", nullable = false)
+    @JdbcTypeCode(SqlTypes.GEOGRAPHY)
     private Point location;
    
     @JsonManagedReference("party-member")
@@ -68,7 +71,7 @@ public class Party {
         this.partyName = partyName;
         this.description = description;
         this.location = location;
-        this.partyAlignment = partyAlignment;
+        setPartyAlignment(partyAlignment);
         this.status = status;
         this.partyMember = partyMembers;
         this.ann = ann;
@@ -81,7 +84,7 @@ public class Party {
         this.partyName = partyName;
         this.description = description;
         this.location = location;
-        this.partyAlignment = new PartyAlignment();
+        setPartyAlignment(new PartyAlignment());
         this.status = "active";
         this.partyMember = new ArrayList<>();
         this.ann = new ArrayList<>();
@@ -128,6 +131,9 @@ public class Party {
 
     public void setPartyAlignment(PartyAlignment partyAlignment) {
         this.partyAlignment = partyAlignment;
+        if (partyAlignment != null) {
+            partyAlignment.setParty(this);
+        }
     }
 
 

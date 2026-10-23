@@ -150,14 +150,6 @@ public class PartyService {
         return parties;
     }
 
-    public Party addParty(Party party) {
-        if (party == null) {
-            throw new BadRequestException("Party object null");
-        }
-
-        return partyRepo.save(party);
-    }
-
     public Party updateParty(Long partyId, Party updatedParty) {
         Party existingParty = partyRepo.findById(partyId).orElseThrow(() ->
         new ResourceNotFoundException("Party with ID " + partyId + " not found"));
@@ -178,7 +170,34 @@ public class PartyService {
     }
 
 
+    public Party addParty(PartyController.PartyCreateRequest request, Long userID) {
+        if (request == null || request.latitude() == null || request.longitude() == null) {
+            throw new BadRequestException("Party latitude and longitude are required");
+        }
 
+        double longitude = request.longitude();
+        double latitude = request.latitude();
+        if (!Double.isFinite(longitude) || !Double.isFinite(latitude)
+                || longitude < -180 || longitude > 180
+                || latitude < -90 || latitude > 90) {
+            throw new BadRequestException("Party location has invalid longitude or latitude");
+        }
+        if (request.description() == null) {
+            throw new BadRequestException("Party description is required");
+        }
+
+        User user = userRepository.findById(userID)
+            .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
+        Point location = geometryFactory.createPoint(new Coordinate(longitude, latitude));
+        Party party = new Party(user, request.partyName(), request.description(), location);
+        if (request.status() != null) {
+            party.setStatus(request.status());
+        }
+
+        return partyRepo.save(party);
+    }
 
 
 }

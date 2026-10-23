@@ -61,6 +61,10 @@ public class PartyAlignment {
         this.technologicalAdvancementAlignment = technologicalAdvancementAlignment;
     }
 
+    public void setParty(Party party) {
+        this.party = party;
+    }
+
     public int getFreemarketAlignment() {
         return freemarketAlignment;
     }
@@ -158,4 +162,3 @@ public class PartyAlignment {
         return absoluteDifference;
     }
 }
-
