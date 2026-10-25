@@ -104,6 +104,17 @@ public class PartyController {
         return ResponseEntity.ok(partiesByAlignment.stream().map(this::toResponse).collect(Collectors.toList()));
     }
 
+     @GetMapping ("party/search")
+    public ResponseEntity<List<PartyResponse>> searchPartiesDefault(
+        @RequestParam long userID,
+        @RequestParam double lng, 
+        @RequestParam double lat, 
+        @RequestParam(required = false, defaultValue = "1000000") double radius // Default radius is 1,000,000 meters (1,000 km, or ~621 miles)
+    ) {
+        List<Party> partiesDefault = partyService.getPartiesDefault(userID, lng, lat, radius);
+        return ResponseEntity.ok(partiesDefault.stream().map(this::toResponse).collect(Collectors.toList()));
+    }
+
     private PartyResponse toResponse(Party party) {
         Point point = party.getLocation();
         GeoJsonPoint location = point == null
