@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.politicalpioneer.Admin.Admin;
+import com.politicalpioneer.Admin.AdminRepository;
 import com.politicalpioneer.User.User;
 import com.politicalpioneer.User.UserRepository;
 
@@ -17,6 +19,8 @@ public class UserDetailService implements UserDetailsService{
    
     @Autowired
     private UserRepository userRepo;
+
+    @Autowired AdminRepository adminRepo;
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
@@ -31,4 +35,5 @@ public class UserDetailService implements UserDetailsService{
         return new org.springframework.security.core.userdetails.User(
                user.getUserName(), user.getPassword(), authList);
     }
+   
 }

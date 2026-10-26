@@ -23,14 +23,18 @@ public class Admin {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "role", nullable = false)
+    private String role;
+
     public Admin() {}
 
-    public Admin(Long id, String firstName, String lastName, String userName, String password) {
+    public Admin(Long id, String firstName, String lastName, String userName, String password, String role) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
-        this.password = userName;
+        this.password = password;
+        this.role = role;
     }
 
 
@@ -76,12 +80,12 @@ public class Admin {
         this.password = password;
     }
 
+    public String getRole() {
+        return role;
+    }
 
+    public void setRole(String role) {
+        this.role = role;
+    }
 
-
-
-    
-
-    
-    
 }

@@ -19,7 +19,9 @@ public class AppController {
     }
 
     @GetMapping("/account")
-    public Object showAccountPage(Model model) {
+    public Object showAccountPage(Model model, Authentication authentication) {
+        String name = authentication.getName();
+        model.addAttribute("name", name);
         return "account";
     }
 
@@ -28,9 +30,19 @@ public class AppController {
         return "questionnaire";
     }
 
+    @GetMapping("/admin")
+    public String adminHome() {
+        return "home";
+    }
+
+    @GetMapping("/createAdmin")
+    public Object adminSignUpPage(Model model) {
+        return "createAdmin";
+    }
+
     // @GetMapping("/home")
     // public Object showHomePage(Model model) {
-    //     return "home";
+    // return "home";
     // }
 
     @GetMapping("/home")
@@ -44,6 +56,11 @@ public class AppController {
     @GetMapping("/acctlogin")
     public Object showAcctloginPage(Model model) {
         return "acctlogin";
+    }
+
+    @GetMapping("/adminLogin")
+    public Object showAdminLogin(Model model) {
+        return "adminLogin";
     }
 
     @GetMapping("/signup")
@@ -94,4 +111,5 @@ public class AppController {
     // public Object loginToAccount(Model model) {
     // return "home";
     // }
+
 }

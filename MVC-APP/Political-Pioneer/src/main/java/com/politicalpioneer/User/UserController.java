@@ -67,7 +67,7 @@ public class UserController {
     public ResponseEntity<User> updateUser(@PathVariable("userId") Long userId, @RequestBody User updatedUser) {
     User savedUser = userService.updateUser(userId, updatedUser);
     return ResponseEntity.ok(savedUser);
-}
+ }
 
 
 @DeleteMapping("/user/{userId}")
@@ -77,11 +77,13 @@ public ResponseEntity<Void> deleteUserById(@PathVariable("userId") Long userId) 
     return ResponseEntity.noContent().build();
 }
 
+
+
+
 @PostMapping("/userSignup")
     public Object userSignUp(@ModelAttribute User user, Model model) {
         userService.addUser(user);
         return "redirect:/acctlogin";   
-
 }
 
 }

@@ -27,13 +27,16 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-    @GetMapping("/admin")
-    public String getAllUsers(Model model) {
-        List<User> user = adminService.getAllNonAdminUsers();
-        // System.out.println(user);
-        model.addAttribute("users", user);
-        return "admin";
-    }
+    // @GetMapping("/admin")
+    // public String getAllUsers(Model model) {
+    //     List<User> user = adminService.getAllNonAdminUsers();
+    //     model.addAttribute("users", user);
+    //     return "admin";
+    // }
+
+    
+
+
 
     // @GetMapping("/admin")
     // public ResponseEntity<List<Admin>> getAllUsers() {
@@ -50,17 +53,32 @@ public class AdminController {
         return ResponseEntity.ok(admins);
     }
 
+    @GetMapping("/adminUsername/{userName}")
+    public ResponseEntity<Admin> getAdminByUserName(@PathVariable("userName") String userName) {
+        Admin admin = adminService.getByUserName(userName);
+        return ResponseEntity.ok(admin);
+    }
+
     @GetMapping("/admin/{id}")
     public ResponseEntity<Admin> getAdminById(@PathVariable("id") Long id) {
         Admin admin = adminService.getAdminById(id);
         return ResponseEntity.ok(admin);
     }
 
+    // @PostMapping("/createAdmin")
+    // public ResponseEntity<Admin> addAdmin(@RequestBody Admin admin) {
+    //     adminService.addAdmin(admin);
+    //     return ResponseEntity.ok(admin);
+    // }
+
     @PostMapping("/createAdmin")
-    public ResponseEntity<Admin> addAdmin(@RequestBody Admin admin) {
+    public Object adminSignUp(@ModelAttribute Admin admin, Model model) {
         adminService.addAdmin(admin);
-        return ResponseEntity.ok(admin);
+        return "redirect:/home";   
+        
     }
+
+   
 
     @PutMapping("/updateAdmin/{id}")
     public ResponseEntity<Admin> updateAdmin(@PathVariable("id") Long id, @RequestBody Admin updatedAdmin) {
