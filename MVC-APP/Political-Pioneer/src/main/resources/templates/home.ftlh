@@ -92,6 +92,7 @@
 
             <#if isAdmin!false>
               <a href="/admin">Admin Dashboard</a>
+              <a href="/createAdmin">Create Admin</a>
             </#if>
 
 

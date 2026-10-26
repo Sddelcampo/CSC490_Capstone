@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.politicalpioneer.ResourceNotFoundException;
 import com.politicalpioneer.User.User;
 import com.politicalpioneer.User.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 public class AdminService {
@@ -17,6 +18,11 @@ public class AdminService {
 
     private String nonAdmin = "user";
     private final AdminRepository adminRepo;
+
+
+    @Autowired 
+    private  PasswordEncoder passwordEncoder;
+
 
     public List<User> getAllNonAdminUsers() {
         return userRepo.findByRole(nonAdmin);
@@ -40,19 +46,37 @@ public class AdminService {
         return adminRepo.findAll();
     }
 
+    public Admin getByUserName(String userName) {
+        if(adminRepo.findByUserName(userName) == null) {
+            throw new ResourceNotFoundException("Admin not found");
+        }
+        return adminRepo.findByUserName(userName);
+    }
     public Admin getAdminById(Long id) {
         if (!adminRepo.existsById(id)) {
-                throw new ResourceNotFoundException("Party with ID " + id + " not found");
+                throw new ResourceNotFoundException("Admin with ID " + id + " not found");
         }   
         return adminRepo.findById(id).orElse(null);
     }
 
+    
+
     public Admin addAdmin(Admin admin) {
+  
         if(admin == null) {
             throw new ResourceNotFoundException("Admin not found");
         }
-        return adminRepo.save(admin);
+        Admin newAdmin = adminRepo.save(admin);
+        
+        newAdmin.setPassword(passwordEncoder.encode(admin.getPassword()));
+
+      
+        return adminRepo.save(newAdmin);
     }
+
+    //   User newUser = userRepo.save(user);
+    //     newUser.setPassword(passwordEncoder.encode(user.getPassword()));
+    //     return userRepo.save(newUser);
 
     public void deleteAdminById(Long id) {
         Admin admin = adminRepo.findById(id).orElse(null);
