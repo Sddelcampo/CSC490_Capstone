@@ -55,48 +55,43 @@ public class PartyService {
     
     public List<Party> getPartiesDefault(Long userID, double lng, double lat, double radius) {
         User user = userRepository.findById(userID).orElse(null);
-        List<Party> parties = getPartiesByLocation(lng, lat, radius);
-        if (parties.isEmpty()) {
+        List<PartyDistance> partiesDistance = partyRepo.findByLocationWithin(lng, lat, radius);
+        if (partiesDistance.isEmpty()) {
             throw new ResourceNotFoundException("No parties found");
         }
         else {
             // Sort the parties based on alignment difference and their index in the list
-            parties.sort((p1, p2) -> {
-                float p1Weight = (float) (p1.getPartyAlignment().getAlignmentDifference(user.getUserAlignment()) * 0.7) + 
-                                 (float) (parties.indexOf(p1) * 0.3);
-                float p2Weight = (float) (p2.getPartyAlignment().getAlignmentDifference(user.getUserAlignment()) * 0.7) +
-                                 (float) (parties.indexOf(p2) * 0.3);
+            partiesDistance.sort((p1, p2) -> {
+                Party party1 = partyRepo.findById(p1.getPartyId()).orElse(null);
+                Party party2 = partyRepo.findById(p2.getPartyId()).orElse(null);
+                float p1Weight = (float) ((party1.getPartyAlignment().getAlignmentDifference(user.getUserAlignment()) / 140) * 0.7) + 
+                                 (float) ((p1.getDistanceMeters() / radius) * 0.3);
+                float p2Weight = (float) ((party2.getPartyAlignment().getAlignmentDifference(user.getUserAlignment()) / 140) * 0.7) +
+                                 (float) ((p2.getDistanceMeters() / radius) * 0.3);
                 return Float.compare(p1Weight, p2Weight);
             });
-            return parties;
+            return partiesDistance.stream().map(partyDistance -> {
+                Party party = partyRepo.findById(partyDistance.getPartyId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Party not found"));
+                return party;
+            }).toList();
+            /*return partiesDistance;*/
         }
     }
     
 
     public List<Party> getPartiesByLocation(double lng, double lat, double radius) {
-        List<Party> parties = getAllParties();
-        if (parties.isEmpty()) {
+        List<PartyDistance> partiesDistance = partyRepo.findByLocationWithin(lng, lat, radius);
+        if (partiesDistance.isEmpty()) {
             throw new ResourceNotFoundException("No parties found");
         }
         else {
-            if (lat < -90 || lat > 90 || lng < -180 || lng > 180) {
-                throw new BadRequestException("Invalid latitude or longitude values");
-            }
-            // Sort the parties based on alignment difference and their index in the list
-            GeometryFactory geoFactory = new GeometryFactory(new PrecisionModel(), 4326);
-            Point userLocation = geoFactory.createPoint(new Coordinate(lng, lat));
-            parties.removeIf(party -> party.getLocation().distance(userLocation) > radius);
-            if (parties.isEmpty()) {
-                throw new ResourceNotFoundException("No parties found within the specified radius");
-            }
-            else {
-                parties.sort((p1, p2) -> {
-                    float p1Distance = (float) (p1.getLocation().distance(userLocation));
-                    float p2Distance = (float) (p2.getLocation().distance(userLocation));
-                    return Float.compare(p1Distance, p2Distance);
-                });
-            }
-            return parties;
+            return partiesDistance.stream().map(partyDistance -> {
+                Party party = partyRepo.findById(partyDistance.getPartyId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Party not found"));
+                return party;
+            }).toList();
+            /*return partiesDistance;*/
         }
     }
 
@@ -109,40 +104,6 @@ public class PartyService {
         }
         else {
             parties.sort((p1, p2) -> {
-                /* float p1FreemarketSimilarity = Math.abs(
-                    p1.getPartyAlignment().getFreemarketAlignment() - user.getUserAlignment().getFreemarketAlignment());
-                float p2FreemarketSimilarity = Math.abs(
-                    p2.getPartyAlignment().getFreemarketAlignment() - user.getUserAlignment().getFreemarketAlignment());
-                float p1GovernmentInvolvementSimilarity = Math.abs(
-                    p1.getPartyAlignment().getGovernmentInvolvementAlignment() - user.getUserAlignment().getGovernmentInvolvementAlignment());
-                float p2GovernmentInvolvementSimilarity = Math.abs(
-                    p2.getPartyAlignment().getGovernmentInvolvementAlignment() - user.getUserAlignment().getGovernmentInvolvementAlignment());
-                float p1SocialFreedomSimilarity = Math.abs(
-                    p1.getPartyAlignment().getSocialFreedomAlignment() - user.getUserAlignment().getSocialFreedomAlignment());
-                float p2SocialFreedomSimilarity = Math.abs(
-                    p2.getPartyAlignment().getSocialFreedomAlignment() - user.getUserAlignment().getSocialFreedomAlignment());
-                float p1ForeignInvolvementSimilarity = Math.abs(
-                    p1.getPartyAlignment().getForeignInvolvementAlignment() - user.getUserAlignment().getForeignInvolvementAlignment());
-                float p2ForeignInvolvementSimilarity = Math.abs(
-                    p2.getPartyAlignment().getForeignInvolvementAlignment() - user.getUserAlignment().getForeignInvolvementAlignment());
-                float p1GunControlSimilarity = Math.abs(
-                    p1.getPartyAlignment().getGunControlAlignment() - user.getUserAlignment().getGunControlAlignment());
-                float p2GunControlSimilarity = Math.abs(
-                    p2.getPartyAlignment().getGunControlAlignment() - user.getUserAlignment().getGunControlAlignment());
-                float p1EnvironmentalSimilarity = Math.abs(
-                    p1.getPartyAlignment().getEnvironmentalAlignment() - user.getUserAlignment().getEnvironmentalAlignment());
-                float p2EnvironmentalSimilarity = Math.abs(
-                    p2.getPartyAlignment().getEnvironmentalAlignment() - user.getUserAlignment().getEnvironmentalAlignment());
-                float p1TechnologicalAdvancementSimilarity = Math.abs(
-                    p1.getPartyAlignment().getTechnologicalAdvancementAlignment() - user.getUserAlignment().getTechnologicalAdvancementAlignment());
-                float p2TechnologicalAdvancementSimilarity = Math.abs(
-                    p2.getPartyAlignment().getTechnologicalAdvancementAlignment() - user.getUserAlignment().getTechnologicalAdvancementAlignment());
-                
-                float p1AlignmentSimilarity = p1FreemarketSimilarity + p1GovernmentInvolvementSimilarity + p1SocialFreedomSimilarity
-                + p1ForeignInvolvementSimilarity + p1GunControlSimilarity + p1EnvironmentalSimilarity + p1TechnologicalAdvancementSimilarity;
-                float p2AlignmentSimilarity = p2FreemarketSimilarity + p2GovernmentInvolvementSimilarity + p2SocialFreedomSimilarity
-                + p2ForeignInvolvementSimilarity + p2GunControlSimilarity + p2EnvironmentalSimilarity + p2TechnologicalAdvancementSimilarity;
-                return Float.compare(p1AlignmentSimilarity, p2AlignmentSimilarity);*/
                 return Float.compare(p1.getPartyAlignment().getAlignmentDifference(user.getUserAlignment()), 
                                      p2.getPartyAlignment().getAlignmentDifference(user.getUserAlignment()));
             });

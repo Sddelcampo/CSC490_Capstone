@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import com.politicalpioneer.Announcement.Announcement;
 import com.politicalpioneer.ForumPost.ForumPost;
+import com.politicalpioneer.Party.PartyController.GeoJsonPoint;
 import com.politicalpioneer.Party.PartyAlignment.PartyAlignment;
 import com.politicalpioneer.PartyMember.PartyMember;
 import org.locationtech.jts.geom.Point;
@@ -34,12 +35,26 @@ public class PartyController {
         List<ForumPost> forumPost
     ) {}
 
+    public record PartyDistanceResponse(
+        Long partyId,
+        String partyName,
+        String description,
+        PartyAlignment partyAlignment,
+        String status,
+        GeoJsonPoint location,
+        List<PartyMember> partyMembers,
+        List<Announcement> ann,
+        List<ForumPost> forumPost,
+        Double distanceMeters
+    ) {}
+
     public record PartyCreateRequest(
         String partyName,
         String description,
         String status,
-        Double latitude,
-        Double longitude
+        Double longitude,
+        Double latitude
+        
     ) {}
 
     private final PartyService partyService;
@@ -104,7 +119,7 @@ public class PartyController {
         return ResponseEntity.ok(partiesByAlignment.stream().map(this::toResponse).collect(Collectors.toList()));
     }
 
-     @GetMapping ("party/search")
+    @GetMapping ("party/search")
     public ResponseEntity<List<PartyResponse>> searchPartiesDefault(
         @RequestParam long userID,
         @RequestParam double lng, 
@@ -131,6 +146,27 @@ public class PartyController {
             party.getPartyMembers(),
             party.getAnn(),
             party.getForumPost()
+        );
+    }
+
+    private PartyDistanceResponse toDistanceResponse(PartyDistance partyDistance) {
+        Party party = partyService.getPartyById(partyDistance.getPartyId());
+        Point point = party.getLocation();
+        GeoJsonPoint location = point == null
+            ? null
+            : new GeoJsonPoint("Point", List.of(point.getY(), point.getX()));
+
+        return new PartyDistanceResponse(
+            party.getPartyId(),
+            party.getPartyName(),
+            party.getDescription(),
+            party.getPartyAlignment(),
+            party.getStatus(),
+            location,
+            party.getPartyMembers(),
+            party.getAnn(),
+            party.getForumPost(),
+            partyDistance.getDistanceMeters()
         );
     }
 }
