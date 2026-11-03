@@ -5,25 +5,29 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-public interface PartyRepository extends JpaRepository<Party, Long> {
+public interface PartyRepository extends JpaRepository<Party, Long> {    
     List<Party> findByPartyIdAndUserId(Long partyId, Long userId);
     List<Party> findByStatus(String status);
     List<Party> findByPartyName(String partyName);
     Party findByUserId(Long userId);
     
     // Custom query to find parties within a certain radius of the user's location, calculated using PostGIS functions
-    /*@Query(value ="""
-        SELECT p.*, ST_Distance(
-            ST_SetSRID(ST_MakePoint(:lng, :lat), 4326),
-            ST_SetSRID(p.location, 4326)
-        ) AS distance
+    @Query(value ="""
+        SELECT p.party_id AS "partyId",
+        p.party_name AS "partyName",
+        p.description AS "description",
+        p.status AS "status", 
+        ST_Distance(
+            ST_SetSRID(ST_MakePoint(:lng, :lat), 4326)::geography,
+            p.location
+        ) AS "distanceMeters"
         FROM Party p 
         WHERE ST_DWithin(
-            ST_SetSRID(ST_MakePoint(:lng, :lat), 4326), 
-            ST_SetSRID(p.location, 4326), 
+            ST_SetSRID(ST_MakePoint(:lng, :lat), 4326)::geography, 
+            p.location, 
             :radius
         )
-        ORDER BY distance
+        ORDER BY "distanceMeters" ASC
     """, nativeQuery = true)
-    List<Party> findByLocationWithin(double lat, double lng, double radius);*/
+    List<PartyDistance> findByLocationWithin(double lng, double lat, double radius);
 }
