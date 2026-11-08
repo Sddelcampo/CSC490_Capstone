@@ -1,14 +1,37 @@
 package com.politicalpioneer;
 
+import java.util.List;
+
+import com.politicalpioneer.Legislation.LegiscanService;
+import com.politicalpioneer.Legislation.LegiscanService.ActiveBills;
+import com.politicalpioneer.Legislation.LegiscanService.LegiscanApiException;
+import com.politicalpioneer.Party.Party;
+import com.politicalpioneer.Party.PartyService;
+import com.politicalpioneer.User.User;
+import com.politicalpioneer.User.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 // import ch.qos.logback.core.model.Model;
 
 @Controller
 public class AppController {
+
+    private final PartyService partyService;
+    private final UserService userService;
+    private final LegiscanService legiscanService;
+
+    public AppController(
+            PartyService partyService,
+            UserService userService,
+            LegiscanService legiscanService) {
+        this.partyService = partyService;
+        this.userService = userService;
+        this.legiscanService = legiscanService;
+    }
 
     // When a user enters the page the first place
     // we want to send them is not to login but rather
@@ -73,10 +96,10 @@ public class AppController {
         return "platform";
     }
 
-    @GetMapping("/resources")
+    /*@GetMapping("/resources")
     public Object showResourcesPage(Model model) {
         return "resources";
-    }
+    }*/
 
     @GetMapping("/events")
     public Object showEventsPage(Model model) {
@@ -111,5 +134,95 @@ public class AppController {
     // public Object loginToAccount(Model model) {
     // return "home";
     // }
+
+    @GetMapping("/search")
+    public String search(
+            Model model,
+            Authentication authentication,
+            @RequestParam(defaultValue = "alignment") String sort,
+            @RequestParam(required = false) Double lng,
+            @RequestParam(required = false) Double lat) {
+        boolean isAdmin = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("admin"));
+        User user = userService.getUserByUserName(authentication.getName());
+
+        List<Party> parties = List.of();
+        String searchError = null;
+        switch (sort) {
+            case "alignment" -> parties = partyService.getPartiesByAlignment(user.getUserId());
+            case "location", "default" -> {
+                if (lng == null || lat == null) {
+                    searchError = "Allow location access in your browser to sort by location or default.";
+                } else if (!Double.isFinite(lng) || !Double.isFinite(lat)
+                        || lng < -180 || lng > 180 || lat < -90 || lat > 90) {
+                    searchError = "Your browser provided invalid location coordinates.";
+                } else if ("location".equals(sort)) {
+                    parties = partyService.getPartiesByLocation(lng, lat, 1_000_000);
+                } else {
+                    parties = partyService.getPartiesDefault(user.getUserId(), lng, lat, 1_000_000);
+                }
+            }
+            default -> searchError = "Unknown party sorting option.";
+        }
+
+        model.addAttribute("parties", parties);
+        model.addAttribute("sort", sort);
+        model.addAttribute("searchError", searchError);
+        model.addAttribute("lng", lng);
+        model.addAttribute("lat", lat);
+        model.addAttribute("isAdmin", isAdmin);
+        return "partysearch";
+    }
+
+    @GetMapping("/resources")
+    public String voterResources(
+            Model model,
+            Authentication authentication) {
+        return "voterresources";
+    }
+
+    @GetMapping("/resources/voter-registration")
+    public String voterRegistration(
+            Model model,
+            Authentication authentication) {
+        return "voterregistration";
+    }
+
+    @GetMapping("/resources/voter-lookup")
+    public String voterLookup(
+            Model model,
+            Authentication authentication) {
+        return "voterlookup";
+    }
+
+    @GetMapping("/resources/polling-places")
+    public String pollingPlaces(
+            Model model,
+            Authentication authentication) {
+        return "pollingplaces";
+    }
+
+    @GetMapping("/resources/legislation")
+    public String legislation(
+            Model model,
+            Authentication authentication,
+            @RequestParam(required = false) String state) {
+        boolean isAdmin = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("admin"));
+        model.addAttribute("isAdmin", isAdmin);
+        model.addAttribute("state", state == null ? "" : state.toUpperCase());
+        model.addAttribute("bills", List.of());
+        if (state != null && !state.isBlank()) {
+            try {
+                ActiveBills results = legiscanService.getActiveBills(state);
+                model.addAttribute("bills", results.bills());
+                model.addAttribute("sessionName", results.sessionName());
+                model.addAttribute("truncated", results.truncated());
+            } catch (LegiscanApiException exception) {
+                model.addAttribute("legislationError", exception.getMessage());
+            }
+        }
+        return "legislation";
+    }
 
 }

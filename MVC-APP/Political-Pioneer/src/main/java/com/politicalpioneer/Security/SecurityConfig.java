@@ -72,9 +72,10 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(authorize -> authorize
                 .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
+                .requestMatchers("/party/search/alignment").authenticated()
                 .requestMatchers("/", "/home", "/user", "/users", "/user/userName/**", "/parties/**",
                     "/party/**", "/users/role/user", "/questionnaire", "/signup", "/platform",
-                    "/resources", "/events", "/aboutus", "/bugreport", "/contactdevteam", "/guide",
+                    "/resources", "/resources/**", "/events", "/aboutus", "/bugreport", "/contactdevteam", "/guide",
                     "/userSignup", "/getAllAdmin", "/adminUsername/**", "/createAdmin", "/addAdmin").permitAll()
                 .requestMatchers("/css/**", "/images/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/user").permitAll()

@@ -8,8 +8,11 @@ import com.politicalpioneer.ForumPost.ForumPost;
 import com.politicalpioneer.Party.PartyController.GeoJsonPoint;
 import com.politicalpioneer.Party.PartyAlignment.PartyAlignment;
 import com.politicalpioneer.PartyMember.PartyMember;
+import com.politicalpioneer.User.User;
+import com.politicalpioneer.User.UserService;
 import org.locationtech.jts.geom.Point;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -58,9 +61,11 @@ public class PartyController {
     ) {}
 
     private final PartyService partyService;
+    private final UserService userService;
 
-    public PartyController(PartyService partyService) {
+    public PartyController(PartyService partyService, UserService userService) {
         this.partyService = partyService;
+        this.userService = userService;
     }
 
     @GetMapping("/party")
@@ -89,7 +94,6 @@ public class PartyController {
 
     @DeleteMapping("/party/delete/{id}")
     public ResponseEntity<Void> deletePartyById(@PathVariable("id") Long id){
-        Party party = partyService.getPartyById(id);
         partyService.deletePartyById(id);
         return ResponseEntity.noContent().build();
 
@@ -113,9 +117,10 @@ public class PartyController {
 
     @GetMapping ("party/search/alignment")
     public ResponseEntity<List<PartyResponse>> searchPartiesByAlignment(
-        @RequestParam long userID
+        Authentication authentication
     ) {
-        List<Party> partiesByAlignment = partyService.getPartiesByAlignment(userID);
+        User user = userService.getUserByUserName(authentication.getName());
+        List<Party> partiesByAlignment = partyService.getPartiesByAlignment(user.getUserId());
         return ResponseEntity.ok(partiesByAlignment.stream().map(this::toResponse).collect(Collectors.toList()));
     }
 
