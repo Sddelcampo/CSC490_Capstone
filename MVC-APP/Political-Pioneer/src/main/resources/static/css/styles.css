@@ -170,6 +170,30 @@ a:hover { color: var(--link-hover); }
 .page-portal .col-left { width: 190px; flex-shrink: 0; }
 .page-portal .col-center { flex-grow: 1; min-width: 0; }
 .page-portal .col-right { width: 200px; flex-shrink: 0; }
+.page-portal .address-search-form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+.page-portal .address-search-form label { color: var(--navy); font-weight: bold; }
+.page-portal .address-search-form input {
+  width: 100%;
+  min-width: 0;
+  padding: 5px;
+  border: 1px solid var(--border-grey);
+  font-family: var(--font-base);
+  font-size: 13px;
+}
+.page-portal .address-search-form button:disabled { opacity: 0.65; }
+.page-portal #address-status,
+.page-portal .geocoder-attribution {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-size: 11px;
+}
+.page-portal #address-status { color: var(--red); }
+.page-portal .geocoder-attribution { margin-top: 8px; color: #555; }
 
 .page-portal .party-row {
   display: flex;
@@ -183,6 +207,87 @@ a:hover { color: var(--link-hover); }
 .page-portal .party-info .name { font-weight: bold; color: var(--navy); font-size: 14px; }
 .page-portal .party-info .meta { color: #666; font-size: 12px; }
 .page-portal .party-info .tagline { margin: 3px 0 0; }
+.page-portal .party-sort-form {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px;
+  background: var(--bg-tab);
+  border-bottom: 1px solid var(--hairline);
+}
+.page-portal .party-sort-form label { color: var(--navy); font-weight: bold; }
+.page-portal .party-sort-form select {
+  padding: 4px 6px;
+  border: 1px solid var(--border-grey);
+  background: var(--bg-panel);
+  color: #000;
+  font-family: var(--font-base);
+  font-size: 13px;
+}
+.page-portal .party-sort-form select:focus { outline: 1px solid var(--navy); }
+.page-portal #location-status { color: var(--red); }
+
+.page-portal .voter-tools-intro { margin: 0 0 10px; }
+.page-portal .voter-tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+.page-portal .voter-tool-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
+  min-height: 165px;
+  padding: 12px;
+  border: 1px solid var(--border-grey);
+  border-top: 4px solid var(--navy);
+  background: var(--bg-tab);
+  color: var(--navy);
+  text-decoration: none;
+}
+.page-portal .voter-tool-card:hover,
+.page-portal .voter-tool-card:focus {
+  border-top-color: var(--red);
+  background: #E0E0E0;
+  color: var(--red);
+}
+.page-portal .voter-tool-icon { font-size: 24px; }
+.page-portal .voter-tool-title { font-weight: bold; font-size: 15px; }
+.page-portal .voter-tool-description { color: #333; }
+.page-portal .voter-tool-action { margin-top: auto; font-weight: bold; text-decoration: underline; }
+.page-portal .voter-tools-note { margin: 10px 0 0; color: #666; font-size: 11px; }
+.page-portal .legislation-search-form {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px;
+  margin: 10px 0;
+  background: var(--bg-tab);
+  border: 1px solid var(--hairline);
+}
+.page-portal .legislation-search-form label { color: var(--navy); font-weight: bold; }
+.page-portal .legislation-search-form select {
+  padding: 5px;
+  border: 1px solid var(--border-grey);
+  background: var(--bg-panel);
+  font-family: var(--font-base);
+  font-size: 13px;
+}
+.page-portal .legislation-list { display: grid; gap: 8px; }
+.page-portal .legislation-item {
+  padding: 10px;
+  border: 1px solid var(--hairline);
+  border-left: 3px solid var(--navy);
+  background: #FFF;
+}
+.page-portal .legislation-item h4 { margin: 0 0 6px; font-size: 14px; }
+.page-portal .legislation-item p { margin: 4px 0; }
+.page-portal .legislation-message { margin: 10px 0; }
+.page-portal .legislation-error { color: var(--red); }
+.page-portal .legislation-attribution { margin: 12px 0 0; font-size: 11px; color: #555; }
 
 .page-portal .stat-strip {
   display: flex;
