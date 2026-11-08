@@ -134,12 +134,6 @@
           <!-- Center Bar -->
           <div class="col-center">
 
-            <div class="stat-strip">
-              <span>Active parties: <b>52</b></span>
-              <span>Platforms updated this week: <b>14</b></span>
-              <span>Voters engaged: <b>8,204</b></span>
-            </div>
-
             <div class="module red">
               <h2>Parties Matching Your Alignment</h2>
               <form id="sort-form" class="party-sort-form" method="get" action="/search">

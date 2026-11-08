@@ -2,9 +2,6 @@ package com.politicalpioneer;
 
 import java.util.List;
 
-import com.politicalpioneer.Legislation.LegiscanService;
-import com.politicalpioneer.Legislation.LegiscanService.ActiveBills;
-import com.politicalpioneer.Legislation.LegiscanService.LegiscanApiException;
 import com.politicalpioneer.Party.Party;
 import com.politicalpioneer.Party.PartyService;
 import com.politicalpioneer.User.User;
@@ -22,15 +19,12 @@ public class AppController {
 
     private final PartyService partyService;
     private final UserService userService;
-    private final LegiscanService legiscanService;
 
     public AppController(
             PartyService partyService,
-            UserService userService,
-            LegiscanService legiscanService) {
+            UserService userService) {
         this.partyService = partyService;
         this.userService = userService;
-        this.legiscanService = legiscanService;
     }
 
     // When a user enters the page the first place
@@ -200,29 +194,6 @@ public class AppController {
             Model model,
             Authentication authentication) {
         return "pollingplaces";
-    }
-
-    @GetMapping("/resources/legislation")
-    public String legislation(
-            Model model,
-            Authentication authentication,
-            @RequestParam(required = false) String state) {
-        boolean isAdmin = authentication != null && authentication.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("admin"));
-        model.addAttribute("isAdmin", isAdmin);
-        model.addAttribute("state", state == null ? "" : state.toUpperCase());
-        model.addAttribute("bills", List.of());
-        if (state != null && !state.isBlank()) {
-            try {
-                ActiveBills results = legiscanService.getActiveBills(state);
-                model.addAttribute("bills", results.bills());
-                model.addAttribute("sessionName", results.sessionName());
-                model.addAttribute("truncated", results.truncated());
-            } catch (LegiscanApiException exception) {
-                model.addAttribute("legislationError", exception.getMessage());
-            }
-        }
-        return "legislation";
     }
 
 }
