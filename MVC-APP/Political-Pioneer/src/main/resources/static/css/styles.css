@@ -226,6 +226,12 @@ a:hover { color: var(--link-hover); }
   font-size: 13px;
 }
 .page-portal .party-sort-form select:focus { outline: 1px solid var(--navy); }
+.page-portal .radius-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.page-portal .radius-field[hidden] { display: none; }
 .page-portal #location-status { color: var(--red); }
 
 .page-portal .voter-tools-intro { margin: 0 0 10px; }

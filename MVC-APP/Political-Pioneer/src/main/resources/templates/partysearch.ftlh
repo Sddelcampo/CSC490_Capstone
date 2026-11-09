@@ -143,6 +143,18 @@
                   <option value="location"<#if sort == "location"> selected</#if>>Location</option>
                   <option value="default"<#if sort == "default"> selected</#if>>Default</option>
                 </select>
+                <div id="radius-field" class="radius-field"<#if sort != "location" && sort != "default"> hidden</#if>>
+                  <label for="radiusKm">Search radius:</label>
+                  <span class="radius-select-wrap">
+                    <select id="radiusKm" name="radiusKm" class="radius-select">
+                      <option value="1"<#if radiusKm == 1> selected</#if>>1 Km</option>
+                      <option value="10"<#if radiusKm == 10> selected</#if>>10 Km</option>
+                      <option value="100"<#if radiusKm == 100> selected</#if>>100 Km</option>
+                      <option value="1000"<#if radiusKm == 1000> selected</#if>>1000 Km</option>
+                      <option value="10000"<#if radiusKm == 10000> selected</#if>>10000 Km</option>
+                    </select>
+                  </span>
+                </div>
                 <input type="hidden" id="lng" name="lng" value="${lng!}">
                 <input type="hidden" id="lat" name="lat" value="${lat!}">
                 <button class="btn primary" type="submit">Apply</button>
@@ -234,10 +246,15 @@
   <script>
     const sortForm = document.getElementById("sort-form");
     const sortSelect = document.getElementById("sort");
+    const radiusField = document.getElementById("radius-field");
     const locationStatus = document.getElementById("location-status");
     const addressSearchForm = document.getElementById("address-search-form");
     const addressInput = document.getElementById("address");
     const addressStatus = document.getElementById("address-status");
+
+    sortSelect.addEventListener("change", () => {
+      radiusField.hidden = sortSelect.value !== "location" && sortSelect.value !== "default";
+    });
 
     addressSearchForm.addEventListener("submit", async (event) => {
       event.preventDefault();
