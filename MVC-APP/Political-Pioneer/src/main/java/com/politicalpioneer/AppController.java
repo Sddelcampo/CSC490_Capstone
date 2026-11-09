@@ -135,25 +135,31 @@ public class AppController {
             Authentication authentication,
             @RequestParam(defaultValue = "alignment") String sort,
             @RequestParam(required = false) Double lng,
-            @RequestParam(required = false) Double lat) {
+            @RequestParam(required = false) Double lat,
+            @RequestParam(defaultValue = "1000") int radiusKm) {
         boolean isAdmin = authentication != null && authentication.getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("admin"));
         User user = userService.getUserByUserName(authentication.getName());
 
         List<Party> parties = List.of();
         String searchError = null;
+        boolean validRadius = radiusKm == 1 || radiusKm == 10 || radiusKm == 100
+                || radiusKm == 1_000 || radiusKm == 10_000;
         switch (sort) {
             case "alignment" -> parties = partyService.getPartiesByAlignment(user.getUserId());
             case "location", "default" -> {
-                if (lng == null || lat == null) {
+                if (!validRadius) {
+                    searchError = "Choose a search radius from the available options.";
+                } else if (lng == null || lat == null) {
                     searchError = "Allow location access in your browser to sort by location or default.";
                 } else if (!Double.isFinite(lng) || !Double.isFinite(lat)
                         || lng < -180 || lng > 180 || lat < -90 || lat > 90) {
                     searchError = "Your browser provided invalid location coordinates.";
                 } else if ("location".equals(sort)) {
-                    parties = partyService.getPartiesByLocation(lng, lat, 1_000_000);
+                    parties = partyService.getPartiesByLocation(lng, lat, radiusKm * 1_000.0);
                 } else {
-                    parties = partyService.getPartiesDefault(user.getUserId(), lng, lat, 1_000_000);
+                    parties = partyService.getPartiesDefault(
+                            user.getUserId(), lng, lat, radiusKm * 1_000.0);
                 }
             }
             default -> searchError = "Unknown party sorting option.";
@@ -161,6 +167,7 @@ public class AppController {
 
         model.addAttribute("parties", parties);
         model.addAttribute("sort", sort);
+        model.addAttribute("radiusKm", validRadius ? radiusKm : 1_000);
         model.addAttribute("searchError", searchError);
         model.addAttribute("lng", lng);
         model.addAttribute("lat", lat);
