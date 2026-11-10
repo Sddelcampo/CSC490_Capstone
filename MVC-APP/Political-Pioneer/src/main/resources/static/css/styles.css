@@ -157,6 +157,26 @@ a:hover { color: var(--link-hover); }
 }
 .question-block .scale-option:hover span { color: var(--red); }
 
+/* paginated questionnaire: step indicator, status line, prev/next bar */
+.q-progress { display: flex; gap: 6px; margin: 0 0 14px 0; padding: 0; list-style: none; }
+.q-progress li { flex: 1; }
+.q-progress a, .q-progress span {
+  display: block;
+  text-align: center;
+  padding: 6px 4px;
+  font-size: 12px;
+  border: 1px solid var(--border-grey);
+  text-decoration: none;
+  color: inherit;
+}
+.q-progress li.current a, .q-progress li.current span { font-weight: bold; border-width: 2px; }
+.q-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.save-status { font-size: 12px; min-height: 1em; }
+.save-status.error { color: var(--red); font-weight: bold; }
+.page-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; }
+.page-nav .spacer { min-width: 120px; }
+.btn.disabled { pointer-events: none; opacity: .4; }
+
 /* ==========================================================
    PAGE: PORTAL (index.html)
    ========================================================== */

@@ -1,0 +1,516 @@
+/* ==========================================================
+   The Political Pioneer — Shared Stylesheet
+   Y2K / early-2000s portal aesthetic (Yahoo/Excite-era)
+   ========================================================== */
+
+:root {
+  --navy: #003366;
+  --red: #CC0000;
+  --gold: #996600;
+  --link-blue: #0000CC;
+  --link-visited: #660099;
+  --link-hover: #CC0000;
+  --border-grey: #999999;
+  --hairline: #C0C0C0;
+  --bg-page: #E8E8E8;
+  --bg-panel: #FFFFFF;
+  --bg-tab: #F0F0F0;
+  --bg-tab-inactive: #DCDCDC;
+  --xp-blue-top: #3A79C4;
+  --xp-blue-bottom: #1C4D8C;
+  --xp-blue-border: #0A2E5C;
+
+  --font-base: "Times New Roman", Times, Georgia, serif;
+  --font-size-base: 13px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  font-family: var(--font-base);
+  font-size: var(--font-size-base);
+  color: #000000;
+  background: var(--bg-page);
+}
+
+a { color: var(--link-blue); text-decoration: underline; }
+a:visited { color: var(--link-visited); }
+a:hover { color: var(--link-hover); }
+
+/* ==========================================================
+   SHARED COMPONENTS
+   ========================================================== */
+
+.btn {
+  display: inline-block;
+  background: var(--bg-tab);
+  border: 1px outset var(--hairline);
+  padding: 4px 10px;
+  font-size: 12px;
+  text-decoration: none;
+  color: #000;
+  font-family: var(--font-base);
+}
+.btn:hover { background: #E0E0E0; }
+.btn.primary { background: var(--red); color: #FFF; border-color: #990000; }
+
+/* bordered module box w/ colored header bar, used on the portal page */
+.module {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-grey);
+  margin-bottom: 8px;
+}
+.module h2 {
+  margin: 0;
+  font-size: 13px;
+  background: var(--navy);
+  color: #FFFFFF;
+  padding: 4px 8px;
+}
+.module.red h2 { background: var(--red); }
+.module.gold h2 { background: var(--gold); }
+.module-body { padding: 8px; }
+.module-body ul { margin: 0; padding-left: 16px; }
+.module-body li { margin-bottom: 4px; }
+
+/* shared navy tab bar, used by both the portal and admin pages */
+.mastbar {
+  background: var(--navy);
+  color: #FFFFFF;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  border-bottom: 3px solid var(--red);
+}
+.mastbar .logo { font-size: 21px; font-weight: bold; letter-spacing: -0.5px; flex-shrink: 0; }
+.mastbar .logo span { color: #FFCC00; }
+.mastbar nav.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  flex-grow: 1;
+}
+.mastbar nav.tabs a {
+  padding: 6px 10px;
+  font-size: 13px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #CCE0FF;
+}
+.mastbar nav.tabs a.active {
+  background: #FFFFFF;
+  color: var(--red);
+}
+.mastbar nav.tabs a:not(.active):hover { color: #FFCC00; }
+.mastbar .search { display: flex; gap: 4px; flex-shrink: 0; }
+.mastbar .search input { font-family: var(--font-base); font-size: 12px; padding: 3px; border: 1px solid #999; }
+.mastbar .search button { font-family: var(--font-base); font-size: 12px; background: #FFCC00; border: 1px outset #FFCC00; padding: 3px 8px; cursor: pointer; }
+
+.breadcrumb {
+  background: #FFFFFF;
+  font-size: 12px;
+  padding: 5px 10px;
+  border-bottom: 1px solid var(--hairline);
+}
+
+/* a fieldset-based Likert-scale question, reusable anywhere a form needs
+   a 5-point agree/disagree scale (questionnaire, future surveys, etc.) */
+.question-block {
+  border: 1px solid var(--hairline);
+  background: #FAFAFA;
+  padding: 10px;
+  margin-bottom: 14px;
+}
+.question-block legend {
+  font-weight: bold;
+  color: var(--navy);
+  font-size: 13px;
+  padding: 0 6px;
+}
+.question-block .scale {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.question-block .scale-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 19%;
+  min-width: 70px;
+  font-size: 11px;
+  text-align: center;
+  cursor: pointer;
+}
+.question-block .scale-option input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  margin-bottom: 4px;
+  accent-color: var(--red);
+  cursor: pointer;
+}
+.question-block .scale-option:hover span { color: var(--red); }
+
+/* ==========================================================
+   PAGE: PORTAL (index.html)
+   ========================================================== */
+
+.page-portal .layout {
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  align-items: flex-start;
+}
+.page-portal .col-left { width: 190px; flex-shrink: 0; }
+.page-portal .col-center { flex-grow: 1; min-width: 0; }
+.page-portal .col-right { width: 200px; flex-shrink: 0; }
+.page-portal .address-search-form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+.page-portal .address-search-form label { color: var(--navy); font-weight: bold; }
+.page-portal .address-search-form input {
+  width: 100%;
+  min-width: 0;
+  padding: 5px;
+  border: 1px solid var(--border-grey);
+  font-family: var(--font-base);
+  font-size: 13px;
+}
+.page-portal .address-search-form button:disabled { opacity: 0.65; }
+.page-portal #address-status,
+.page-portal .geocoder-attribution {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-size: 11px;
+}
+.page-portal #address-status { color: var(--red); }
+.page-portal .geocoder-attribution { margin-top: 8px; color: #555; }
+
+.page-portal .party-row {
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  border-bottom: 1px dashed var(--hairline);
+}
+.page-portal .party-row:last-child { border-bottom: none; }
+.page-portal .party-swatch { width: 40px; height: 40px; border: 1px solid #999; flex-shrink: 0; }
+.page-portal .party-info { font-size: 13px; }
+.page-portal .party-info .name { font-weight: bold; color: var(--navy); font-size: 14px; }
+.page-portal .party-info .meta { color: #666; font-size: 12px; }
+.page-portal .party-info .tagline { margin: 3px 0 0; }
+.page-portal .party-sort-form {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px;
+  background: var(--bg-tab);
+  border-bottom: 1px solid var(--hairline);
+}
+.page-portal .party-sort-form label { color: var(--navy); font-weight: bold; }
+.page-portal .party-sort-form select {
+  padding: 4px 6px;
+  border: 1px solid var(--border-grey);
+  background: var(--bg-panel);
+  color: #000;
+  font-family: var(--font-base);
+  font-size: 13px;
+}
+.page-portal .party-sort-form select:focus { outline: 1px solid var(--navy); }
+.page-portal .radius-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.page-portal .radius-field[hidden] { display: none; }
+.page-portal #location-status { color: var(--red); }
+
+.page-portal .voter-tools-intro { margin: 0 0 10px; }
+.page-portal .voter-tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+.page-portal .voter-tool-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
+  min-height: 165px;
+  padding: 12px;
+  border: 1px solid var(--border-grey);
+  border-top: 4px solid var(--navy);
+  background: var(--bg-tab);
+  color: var(--navy);
+  text-decoration: none;
+}
+.page-portal .voter-tool-card:hover,
+.page-portal .voter-tool-card:focus {
+  border-top-color: var(--red);
+  background: #E0E0E0;
+  color: var(--red);
+}
+.page-portal .voter-tool-icon { font-size: 24px; }
+.page-portal .voter-tool-title { font-weight: bold; font-size: 15px; }
+.page-portal .voter-tool-description { color: #333; }
+.page-portal .voter-tool-action { margin-top: auto; font-weight: bold; text-decoration: underline; }
+.page-portal .voter-tools-note { margin: 10px 0 0; color: #666; font-size: 11px; }
+.page-portal .legislation-search-form {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px;
+  margin: 10px 0;
+  background: var(--bg-tab);
+  border: 1px solid var(--hairline);
+}
+.page-portal .legislation-search-form label { color: var(--navy); font-weight: bold; }
+.page-portal .legislation-search-form select {
+  padding: 5px;
+  border: 1px solid var(--border-grey);
+  background: var(--bg-panel);
+  font-family: var(--font-base);
+  font-size: 13px;
+}
+.page-portal .legislation-list { display: grid; gap: 8px; }
+.page-portal .legislation-item {
+  padding: 10px;
+  border: 1px solid var(--hairline);
+  border-left: 3px solid var(--navy);
+  background: #FFF;
+}
+.page-portal .legislation-item h4 { margin: 0 0 6px; font-size: 14px; }
+.page-portal .legislation-item p { margin: 4px 0; }
+.page-portal .legislation-message { margin: 10px 0; }
+.page-portal .legislation-error { color: var(--red); }
+.page-portal .legislation-attribution { margin: 12px 0 0; font-size: 11px; color: #555; }
+
+.page-portal .stat-strip {
+  display: flex;
+  justify-content: space-between;
+  background: var(--bg-tab);
+  border: 1px solid var(--hairline);
+  padding: 6px 10px;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+.page-portal .stat-strip b { color: var(--red); }
+
+.page-portal .ticker {
+  background: #FFFFCC;
+  border: 1px solid #E0C000;
+  padding: 5px 8px;
+  font-size: 12px;
+}
+
+.page-portal .footer {
+  text-align: center;
+  font-size: 12px;
+  color: #666;
+  padding: 12px;
+  border-top: 1px solid var(--hairline);
+  background: var(--bg-tab);
+}
+
+/* ==========================================================
+   PAGE: DASHBOARD SHELL (shared 2x2 grid framework)
+   ========================================================== */
+
+.page-dashboard .grid {
+  display: grid;
+  grid-template-columns: 230px 1fr;
+  grid-template-rows: 230px 1fr;
+  gap: 8px;
+  height: 100vh;
+  padding: 8px;
+}
+.page-dashboard .quadrant {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-grey);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.page-dashboard .quadrant h2 {
+  margin: 0;
+  font-size: 13px;
+  padding: 4px 8px;
+  color: #FFFFFF;
+  background: var(--navy);
+  flex-shrink: 0;
+}
+.page-dashboard .quadrant .body {
+  padding: 14px;
+  flex-grow: 1;
+  overflow: auto;
+}
+
+.page-dashboard .q-logo { grid-column: 1; grid-row: 1; align-items: center; justify-content: center; text-align: center; }
+.page-dashboard .q-logo a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 12px;
+  text-decoration: none;
+}
+.page-dashboard .q-logo img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.page-dashboard .q-side { grid-column: 1; grid-row: 2; }
+.page-dashboard .q-side .body { padding: 0; display: flex; flex-direction: column; }
+.page-dashboard .account-block {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: linear-gradient(#EAF2FB, #FFFFFF);
+  border-bottom: 2px solid var(--xp-blue-border);
+}
+.page-dashboard .avatar-circle {
+  width: 46px; height: 46px; border-radius: 50%;
+  background: #FFFFFF; border: 2px solid var(--xp-blue-top);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; flex-shrink: 0;
+}
+.page-dashboard .account-block .welcome-text { font-size: 15px; font-weight: bold; color: var(--xp-blue-bottom); margin: 0 0 4px; }
+.page-dashboard .account-block .account-links a { margin-right: 8px; font-size: 11px; }
+.page-dashboard .q-side nav { display: flex; flex-direction: column; gap: 12px; padding: 12px; border-bottom: 1px solid var(--hairline); background: #F7F7F7; }
+.page-dashboard .q-side nav a { font-weight: bold; color: var(--navy); font-size: 13px; }
+.page-dashboard .q-side .info-text { padding: 12px; font-size: 12px; }
+.page-dashboard .q-side .info-text ul { margin: 6px 0 0; padding-left: 16px; }
+.page-dashboard .q-side .info-text li { margin-bottom: 6px; }
+
+.page-dashboard .q-portal { grid-column: 2; grid-row: 1 / 3; }
+.page-dashboard .q-portal .body { padding: 0; display: flex; flex-direction: column; }
+
+/* ==========================================================
+   PAGE: ADMIN (admin.html)
+   ========================================================== */
+
+.page-admin .admin-content { padding: 10px; overflow: auto; flex-grow: 1; }
+
+.page-admin .stat-strip {
+  display: flex;
+  justify-content: space-between;
+  background: var(--bg-tab);
+  border: 1px solid var(--hairline);
+  padding: 6px 10px;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+.page-admin .stat-strip b { color: var(--red); }
+
+.page-admin table.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  background: #FFFFFF;
+}
+.page-admin table.data-table th,
+.page-admin table.data-table td {
+  border: 1px solid var(--hairline);
+  padding: 6px 8px;
+  text-align: left;
+}
+.page-admin table.data-table th {
+  background: var(--bg-tab);
+  color: var(--navy);
+  font-weight: bold;
+}
+.page-admin table.data-table tr:nth-child(even) td { background: #FAFAFA; }
+.page-admin table.data-table .action-cell { white-space: nowrap; }
+.page-admin table.data-table .action-cell a { margin-right: 8px; font-size: 11px; }
+
+/* ==========================================================
+   SHARED: generic content wrapper (non-3-column pages)
+   ========================================================== */
+.content-area { padding: 10px; overflow: auto; flex-grow: 1; }
+
+/* ==========================================================
+   SHARED: form fields (login, signup, bug report, contact)
+   ========================================================== */
+.form-field { margin-bottom: 12px; display: flex; flex-direction: column; gap: 4px; }
+.form-field label { font-weight: bold; color: var(--navy); font-size: 12px; }
+.form-field input[type="text"],
+.form-field input[type="password"],
+.form-field input[type="email"],
+.form-field textarea,
+.form-field select {
+  font-family: var(--font-base);
+  font-size: 13px;
+  padding: 5px;
+  border: 1px solid #999;
+}
+.form-field textarea { resize: vertical; min-height: 80px; }
+.form-actions { text-align: center; margin-top: 14px; }
+
+/* ==========================================================
+   SHARED: event row (events.ftlh)
+   ========================================================== */
+.event-row {
+  display: flex;
+  gap: 10px;
+  padding: 8px;
+  border-bottom: 1px dashed var(--hairline);
+}
+.event-row:last-child { border-bottom: none; }
+.event-date-badge {
+  width: 46px;
+  flex-shrink: 0;
+  border: 1px solid var(--navy);
+  text-align: center;
+  font-size: 11px;
+}
+.event-date-badge .month { background: var(--navy); color: #fff; font-weight: bold; padding: 2px 0; }
+.event-date-badge .day { padding: 3px 0; font-size: 15px; font-weight: bold; color: var(--navy); }
+.event-info .name { font-weight: bold; color: var(--navy); font-size: 14px; }
+.event-info .meta { color: #666; font-size: 12px; }
+.event-info .desc { margin: 3px 0 0; font-size: 12px; }
+
+/* ==========================================================
+   PAGE: LOGIN / SIGNUP (standalone, outside the quadrant grid)
+   ========================================================== */
+.page-login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  gap: 16px;
+}
+.page-login .login-brand { text-align: center; }
+.page-login .login-brand img { max-width: 170px; height: auto; }
+.page-login .login-box {
+  background: #FFFFFF;
+  border: 1px solid var(--border-grey);
+  width: 320px;
+  max-width: 100%;
+}
+.page-login .login-box h2 {
+  margin: 0;
+  background: var(--navy);
+  color: #FFFFFF;
+  padding: 6px 10px;
+  font-size: 14px;
+  border-bottom: 3px solid var(--red);
+}
+.page-login .login-box .login-body { padding: 16px; }
+.page-login .divider-link { text-align: center; margin: 10px 0; font-size: 12px; }

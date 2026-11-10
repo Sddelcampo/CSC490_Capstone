@@ -203,4 +203,19 @@ public class AppController {
         return "pollingplaces";
     }
 
+    @GetMapping("/questionnaire/results")
+    public Object showResultPage(Model model) {
+        return "results";
+    }
+    
+    @GetMapping("/forum")
+    public Object showForumPage(Model model) {
+        return "forum";
+    }
+
+    @GetMapping("/forumpost")
+    public Object showForumpostPage(Model model) {
+        return "forumpost";
+    }
+
 }

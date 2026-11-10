@@ -77,7 +77,7 @@ public class SecurityConfig {
                     "/party/**", "/users/role/user", "/questionnaire", "/signup", "/platform",
                     "/resources", "/resources/**", "/events", "/aboutus", "/bugreport", "/contactdevteam", "/guide",
                     "/userSignup", "/getAllAdmin", "/adminUsername/**", "/createAdmin", "/addAdmin").permitAll()
-                .requestMatchers("/css/**", "/images/**").permitAll()
+                .requestMatchers("/css/**", "/images/**", "/js/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/user").permitAll()
                 .requestMatchers("/account").hasAnyAuthority("owner", "user", "admin")
                 .anyRequest().authenticated())
