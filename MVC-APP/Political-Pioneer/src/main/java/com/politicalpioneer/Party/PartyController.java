@@ -2,6 +2,7 @@ package com.politicalpioneer.Party;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.politicalpioneer.Announcement.Announcement;
 import com.politicalpioneer.ForumPost.ForumPost;
@@ -10,9 +11,14 @@ import com.politicalpioneer.Party.PartyAlignment.PartyAlignment;
 import com.politicalpioneer.PartyMember.PartyMember;
 import com.politicalpioneer.User.User;
 import com.politicalpioneer.User.UserService;
+
+import ch.qos.logback.core.model.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+
 import org.locationtech.jts.geom.Point;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,9 +28,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController 
+@Controller 
 public class PartyController {
+
+
     public record GeoJsonPoint(String type, List<Double> coordinates) {}
+    private User user;
+    
 
     public record PartyResponse(
         Long partyId,
@@ -85,6 +95,21 @@ public class PartyController {
         List<Party> party = partyService.getPartyByStatus(status);
         return ResponseEntity.ok(party.stream().map(this::toResponse).collect(Collectors.toList()));
     }
+
+
+    @GetMapping("/createParty")
+    public String createParty() {
+        return "createParty";
+    }
+
+    @PostMapping("/makeParty")
+    public Object makeParty( @ModelAttribute PartyController.PartyCreateRequest party, Authentication authentication) {
+        User user = userService.getUserByUserName(authentication.getName());
+        Long userId = user.getUserId();
+        partyService.addParty(party, userId);
+        return "redirect:/home";
+    }
+
 
     @PostMapping("/party")
     public ResponseEntity<PartyResponse> addParty(@RequestBody PartyCreateRequest party, @RequestParam Long userID) {

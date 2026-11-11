@@ -209,7 +209,7 @@
             </div>
 
             <div style="text-align:center; margin: 10px 0;">
-              <a href="#" class="btn primary">+ Start a New Party Page</a>
+              <a href="/createParty" class="btn primary">+ Start a New Party Page</a>
               <a href="#" class="btn">Browse All 52 Parties &raquo;</a>
             </div>
 

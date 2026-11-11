@@ -76,14 +76,20 @@ public class SecurityConfig {
                 .requestMatchers("/", "/home", "/user", "/users", "/user/userName/**", "/parties/**",
                     "/party/**", "/users/role/user", "/questionnaire", "/signup", "/platform",
                     "/resources", "/resources/**", "/events", "/aboutus", "/bugreport", "/contactdevteam", "/guide",
+<<<<<<< HEAD
                     "/userSignup", "/getAllAdmin", "/adminUsername/**", "/createAdmin", "/addAdmin").permitAll()
                 .requestMatchers("/css/**", "/images/**", "/js/**").permitAll()
+=======
+                    "/userSignup", "/getAllAdmin", "/adminUsername/**", "/createAdmin", "/addAdmin", "/createParty").permitAll()
+                .requestMatchers("/css/**","/js/**", "/images/**").permitAll()
+>>>>>>> main
                 .requestMatchers(HttpMethod.POST, "/user").permitAll()
                 .requestMatchers("/account").hasAnyAuthority("owner", "user", "admin")
+                .requestMatchers("/createParty").hasAuthority("owner")
                 .anyRequest().authenticated())
             .formLogin(form -> form
                 .loginPage("/acctlogin")
-                .defaultSuccessUrl("/platform", true)
+                .defaultSuccessUrl("/home", true)
                 .permitAll())
             .exceptionHandling(x -> x.accessDeniedPage("/403"))
             .logout(logout -> logout.logoutSuccessUrl("/").permitAll())
