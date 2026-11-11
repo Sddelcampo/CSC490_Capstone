@@ -38,6 +38,7 @@ public class AppController {
     @GetMapping("/account")
     public Object showAccountPage(Model model, Authentication authentication) {
         String name = authentication.getName();
+        
         model.addAttribute("name", name);
         return "account";
     }
@@ -139,6 +140,7 @@ public class AppController {
         boolean isAdmin = authentication != null && authentication.getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("admin"));
         User user = userService.getUserByUserName(authentication.getName());
+        
 
         List<Party> parties = List.of();
         String searchError = null;
