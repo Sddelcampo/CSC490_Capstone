@@ -67,6 +67,10 @@ public class AppController {
     public String home(Model model, Authentication authentication) {
         boolean isAdmin = authentication != null && authentication.getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("admin"));
+        boolean isOwner = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("owner"));
+        model.addAttribute("isOwner", isOwner);
+        
         model.addAttribute("isAdmin", isAdmin);
         return "home";
     }
@@ -204,5 +208,7 @@ public class AppController {
             Authentication authentication) {
         return "pollingplaces";
     }
+
+   
 
 }
