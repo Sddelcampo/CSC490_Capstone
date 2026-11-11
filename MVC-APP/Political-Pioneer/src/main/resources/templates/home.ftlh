@@ -89,12 +89,8 @@
             <!--<a href="#">Collaborate</a> might remove as it could be merged with /account or /events-->
             <a href="/events">Events</a>
             <!--<a href="#">Voter Tools</a> may remove as it can be merged with resources-->
-            
-           
 
-              <#if isOwner!false>
-               <a href="/partyManage">Manage Party</a>
-              </#if>
+
             <#if isAdmin!false>
               <a href="/admin">Admin Dashboard</a>
               <a href="/createAdmin">Create Admin</a>
@@ -213,7 +209,7 @@
             </div>
 
             <div style="text-align:center; margin: 10px 0;">
-              <a href="/createParty" class="btn primary">+ Start a New Party Page</a>
+              <a href="#" class="btn primary">+ Start a New Party Page</a>
               <a href="#" class="btn">Browse All 52 Parties &raquo;</a>
             </div>
 

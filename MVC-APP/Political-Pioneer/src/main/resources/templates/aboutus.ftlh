@@ -31,10 +31,7 @@
         <div class="account-block">
           <div class="avatar-circle">&#128100;</div>
           <div>
-            <#if Session.SPRING_SECURITY_CONTEXT??>
-                <p class="welcome-text">Welcome, ${name}</p>
-
-              </#if>
+            <p class="welcome-text">Welcome, User!</p>
             <div class="account-links">
               <!-- <a href="/acctlogin">Log In</a> Might be useless if we start at the login page-->
               <#if Session.SPRING_SECURITY_CONTEXT??>
