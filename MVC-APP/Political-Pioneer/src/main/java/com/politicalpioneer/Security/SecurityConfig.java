@@ -76,11 +76,12 @@ public class SecurityConfig {
                 .requestMatchers("/", "/home", "/user", "/users", "/user/userName/**", "/parties/**",
                     "/party/**", "/users/role/user", "/questionnaire", "/signup", "/platform",
                     "/resources", "/resources/**", "/events", "/aboutus", "/bugreport", "/contactdevteam", "/guide",
-                    "/userSignup", "/getAllAdmin", "/adminUsername/**", "/createAdmin", "/addAdmin", "/createParty").permitAll()
+                    "/userSignup", "/getAllAdmin", "/adminUsername/**", "/createAdmin", "/addAdmin", "/createParty", "/partyPage").permitAll()
                 .requestMatchers("/css/**","/js/**", "/images/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/user").permitAll()
                 .requestMatchers("/account").hasAnyAuthority("owner", "user", "admin")
                 .requestMatchers("/createParty").hasAuthority("owner")
+                .requestMatchers("/partyManage").hasAuthority("owner")
                 .anyRequest().authenticated())
             .formLogin(form -> form
                 .loginPage("/acctlogin")

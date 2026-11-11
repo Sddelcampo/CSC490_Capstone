@@ -169,7 +169,8 @@
                     <div class="party-row">
                       <div class="party-swatch" style="background:#2E7D32;"></div>
                       <div class="party-info">
-                        <div class="name">${party.partyName!"Unnamed party"}</div>
+                        <a href="/partyDetail/${party.partyId?c}"> <div class="name">${party.partyName!"Unnamed party"}</div></a>
+                       
                         <div class="meta">Status: ${party.status!"Unknown"}</div>
                         <div class="tagline">${party.description!""}</div>
                       </div>

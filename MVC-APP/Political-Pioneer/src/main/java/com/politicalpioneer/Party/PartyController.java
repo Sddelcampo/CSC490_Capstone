@@ -11,8 +11,9 @@ import com.politicalpioneer.Party.PartyAlignment.PartyAlignment;
 import com.politicalpioneer.PartyMember.PartyMember;
 import com.politicalpioneer.User.User;
 import com.politicalpioneer.User.UserService;
+import org.springframework.ui.Model;
 
-import ch.qos.logback.core.model.Model;
+// import ch.qos.logback.core.model.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import org.locationtech.jts.geom.Point;
@@ -26,7 +27,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+
 
 @Controller 
 public class PartyController {
@@ -84,11 +85,11 @@ public class PartyController {
         return ResponseEntity.ok(parties.stream().map(this::toResponse).collect(Collectors.toList()));
     }
 
-    @GetMapping("/party/{id}")
-    public ResponseEntity<PartyResponse> getPartyById(@PathVariable("id") Long id) {
-        Party party = partyService.getPartyById(id);
-        return ResponseEntity.ok(toResponse(party));
-    }
+    // @GetMapping("/party/{id}")
+    // public ResponseEntity<PartyResponse> getPartyById(@PathVariable("id") Long id) {
+    //     Party party = partyService.getPartyById(id);
+    //     return ResponseEntity.ok(toResponse(party));
+    // }
     
     @GetMapping("/party/status/{status}")
     public ResponseEntity<List<PartyResponse>> getPartyByStatus(@PathVariable("status") String status) {
@@ -109,6 +110,27 @@ public class PartyController {
         partyService.addParty(party, userId);
         return "redirect:/home";
     }
+
+    @GetMapping("/partyPage")
+    public String partyPage() {
+        return "partyPage";
+    }
+
+    @GetMapping("/partyDetail/{id}")
+    public String partyDetail(@PathVariable("id") Long id, Model model) {
+        Party party = partyService.getPartyById(id);
+        User partyOwner = party.getUser();
+        String lastName = partyOwner.getLastName();
+
+        model.addAttribute("lastName", lastName);
+        
+        // model.addAttribute("owner", partyOwner);
+        
+        model.addAttribute("party", party);
+        return "partyPage";
+    }
+
+
 
 
     @PostMapping("/party")
@@ -199,4 +221,7 @@ public class PartyController {
             partyDistance.getDistanceMeters()
         );
     }
+
+
+
 }

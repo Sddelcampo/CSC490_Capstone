@@ -86,4 +86,9 @@ public ResponseEntity<Void> deleteUserById(@PathVariable("userId") Long userId) 
         return "redirect:/acctlogin";   
 }
 
+ @GetMapping("/partyManage") 
+    public Object manageParty(Model model) {
+        return "partyManage";
+    }
+
 }
