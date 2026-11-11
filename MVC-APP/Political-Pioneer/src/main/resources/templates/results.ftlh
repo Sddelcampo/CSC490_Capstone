@@ -5,7 +5,7 @@
 
  Description: Results page for the political questionnaire. Shows, for each of the 7 sections, the
  user's category score and every statement with the answer they gave. Unanswered questions are shown
- as such and count as Neutral (3) toward the score.
+ as such and contribute 0 to the section score.
 
  MODEL EXPECTED FROM THE CONTROLLER (GET /questionnaire/results):
    totalAnswered   : int
@@ -14,8 +14,8 @@
                        title    : string
                        answered : int      (how many of this section's questions were answered)
                        total    : int      (questions in the section, normally 5)
-                       score    : number   (1.00 - 5.00; 3.00 = neutral / untouched)
-                       percent  : int      (0 - 100, position of the score on the bar: (score - 1) / 4 * 100)
+                       score    : number   (0.00 - 5.00; unanswered questions contribute 0)
+                       percent  : int      (0 - 100, position of the score on the bar: score / 5 * 100)
                        questions: list of {
                                     text        : string
                                     answer      : int     (1-5, ABSENT if the question was not answered)
@@ -108,7 +108,7 @@
               <div class="results-summary">
                 <p style="margin-top:0;">
                   You answered <strong>${totalAnswered}</strong> of <strong>${totalQuestions}</strong> questions.
-                  Each section is scored from 1 to 5. A question you skipped counts as Neutral (3),
+                  Each section is averaged across its five questions. A skipped question contributes 0,
                   so you can go back at any time and finish or change your answers.
                 </p>
                 <div class="page-nav">
@@ -126,18 +126,9 @@
               <div class="module-body">
 
                 <div class="score-line">
-                  <span>Score: <strong>${s.score?string("0.00")}</strong> / 5</span>
+                  <span>Score: <strong><#if s.answered == 0>0.00<#else>${s.score?string("0.00")}</#if></strong> / 5</span>
+                  <br>
                   <span>${s.answered} of ${s.total} answered</span>
-                </div>
-
-                <div class="score-bar" role="img" aria-label="Score ${s.score?string("0.00")} out of 5">
-                  <div class="score-fill" data-width="${s.percent?c}" aria-hidden="true"></div>
-                  <div class="score-mid" title="Neutral"></div>
-                </div>
-                <div class="score-scale">
-                  <span>1</span>
-                  <span>3 (Neutral)</span>
-                  <span>5</span>
                 </div>
 
                 <table class="results-table">
