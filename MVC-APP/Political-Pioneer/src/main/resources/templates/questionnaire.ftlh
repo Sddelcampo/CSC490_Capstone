@@ -1,4 +1,4 @@
-<!--
+<#--
  CSC 490: The Political Pioneer
  questionnaire.ftlh
  Last updated: November 9, 2026
@@ -14,7 +14,7 @@
    pageNumber    : int (1-based current page)
    totalPages    : int (7)
    sectionTitles : list of strings, in page order (used for the step indicator)
-   section       : { title: string, questions: [ { id: long, text: string, answer: int (optional, 1-5) } ] }
+   section       : { title: string, score: int, questions: [ { id: long, text: string, answer: int (optional, 1-5) } ] }
    _csrf         : (optional) Spring Security CsrfToken, only if CSRF protection is enabled
 -->
 
@@ -22,7 +22,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>The Political Pioneer — Political Questionnaire</title>
+<title>The Political Pioneer — ${section.title}</title>
   <link rel="stylesheet" type="text/css" href="/css/styles.css">
 
   <!-- CSRF values (safe if Spring Security CSRF is off: they just come out empty) -->
@@ -100,26 +100,27 @@
         <div class="admin-content">
 
           <div class="module red">
-            <h2>Political Alignment Questionnaire</h2>
+            <h2>${section.title}</h2>
             <div class="module-body">
 
               <!-- Step indicator: jump to any section. Answers are already saved, so jumping is safe. -->
               <ol class="q-progress">
                 <#list sectionTitles as title>
                   <li<#if title?index + 1 == pageNumber> class="current"</#if>>
-                    <a href="/questionnaire?page=${title?index + 1}" title="${title}">${title?index + 1}</a>
+                    <a href="/questionnaire?page=${title?index + 1}" title="${title}">${title}</a>
                   </li>
                 </#list>
               </ol>
 
               <div class="q-meta">
-                <strong>${section.title} (Page ${pageNumber} of ${totalPages})</strong>
+                <strong>Page ${pageNumber} of ${totalPages}</strong>
+                <span>Section score: <strong id="section-score">${section.score}</strong></span>
                 <span id="save-status" class="save-status" aria-live="polite"></span>
               </div>
 
               <p style="margin-top:0;">Select how strongly you agree or disagree with each statement.
-                Your answer is saved as soon as you click it. You can skip questions or stop at any
-                time, and any unanswered question counts as 0.</p>
+                Your answer and section score are saved as soon as you click it. You can skip questions
+                or stop at any time, and unanswered questions count as 0.</p>
 
               <div class="questionnaire-form" id="questionnaire-form">
 

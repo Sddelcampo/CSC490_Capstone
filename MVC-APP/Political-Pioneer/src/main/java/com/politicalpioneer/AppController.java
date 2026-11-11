@@ -43,11 +43,6 @@ public class AppController {
         return "account";
     }
 
-    @GetMapping("/questionnaire")
-    public Object showQuestionnairePage(Model model) {
-        return "questionnaire";
-    }
-
     @GetMapping("/admin")
     public String adminHome() {
         return "home";
