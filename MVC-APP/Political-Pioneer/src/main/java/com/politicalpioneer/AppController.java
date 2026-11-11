@@ -106,7 +106,10 @@ public class AppController {
     }
 
     @GetMapping("/aboutus")
-    public Object showAboutusPage(Model model) {
+    public Object showAboutusPage(Model model, Authentication authentication) {
+        String name = authentication.getName();
+        
+        model.addAttribute("name", name);
         return "aboutus";
     }
 
