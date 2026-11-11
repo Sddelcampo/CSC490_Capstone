@@ -60,6 +60,10 @@ public class UserAlignment {
         this.technologicalAdvancementAlignment = technologicalAdvancementAlignment;
     }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public int getFreemarketAlignment() {
         return freemarketAlignment;
     }

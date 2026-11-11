@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.politicalpioneer.BadRequestException;
 import com.politicalpioneer.ResourceNotFoundException;
+import com.politicalpioneer.User.UserAlignment.UserAlignment;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -65,6 +66,11 @@ public class UserService {
     public User addUser(User user) {
         if (user == null) {
             throw new BadRequestException("User object null");
+        }
+        if (user.getUserAlignment() == null) {
+            user.setUserAlignment(new UserAlignment());
+        } else {
+            user.getUserAlignment().setUser(user);
         }
         User newUser = userRepo.save(user);
         newUser.setPassword(passwordEncoder.encode(user.getPassword()));
