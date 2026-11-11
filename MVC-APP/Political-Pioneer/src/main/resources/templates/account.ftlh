@@ -84,7 +84,7 @@
           <nav class="tabs">
             <a href="/home">Home</a>
             <a href="/account" class="active">My Account</a>
-            <a href="/platform">Platforms</a>
+            <a href="/forum">Forum</a>
             <a href="/search">Find Parties</a>
             <a href="/resources">Resources</a>
             <!--<a href="#">Collaborate</a> might remove as it could be merged with /account or /events-->

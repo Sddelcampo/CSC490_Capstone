@@ -99,9 +99,8 @@
           <nav class="tabs">
             <a href="/home">Home</a>
             <a href="/account">My Account</a>
-            <a href="/platform">Platforms</a>
+            <a href="/forum" class="active">Forum</a>
             <a href="/search">Find Parties</a>
-            <a href="/forum">Forum</a>
             <a href="/resources">Resources</a>
             <a href="/events">Events</a>
          </nav>
