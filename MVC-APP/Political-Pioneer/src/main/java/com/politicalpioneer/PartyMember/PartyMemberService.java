@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 
 import com.politicalpioneer.BadRequestException;
 import com.politicalpioneer.ResourceNotFoundException;
+import com.politicalpioneer.Party.Party;
+import com.politicalpioneer.User.User;
 
 @Service
 public class PartyMemberService {
@@ -26,7 +28,7 @@ public class PartyMemberService {
 
     public List<PartyMember> getPMByPartyId(Long partyId) {
         // memberRepo.findByIdPartyId(partyId);
-        if(memberRepo.findByIdPartyId(partyId) == null) {
+        if (memberRepo.findByIdPartyId(partyId) == null) {
             throw new ResourceNotFoundException("Party member does not exist");
         }
         return memberRepo.findByIdPartyId(partyId);
@@ -34,36 +36,44 @@ public class PartyMemberService {
 
     public PartyMember getPMById(Long userId, Long partyId) {
         PartyMemberId id = new PartyMemberId(userId, partyId);
-        if(!memberRepo.existsById(id)) {
+        if (!memberRepo.existsById(id)) {
             throw new ResourceNotFoundException("Party Members not found");
         }
         return memberRepo.findById(id).orElse(null);
 
     }
 
-    //Work on passing original composite key
-    public PartyMember addPartyMember(PartyMember newPm) {
+    // //Work on passing original composite key
+    // public PartyMember addPartyMember(PartyMember newPm) {
 
-        // PartyMemberId id = new PartyMemberId(
-        //     partyMember.getPartyId(),
-        //     partyMember.getUserId()
-        // );
+    // // PartyMemberId id = new PartyMemberId(
+    // // partyMember.getPartyId(),
+    // // partyMember.getUserId()
+    // // );
 
-        // if (memberRepo.existsById(id)) {
-        //     throw new IllegalStateException("This user already exisits");
-        // }
+    // // if (memberRepo.existsById(id)) {
+    // // throw new IllegalStateException("This user already exisits");
+    // // }
 
-        return memberRepo.save(newPm);
+    // return memberRepo.save(newPm);
+    // }
+
+    public PartyMember addPartyMember(User user, Party party) {
+        PartyMemberId id = new PartyMemberId(user.getUserId(), party.getPartyId());
+        if (memberRepo.existsById(id)) {
+            throw new BadRequestException("User is already a member of this party");
+        }
+        return memberRepo.save(new PartyMember(user, party));
     }
 
-   public void deletePartyMemberById(Long userId, Long partyId) {
-    PartyMemberId id = new PartyMemberId(userId, partyId);
-    if (!memberRepo.existsById(id)) {
-        throw new ResourceNotFoundException("Party Member with userId " + userId + " and partyId " + partyId + " not found");
+    public void deletePartyMemberById(Long userId, Long partyId) {
+        PartyMemberId id = new PartyMemberId(userId, partyId);
+        if (!memberRepo.existsById(id)) {
+            throw new ResourceNotFoundException(
+                    "Party Member with userId " + userId + " and partyId " + partyId + " not found");
+        }
+        memberRepo.deleteById(id);
+
     }
-    memberRepo.deleteById(id);
-
-
-}
 
 }

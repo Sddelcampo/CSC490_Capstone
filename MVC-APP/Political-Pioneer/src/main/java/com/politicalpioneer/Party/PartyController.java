@@ -9,12 +9,15 @@ import com.politicalpioneer.ForumPost.ForumPost;
 import com.politicalpioneer.Party.PartyController.GeoJsonPoint;
 import com.politicalpioneer.Party.PartyAlignment.PartyAlignment;
 import com.politicalpioneer.PartyMember.PartyMember;
+import com.politicalpioneer.PartyMember.PartyMemberService;
 import com.politicalpioneer.User.User;
 import com.politicalpioneer.User.UserService;
 import org.springframework.ui.Model;
 
 // import ch.qos.logback.core.model.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.security.web.csrf.CsrfToken;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.locationtech.jts.geom.Point;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +38,7 @@ public class PartyController {
 
     public record GeoJsonPoint(String type, List<Double> coordinates) {}
     private User user;
+    private PartyMember pm;
     
 
     public record PartyResponse(
@@ -73,10 +77,12 @@ public class PartyController {
 
     private final PartyService partyService;
     private final UserService userService;
+    private final PartyMemberService memService;
 
-    public PartyController(PartyService partyService, UserService userService) {
+    public PartyController(PartyService partyService, UserService userService, PartyMemberService memService) {
         this.partyService = partyService;
         this.userService = userService;
+        this.memService = memService;
     }
 
     @GetMapping("/party")
@@ -115,7 +121,7 @@ public class PartyController {
     public String partyPage() {
         return "partyPage";
     }
-
+    
     @GetMapping("/partyDetail/{id}")
     public String partyDetail(@PathVariable("id") Long id, Model model) {
         Party party = partyService.getPartyById(id);
@@ -125,11 +131,35 @@ public class PartyController {
         model.addAttribute("lastName", lastName);
         
         // model.addAttribute("owner", partyOwner);
-        
+      
         model.addAttribute("party", party);
         return "partyPage";
     }
 
+    // @PostMapping("/joinParty/{id}")
+    // public String joinParty(@PathVariable("id") Long id, Model model, Authentication authentication) {
+    //     String userName = authentication.getName();
+    //     User user = userService.getUserByUserName(userName);
+
+    //     Party party = partyService.getPartyById(id);
+
+        
+
+    //     // PartyMember pm = memService.addPartyMember(user, party);
+
+
+    //     return "partysearch";
+    // }
+
+  @PostMapping("/joinParty/{id}")
+public String joinParty(@PathVariable("id") Long id, Authentication authentication) {
+    User user = userService.getUserByUserName(authentication.getName());
+    Party party = partyService.getPartyById(id);
+
+    memService.addPartyMember(user, party);
+
+    return "redirect:/home";
+}
 
 
 
