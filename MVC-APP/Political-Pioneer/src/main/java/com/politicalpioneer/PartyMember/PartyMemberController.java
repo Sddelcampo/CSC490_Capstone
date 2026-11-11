@@ -42,10 +42,10 @@ public class PartyMemberController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/members")
-    public ResponseEntity<PartyMember> addPM(@RequestBody PartyMember newPm) {
-        memService.addPartyMember(newPm);
-        return ResponseEntity.ok(newPm);
-    }
+    // @PostMapping("/members")
+    // public ResponseEntity<PartyMember> addPM(@RequestBody PartyMember newPm) {
+    //     memService.addPartyMember(newPm);
+    //     return ResponseEntity.ok(newPm);
+    // }
 
 }

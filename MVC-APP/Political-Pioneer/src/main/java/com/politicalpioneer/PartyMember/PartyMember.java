@@ -75,7 +75,7 @@ public class PartyMember {
     @Column
     private String status;
 
-    protected PartyMember() {}
+    public PartyMember() {}
 
     
 
@@ -86,6 +86,14 @@ public class PartyMember {
         this.joinDate = joinDate;
         this.status = status;
        
+    }
+
+    public PartyMember(User user, Party party) {
+    this.id = new PartyMemberId(user.getUserId(), party.getPartyId());
+    this.user = user;
+    this.party = party;
+    this.joinDate = LocalDateTime.now();
+    this.status = "active";
     }
 
     //Allows jackson to parse through composite key
