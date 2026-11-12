@@ -662,6 +662,13 @@ a:visited {
   border-bottom: none;
 }
 
+.party-empty-state {
+  margin: 0;
+  padding: 18px 10px;
+  color: #666666;
+  text-align: center;
+}
+
 
 .party-header {
   display: flex;
