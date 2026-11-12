@@ -113,7 +113,7 @@
               <a href="/admin">Admin Dashboard</a>
               <a href="/createAdmin">Create Admin</a>
             </#if>
-            <#if isOwner!false>
+            <#if canCreateParty!false>
               <a href="/createParty">Create Party</a>
               
             </#if>
