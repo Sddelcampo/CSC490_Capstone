@@ -151,6 +151,43 @@
           <!-- CENTER: Bio & posts -->
           <div class="col-center">
 
+            <#if (isUser!false) || (isOwner!false)>
+              <div class="module red">
+                <h2>Account Details</h2>
+                <div class="module-body">
+                  <#if profileUpdated!false>
+                    <p role="status">Your account details were updated.</p>
+                  </#if>
+                <form action="/account/profile" method="post">
+  <div class="form-field">
+    <label for="profile-first-name">First name</label>
+    <input id="profile-first-name" type="text" name="firstName"
+           value="${profileFirstName!}" required>
+  </div>
+  <div class="form-field">
+    <label for="profile-last-name">Last name</label>
+    <input id="profile-last-name" type="text" name="lastName"
+           value="${profileLastName!}" required>
+  </div>
+  <div class="form-field">
+    <label for="profile-username">Username</label>
+    <input id="profile-username" type="text"
+           value="${profileUserName!}" readonly>
+    <small>Your username cannot be changed.</small>
+  </div>
+  <div class="form-field">
+    <label for="profile-email">Email</label>
+    <input id="profile-email" type="email" name="email"
+           value="${profileEmail!}">
+  </div>
+  <div class="form-actions">
+    <button type="submit" class="btn primary">Save Account Details</button>
+  </div>
+</form>
+                </div>
+              </div>
+            </#if>
+
             <div class="stat-strip">
               <span>Posts: <b>12</b></span>
               <span>Top Match: <b>88%</b></span>
