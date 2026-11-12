@@ -11,6 +11,7 @@ public interface PartyRepository extends JpaRepository<Party, Long> {
     List<Party> findByStatus(String status);
     List<Party> findByPartyName(String partyName);
     Party findByUserId(Long userId);
+    boolean existsByUserId(Long userId);
     
     // Custom query to find parties within a certain radius of the user's location, calculated using PostGIS functions
     @Query(value = """

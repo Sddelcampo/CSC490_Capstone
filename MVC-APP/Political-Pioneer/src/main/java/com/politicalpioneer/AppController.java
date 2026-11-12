@@ -64,8 +64,14 @@ public class AppController {
                 .anyMatch(a -> a.getAuthority().equals("admin"));
         boolean isOwner = authentication != null && authentication.getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("owner"));
+        boolean canCreateParty = false;
+        if (isOwner) {
+            User owner = userService.getUserByUserName(authentication.getName());
+            canCreateParty = !partyService.hasPartyByUserId(owner.getUserId());
+        }
+
         model.addAttribute("isOwner", isOwner);
-        
+        model.addAttribute("canCreateParty", canCreateParty);
         model.addAttribute("isAdmin", isAdmin);
         return "home";
     }
@@ -205,6 +211,11 @@ public class AppController {
             Model model,
             Authentication authentication) {
         return "pollingplaces";
+    }
+
+    @GetMapping("/party/forum")
+    public Object showForumPage(Model model) {
+        return "forum";
     }
 
    

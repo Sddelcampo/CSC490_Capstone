@@ -52,6 +52,10 @@ public class PartyService {
         return partyRepo.findByUserId(userId);
     }
 
+    public boolean hasPartyByUserId(Long userId) {
+        return partyRepo.existsByUserId(userId);
+    }
+
     
     public List<Party> getPartiesDefault(Long userID, double lng, double lat, double radius) {
         User user = userRepository.findById(userID).orElse(null);
