@@ -180,9 +180,10 @@ public class AppController {
     public String voterResources(
             Model model,
             Authentication authentication) {
-        String name = authentication.getName();
         addNavigationRoleAttributes(model, authentication);
-        model.addAttribute("name", name);
+        if (authentication != null) {
+            model.addAttribute("name", authentication.getName());
+        }
         return "voterresources";
     }
 
@@ -190,9 +191,10 @@ public class AppController {
     public String voterRegistration(
             Model model,
             Authentication authentication) {
-        String name = authentication.getName();
         addNavigationRoleAttributes(model, authentication);
-        model.addAttribute("name", name);
+        if (authentication != null) {
+            model.addAttribute("name", authentication.getName());
+        }
         return "voterregistration";
     }
 
