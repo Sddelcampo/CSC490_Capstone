@@ -63,7 +63,7 @@
                 <div class="brand">TP2 <span>Portal</span></div>
 
                 <nav class="nav-links">
-                    <a href="/">Home</a>
+                    <a href="/home">Home</a>
                     <a href="/account">My Account</a>
                     <a href="/platforms">Platforms</a>
                     <a href="/parties">Find Parties</a>

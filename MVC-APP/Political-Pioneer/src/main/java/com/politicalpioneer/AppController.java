@@ -32,7 +32,7 @@ public class AppController {
     // the dashboard
     @GetMapping("/")
     public Object showStartPage(Model model) {
-        return "platform";
+        return "home";
     }
 
     @GetMapping("/account")

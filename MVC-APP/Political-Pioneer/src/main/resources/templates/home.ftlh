@@ -117,7 +117,7 @@
           <!-- Left Sidebar -->
           <div class="col-left">
             <div class="module">
-              <h2>Browse by Category</h2>
+              <a href="/"> <h2>Browse by Category</h2></a>
               <div class="module-body">
                 <ul>
                   <li><a href="#">Environmental (12)</a></li>
@@ -214,7 +214,7 @@
 
             <div style="text-align:center; margin: 10px 0;">
               <a href="/createParty" class="btn primary">+ Start a New Party Page</a>
-              <a href="#" class="btn">Browse All 52 Parties &raquo;</a>
+              <a href="/partyManage" class="btn"> Manage Party</a>
             </div>
 
           </div>
