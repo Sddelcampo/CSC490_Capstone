@@ -1,3 +1,4 @@
+<#ftl output_format="HTML" auto_esc=true>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -83,7 +84,7 @@
                     <div class="stats-bar">
                         <span>Members: <strong>34</strong></span>
                         <span>Forum posts: <strong>9</strong></span>
-                        <span>Announcements: <strong>2</strong></span>
+                        <span>Announcements: <strong>${announcementCount!0}</strong></span>
                     </div>
 
                     <!-- Party info + join -->
@@ -142,23 +143,15 @@
                     <section class="box">
                         <h2 class="box-header">Announcements</h2>
 
-                        <div class="announcement">
-                            <p class="party-title">Park cleanup day: Saturday, Nov 21 at 9:00 AM</p>
-                            <p class="meta-text">Published Nov 8, 2026</p>
-                            <p class="summary-text">
-                                Meet at the Maple Street entrance of Green Valley Park. Gloves and
-                                bags are provided; bring water and a friend.
-                            </p>
-                        </div>
-
-                        <div class="announcement">
-                            <p class="party-title">Comment period open on the city tree ordinance</p>
-                            <p class="meta-text">Published Nov 2, 2026</p>
-                            <p class="summary-text">
-                                The city is taking public comments until Nov 30. Our summary of the
-                                proposal and a sample letter are in the forum.
-                            </p>
-                        </div>
+                        <#list announcements as announcement>
+                            <div class="announcement">
+                                <p class="party-title">${announcement.title!"Untitled"}</p>
+                                <p class="meta-text">Published ${announcement.createdAt!""}</p>
+                                <p class="summary-text">${announcement.description!""}</p>
+                            </div>
+                        <#else>
+                            <p class="summary-text">No announcements have been published yet.</p>
+                        </#list>
                     </section>
 
                     <!-- Recent forum posts -->

@@ -148,8 +148,13 @@ public class PartyController {
         Party party = partyService.getPartyById(id);
         User partyOwner = party.getUser();
         String lastName = partyOwner.getLastName();
+        List<Map<String, Object>> announcements = party.getAnn().stream()
+                .map(this::toAnnouncementView)
+                .toList();
 
         model.addAttribute("lastName", lastName);
+        model.addAttribute("announcements", announcements);
+        model.addAttribute("announcementCount", announcements.size());
         
         // model.addAttribute("owner", partyOwner);
       
@@ -223,6 +228,126 @@ public String joinParty(@PathVariable("id") Long id, Authentication authenticati
         
         // System.out.println(party.getPartyName());
         return "partyManage";
+    }
+
+    @GetMapping("/createannouncement")
+    public String createAnnouncementForm(Model model, Authentication authentication) {
+        Party ownerParty = getOwnerParty(authentication);
+        addAnnouncementFormAttributes(model, ownerParty, authentication);
+        return "createannouncement";
+    }
+
+    @PostMapping("/partyManage/announcements/create")
+    public String createAnnouncement(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String description,
+            Model model,
+            Authentication authentication) {
+        Party ownerParty = getOwnerParty(authentication);
+        String normalizedTitle = title == null ? "" : title.trim();
+        String normalizedDescription = description == null ? "" : description.trim();
+        String error = validateAnnouncement(normalizedTitle, normalizedDescription);
+
+        if (error != null) {
+            addAnnouncementFormAttributes(model, ownerParty, authentication);
+            model.addAttribute("announcementTitle", title == null ? "" : title);
+            model.addAttribute("announcementDescription", description == null ? "" : description);
+            model.addAttribute("announcementError", error);
+            return "createannouncement";
+        }
+
+        Announcement announcement = new Announcement(
+                null,
+                ownerParty,
+                normalizedDescription,
+                LocalDateTime.now(),
+                normalizedTitle);
+        announcementService.saveAnn(announcement);
+        return "redirect:/partyManage";
+    }
+
+    @GetMapping("/partyManage/announcements/{announcementId}/edit")
+    public String editAnnouncementForm(
+            @PathVariable Long announcementId,
+            Model model,
+            Authentication authentication) {
+        Party ownerParty = getOwnerParty(authentication);
+        Announcement announcement = getOwnedAnnouncement(announcementId, ownerParty);
+        addAnnouncementFormAttributes(model, ownerParty, authentication);
+        model.addAttribute("announcementId", announcement.getId());
+        model.addAttribute("announcementTitle", announcement.getTitle());
+        model.addAttribute("announcementDescription", announcement.getDescription());
+        return "editannouncement";
+    }
+
+    @PostMapping("/partyManage/announcements/{announcementId}/edit")
+    public String updateAnnouncement(
+            @PathVariable Long announcementId,
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String description,
+            Model model,
+            Authentication authentication) {
+        Party ownerParty = getOwnerParty(authentication);
+        Announcement announcement = getOwnedAnnouncement(announcementId, ownerParty);
+        String normalizedTitle = title == null ? "" : title.trim();
+        String normalizedDescription = description == null ? "" : description.trim();
+        String error = validateAnnouncement(normalizedTitle, normalizedDescription);
+
+        if (error != null) {
+            addAnnouncementFormAttributes(model, ownerParty, authentication);
+            model.addAttribute("announcementId", announcementId);
+            model.addAttribute("announcementTitle", title == null ? "" : title);
+            model.addAttribute("announcementDescription", description == null ? "" : description);
+            model.addAttribute("announcementError", error);
+            return "editannouncement";
+        }
+
+        announcement.setTitle(normalizedTitle);
+        announcement.setDescription(normalizedDescription);
+        announcementService.saveAnn(announcement);
+        return "redirect:/partyManage";
+    }
+
+    private String validateAnnouncement(String title, String description) {
+        if (title.isEmpty()) {
+            return "Enter an announcement title.";
+        }
+        if (title.length() > 120) {
+            return "The title must be 120 characters or fewer.";
+        }
+        if (description.isEmpty()) {
+            return "Enter an announcement message.";
+        }
+        if (description.length() > 5000) {
+            return "The message must be 5,000 characters or fewer.";
+        }
+        return null;
+    }
+
+    private void addAnnouncementFormAttributes(
+            Model model,
+            Party party,
+            Authentication authentication) {
+        boolean isOwner = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("owner"));
+        boolean isUser = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("user"));
+        boolean isAdmin = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("admin"));
+
+        model.addAttribute("isOwner", isOwner);
+        model.addAttribute("isUser", isUser);
+        model.addAttribute("isAdmin", isAdmin);
+        model.addAttribute("partyName", party.getPartyName());
+        model.addAttribute("memberCount", memService.getPMByPartyId(party.getPartyId()).size());
+    }
+
+    private Announcement getOwnedAnnouncement(Long announcementId, Party ownerParty) {
+        Announcement announcement = announcementService.getAnnById(announcementId);
+        if (!ownerParty.getPartyId().equals(announcement.getParty().getPartyId())) {
+            throw new AccessDeniedException("Cannot edit an announcement from another party");
+        }
+        return announcement;
     }
 
     private Map<String, Object> toForumPostView(ForumPost forumPost) {
