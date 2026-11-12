@@ -729,6 +729,21 @@ a:visited {
 }
 
 
+.form-row .checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  width: auto;
+  color: #000000;
+  font-weight: normal;
+  line-height: 16px;
+}
+
+.checkbox-label input {
+  margin: 2px 0 0 0;
+}
+
+
 @media screen and (max-width: 1100px) {
   .content {
     flex-wrap: wrap;

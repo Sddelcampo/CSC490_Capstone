@@ -81,6 +81,7 @@
             <a href="#">Parties</a>
             <a href="#">Reports</a>
             <a href="#">Inbox</a>
+            <#if isOwner!false><a href="/createFP">Create Forum Post</a></#if>
           </nav>
           <div class="search">
             <input type="text" placeholder="Search users, parties, reports...">
@@ -183,4 +184,3 @@
   </div>
 </body>
 </html>
-

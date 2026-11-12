@@ -66,6 +66,7 @@
                     <a href="/parties" class="active">Find Parties</a>
                     <a href="/resources">Resources</a>
                     <a href="/events">Events</a>
+                    <#if isOwner!false><a href="/createFP">Create Forum Post</a></#if>
                 </nav>
 
                 <form class="search-form" action="/search" method="get">

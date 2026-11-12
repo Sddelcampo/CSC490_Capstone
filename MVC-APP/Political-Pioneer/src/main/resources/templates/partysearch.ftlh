@@ -88,6 +88,7 @@
             <a href="/resources">Resources</a>
             <!--<a href="#">Collaborate</a> might remove as it could be merged with /account or /events-->
             <a href="/events">Events</a>
+            <#if isOwner!false><a href="/createFP">Create Forum Post</a></#if>
             <!--<a href="#">Voter Tools</a> may remove as it can be merged with resources-->
 
 
