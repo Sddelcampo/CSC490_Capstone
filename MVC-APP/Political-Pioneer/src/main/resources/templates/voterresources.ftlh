@@ -150,6 +150,12 @@
                     <span class="voter-tool-description">Find where to vote using your location or address.</span>
                     <span class="voter-tool-action">Go to polling place lookup &raquo;</span>
                   </a>
+                  <a class="voter-tool-card" href="/questionnaire">
+                    <span class="voter-tool-icon" aria-hidden="true">&#x1f4dd;</span>
+                    <span class="voter-tool-title">Take The Political Questionnaire</span>
+                    <span class="voter-tool-description">Want to know what you what you belive? Take our original questionnaire!</span>
+                    <span class="voter-tool-action">Go to Questionnaire &raquo;</span>
+                  </a>
                 </div>
               </div>
             </div>

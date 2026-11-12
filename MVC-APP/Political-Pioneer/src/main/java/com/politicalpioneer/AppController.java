@@ -43,11 +43,6 @@ public class AppController {
         return "account";
     }
 
-    @GetMapping("/questionnaire")
-    public Object showQuestionnairePage(Model model) {
-        return "questionnaire";
-    }
-
     @GetMapping("/admin")
     public String adminHome() {
         return "home";
@@ -106,7 +101,10 @@ public class AppController {
     }
 
     @GetMapping("/aboutus")
-    public Object showAboutusPage(Model model) {
+    public Object showAboutusPage(Model model, Authentication authentication) {
+        String name = authentication.getName();
+        
+        model.addAttribute("name", name);
         return "aboutus";
     }
 

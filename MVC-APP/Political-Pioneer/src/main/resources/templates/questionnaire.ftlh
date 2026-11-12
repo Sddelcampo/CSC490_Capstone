@@ -1,21 +1,35 @@
-<!-- 
+<#--
  CSC 490: The Political Pioneer
- questionnaire.ftlh 
- Last updated: October 5, 2026
+ questionnaire.ftlh
+ Last updated: November 9, 2026
 
- Description: This is the questionnaire file for The Political Pioneer Web App, this will contain the
- questionnaire which will be used to determine a user's alignments in political ideologies this will
- then be processed by the backend to give a user scores depending on their answers to the questions.
+ Description: Paginated questionnaire. Each page shows ONE section (5 questions). The moment a user
+ clicks a Likert option, the answer is POSTed to /questionnaire/answer and scored by the backend.
+ Unanswered questions simply stay at 0, so users can leave early and still keep their score.
+
+ NOTE: this is a FreeMarker comment (not an HTML comment) on purpose. FreeMarker parses ${...} and
+ <#...> inside HTML comments, which is what caused the earlier 500.
+
+ MODEL EXPECTED FROM THE CONTROLLER (GET /questionnaire?page=N):
+   pageNumber    : int (1-based current page)
+   totalPages    : int (7)
+   sectionTitles : list of strings, in page order (used for the step indicator)
+   section       : { title: string, score: int, questions: [ { id: long, text: string, answer: int (optional, 1-5) } ] }
+   _csrf         : (optional) Spring Security CsrfToken, only if CSRF protection is enabled
 -->
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>The Political Pioneer — Political Questionnaire</title>
+<title>The Political Pioneer — ${section.title}</title>
   <link rel="stylesheet" type="text/css" href="/css/styles.css">
 
-<!-- <script src="script.js" defer></script> -->
+  <!-- CSRF values (safe if Spring Security CSRF is off: they just come out empty) -->
+  <meta name="_csrf" content="${(_csrf.token)!''}">
+  <meta name="_csrf_header" content="${(_csrf.headerName)!'X-CSRF-TOKEN'}">
+
+  <script src="/js/questionnaire.js" defer></script>
 </head>
 <body class="page-dashboard page-portal">
 
@@ -25,8 +39,8 @@
     <!-- Top Left Quadrant: Logo Implementation -->
     <div class="quadrant q-logo">
       <a href="/">
-        <!-- The Political Pioneer Logo: Created by Sebastian Del Campo -->
-        <img src="images/deSebastian_TPP_Logo.png" alt="The Political Pioneer Logo">
+        <#-- The Political Pioneer Logo: Created by Sebastian Del Campo -->
+        <img src="/images/deSebastian_TPP_Logo.png" alt="The Political Pioneer Logo">
       </a>
     </div>
 
@@ -39,7 +53,6 @@
           <div>
             <p class="welcome-text">Welcome, User!</p>
             <div class="account-links">
-              <!-- <a href="/acctlogin">Log In</a> Might be useless if we start at the login page-->
               <a href="/acctlogin">Log Out</a>
               <a href="/account">My Account</a>
             </div>
@@ -49,7 +62,6 @@
           <a href="/home">Home</a>
           <a href="/aboutus">About Us</a>
           <a href="/guide">Guide</a>
-          <!-- <a href="#">Settings</a> Unsure if settings may be necessary for the project-->
           <a href="/contactdevteam">Report a Concern</a>
         </nav>
         <div class="info-text">
@@ -63,12 +75,10 @@
       </div>
     </div>
 
-    <!-- Right Quadrant: The Political Pioneer Portal (TP2 Portal)
-     (largest area — Provides portal navigation and user/party usage) -->
+    <!-- Right Quadrant: The Political Pioneer Portal (TP2 Portal) -->
     <div class="quadrant q-portal">
       <div class="body">
 
-        <!--Provides information for navigation within the portal along with a search bar and button-->
         <div class="mastbar">
           <div class="logo">TP2 <span>Portal</span></div>
           <nav class="tabs">
@@ -77,9 +87,7 @@
             <a href="/platform">Platforms</a>
             <a href="/search">Find Parties</a>
             <a href="/resources">Resources</a>
-            <!--<a href="#">Collaborate</a> might remove as it could be merged with /account or /events-->
             <a href="/events">Events</a>
-            <!--<a href="#">Voter Tools</a> may remove as it can be merged with resources-->
          </nav>
           <div class="search">
             <input type="text" placeholder="Search parties, platforms, issues...">
@@ -87,97 +95,74 @@
           </div>
         </div>
 
-        <!-- Provies a way to navigate within the portal -->
-        <div class="breadcrumb">Resources &gt; Political Questionnaire</div>
+        <div class="breadcrumb">Resources &gt; Political Questionnaire &gt; ${section.title}</div>
 
-        <!-- Questionnaire block: 5 Likert-scale questions (strongly disagree -> strongly agree),
-             submitted to the backend for ideology-alignment scoring -->
         <div class="admin-content">
 
           <div class="module red">
-            <h2>Political Alignment Questionnaire</h2>
+            <h2>${section.title}</h2>
             <div class="module-body">
-              <p style="margin-top:0;">Answer each statement below based on how strongly you agree or
-                disagree. Your responses are used to estimate your alignment across a range of issues.</p>
 
-              <#--
-                TODO: once wired to the backend/model, replace the 5 hardcoded <fieldset> blocks below
-                with a <#list questions as q> loop driven by the model's question list, e.g.:
+              <!-- Step indicator: jump to any section. Answers are already saved, so jumping is safe. -->
+              <ol class="q-progress">
+                <#list sectionTitles as title>
+                  <li<#if title?index + 1 == pageNumber> class="current"</#if>>
+                    <a href="/questionnaire?page=${title?index + 1}" title="${title}">${title}</a>
+                  </li>
+                </#list>
+              </ol>
 
-                <#list questions as q>
+              <div class="q-meta">
+                <strong>Page ${pageNumber} of ${totalPages}</strong>
+                <span>Section score: <strong id="section-score">${section.score}</strong></span>
+                <span id="save-status" class="save-status" aria-live="polite"></span>
+              </div>
+
+              <p style="margin-top:0;">Select how strongly you agree or disagree with each statement.
+                Your answer and section score are saved as soon as you click it. You can skip questions
+                or stop at any time, and unanswered questions count as 0.</p>
+
+              <div class="questionnaire-form" id="questionnaire-form">
+
+                <#list section.questions as q>
                   <fieldset class="question-block">
-                    <legend>${q.index}. ${q.text}</legend>
-                    <div class="scale"> ... name="q${q.id}" ... </div>
+                    <legend>${q?index + 1}. ${q.text}</legend>
+                    <div class="scale">
+                      <#assign labels = ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"]>
+                      <#list labels as label>
+                        <label class="scale-option">
+                          <input type="radio"
+                                 name="q${q.id?c}"
+                                 value="${label?index + 1}"
+                                 data-question-id="${q.id?c}"
+                                 <#if (q.answer!0) == label?index + 1>checked</#if>>
+                          <span>${label}</span>
+                        </label>
+                      </#list>
+                    </div>
                   </fieldset>
                 </#list>
 
-                NOTE: this block uses FreeMarker's own comment syntax , not an HTML comment
-                . FreeMarker still parses directives inside HTML comments, so any example FTL
-                code written there gets executed, not just displayed — that was the cause of the 500 here.
-              -->
+                <div class="page-nav">
+                  <#if pageNumber gt 1>
+                    <a class="btn" href="/questionnaire?page=${pageNumber - 1}">&laquo; Previous</a>
+                  <#else>
+                    <span class="spacer"></span>
+                  </#if>
 
-              <form action="/questionnaire/submit" method="post" class="questionnaire-form">
-
-                <fieldset class="question-block">
-                  <legend>1. The government should play an active role in reducing economic inequality.</legend>
-                  <div class="scale">
-                    <label class="scale-option"><input type="radio" name="q1" value="1" required><span>Strongly Disagree</span></label>
-                    <label class="scale-option"><input type="radio" name="q1" value="2"><span>Disagree</span></label>
-                    <label class="scale-option"><input type="radio" name="q1" value="3"><span>Neutral</span></label>
-                    <label class="scale-option"><input type="radio" name="q1" value="4"><span>Agree</span></label>
-                    <label class="scale-option"><input type="radio" name="q1" value="5"><span>Strongly Agree</span></label>
-                  </div>
-                </fieldset>
-
-                <fieldset class="question-block">
-                  <legend>2. Individual liberty should be prioritized over collective security, even during a crisis.</legend>
-                  <div class="scale">
-                    <label class="scale-option"><input type="radio" name="q2" value="1" required><span>Strongly Disagree</span></label>
-                    <label class="scale-option"><input type="radio" name="q2" value="2"><span>Disagree</span></label>
-                    <label class="scale-option"><input type="radio" name="q2" value="3"><span>Neutral</span></label>
-                    <label class="scale-option"><input type="radio" name="q2" value="4"><span>Agree</span></label>
-                    <label class="scale-option"><input type="radio" name="q2" value="5"><span>Strongly Agree</span></label>
-                  </div>
-                </fieldset>
-
-                <fieldset class="question-block">
-                  <legend>3. Environmental regulations are necessary to protect the long-term public interest, even if they raise costs for businesses.</legend>
-                  <div class="scale">
-                    <label class="scale-option"><input type="radio" name="q3" value="1" required><span>Strongly Disagree</span></label>
-                    <label class="scale-option"><input type="radio" name="q3" value="2"><span>Disagree</span></label>
-                    <label class="scale-option"><input type="radio" name="q3" value="3"><span>Neutral</span></label>
-                    <label class="scale-option"><input type="radio" name="q3" value="4"><span>Agree</span></label>
-                    <label class="scale-option"><input type="radio" name="q3" value="5"><span>Strongly Agree</span></label>
-                  </div>
-                </fieldset>
-
-                <fieldset class="question-block">
-                  <legend>4. Immigration policy should prioritize inclusivity and clear pathways to citizenship.</legend>
-                  <div class="scale">
-                    <label class="scale-option"><input type="radio" name="q4" value="1" required><span>Strongly Disagree</span></label>
-                    <label class="scale-option"><input type="radio" name="q4" value="2"><span>Disagree</span></label>
-                    <label class="scale-option"><input type="radio" name="q4" value="3"><span>Neutral</span></label>
-                    <label class="scale-option"><input type="radio" name="q4" value="4"><span>Agree</span></label>
-                    <label class="scale-option"><input type="radio" name="q4" value="5"><span>Strongly Agree</span></label>
-                  </div>
-                </fieldset>
-
-                <fieldset class="question-block">
-                  <legend>5. Decisions on local issues should be made primarily by local communities rather than centralized authorities.</legend>
-                  <div class="scale">
-                    <label class="scale-option"><input type="radio" name="q5" value="1" required><span>Strongly Disagree</span></label>
-                    <label class="scale-option"><input type="radio" name="q5" value="2"><span>Disagree</span></label>
-                    <label class="scale-option"><input type="radio" name="q5" value="3"><span>Neutral</span></label>
-                    <label class="scale-option"><input type="radio" name="q5" value="4"><span>Agree</span></label>
-                    <label class="scale-option"><input type="radio" name="q5" value="5"><span>Strongly Agree</span></label>
-                  </div>
-                </fieldset>
-
-                <div style="text-align:center; margin-top:14px;">
-                  <button type="submit" class="btn primary">Submit Questionnaire</button>
+                  <#if pageNumber lt totalPages>
+                    <a class="btn primary" href="/questionnaire?page=${pageNumber + 1}">Next &raquo;</a>
+                  <#else>
+                    <a class="btn primary" href="/questionnaire/results">Finish &amp; View Results</a>
+                  </#if>
                 </div>
 
-              </form>
+                <!-- Let users bail out early; their scores so far are already stored. -->
+                <p style="text-align:center; margin-top:10px;">
+                  <a href="/questionnaire/results">Done for now? View my results so far</a>
+                </p>
+
+              </div>
             </div>
           </div>
 
@@ -192,6 +177,7 @@
     </div>
 
   </div>
+
 
 </body>
 </html>

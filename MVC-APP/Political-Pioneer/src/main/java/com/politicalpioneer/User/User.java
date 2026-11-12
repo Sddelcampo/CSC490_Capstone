@@ -101,6 +101,23 @@ public class User {
         this.parties = parties;
         this.forumPost = forumPost;
         this.comment = comment;
+    }
+
+    public User(Long id, String first_name, String last_name,
+            String user_name, String password, String email,
+            String status, String role) {
+        this.id = id;
+        this.firstName = first_name;
+        this.lastName = last_name;
+        this.userName = user_name;
+        this.password = password;
+        this.email = email;
+        setUserAlignment(new UserAlignment());
+        this.status = status;
+        this.role = role;
+        this.parties = new ArrayList<>();
+        this.forumPost = new ArrayList<>();
+        this.comment = new ArrayList<>();
 
     }
 
@@ -158,6 +175,9 @@ public class User {
 
     public void setUserAlignment(UserAlignment userAlignment) {
         this.userAlignment = userAlignment;
+        if (userAlignment != null) {
+            userAlignment.setUser(this);
+        }
     }
 
     public String getStatus() {
@@ -172,7 +192,7 @@ public class User {
         return this.role;
     }
 
-    public void setString(String role) {
+    public void setRole(String role) {
         this.role = role;
     }
 

@@ -74,7 +74,7 @@ public class SecurityConfig {
                 .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
                 .requestMatchers("/party/search/alignment").authenticated()
                 .requestMatchers("/", "/home", "/user", "/users", "/user/userName/**", "/parties/**",
-                    "/party/**", "/users/role/user", "/questionnaire", "/signup", "/platform",
+                    "/party/**", "/users/role/user", "/signup", "/platform",
                     "/resources", "/resources/**", "/events", "/aboutus", "/bugreport", "/contactdevteam", "/guide",
                     "/userSignup", "/getAllAdmin", "/adminUsername/**", "/createAdmin", "/addAdmin", "/createParty", "/partyPage", "/joinParty/**").permitAll()
                 .requestMatchers("/css/**","/js/**", "/images/**").permitAll()
