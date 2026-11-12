@@ -102,7 +102,17 @@ public class PartyController {
 
 
     @GetMapping("/createParty")
-    public String createParty() {
+    public String createParty(Model model, Authentication authentication) {
+        boolean isAdmin = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("admin"));
+        boolean isOwner = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("owner"));
+        boolean isUser = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("user"));
+
+        model.addAttribute("isAdmin", isAdmin);
+        model.addAttribute("isOwner", isOwner);
+        model.addAttribute("isUser", isUser);
         return "createParty";
     }
 
@@ -114,10 +124,7 @@ public class PartyController {
         return "redirect:/home";
     }
 
-    @GetMapping("/partyPage")
-    public String partyPage() {
-        return "partyPage";
-    }
+   
     
     @GetMapping("/partyDetail/{id}")
     public String partyDetail(@PathVariable("id") Long id, Model model) {
@@ -158,6 +165,18 @@ public String joinParty(@PathVariable("id") Long id, Authentication authenticati
         String status = party.getStatus();
         String lastName = user.getLastName();
         List<PartyMember> pm = memService.getPMByPartyId(party.getPartyId());
+
+
+       
+        boolean isOwner = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("owner"));
+        model.addAttribute("isOwner", isOwner);
+        boolean isUser = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("user"));
+
+
+        model.addAttribute("isOwner", isOwner);
+        model.addAttribute("isUser", isUser);   
         
         
         model.addAttribute("status", status);

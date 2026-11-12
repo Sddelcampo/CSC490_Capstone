@@ -60,19 +60,34 @@
                 <div class="brand">TP2 <span>Portal</span></div>
 
                 <nav class="nav-links">
-                    <a href="/home">Home</a>
-                    <a href="/account">My Account</a>
-                    <a href="/platforms">Platforms</a>
-                    <a href="/parties">Find Parties</a>
-                    <a href="/resources">Resources</a>
-                    <a href="/events">Events</a>
-                    <a href="/partyManage" class="active">Manage Party</a>
-                </nav>
+                     <a href="/home">Home</a>
+                      <#if Session.SPRING_SECURITY_CONTEXT??>
+             <a href="/account">My Account</a>
+            </#if>
 
-                <form class="search-form" action="/search" method="get">
-                    <input type="text" name="q" placeholder="Search parties, platforms, events" />
-                    <button type="submit">Search</button>
-                </form>
+                     <#if isUser!false>
+               <a href="/parties">Find Parties</a>
+            </#if>
+              <a href="/resources">Resources</a>
+                <a href="/events">Events</a>
+                <#if isOwner!false>
+                     <a href="/partyManage" class="active">Manage Party</a>
+            </#if>
+
+
+            <#if isOwner!false>
+              <a href="/createParty">Create Party</a>
+              
+            </#if>
+                  
+                   
+                        <#if isAdmin!false>
+              <a href="/admin">Admin Dashboard</a>
+              <a href="/createAdmin">Create Admin</a>
+            </#if>
+               </nav>
+                    
+                
             </header>
 
             <div class="breadcrumb">My Account &gt; My Parties &gt; Riverbend Neighbors Party</div>
