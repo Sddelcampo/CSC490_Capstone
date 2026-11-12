@@ -35,9 +35,9 @@
         <div class="account-block">
           <div class="avatar-circle">&#128100;</div>
           <div>
-              <#if Session.SPRING_SECURITY_CONTEXT??>
+              #if Session.SPRING_SECURITY_CONTEXT??>
                 <p class="welcome-text">Welcome, ${name}</p>
-
+<
               </#if>
 
             
@@ -87,7 +87,7 @@
               <a href="/account" class="active">My Account</a>
             </#if>
 
-            <a href="/platform">Platforms</a>
+            <a href="/forum">Forum</a>
              <#if isOwner!false>
                <a href="/partyManage">Manage Party</a>
             </#if>

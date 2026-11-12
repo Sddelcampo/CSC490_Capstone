@@ -62,6 +62,9 @@ public class AppController {
     @GetMapping("/home")
     public String home(Model model, Authentication authentication) {
         addNavigationRoleAttributes(model, authentication);
+        String name = authentication.getName();
+        addNavigationRoleAttributes(model, authentication);
+        model.addAttribute("name", name);
         return "home";
     }
 
