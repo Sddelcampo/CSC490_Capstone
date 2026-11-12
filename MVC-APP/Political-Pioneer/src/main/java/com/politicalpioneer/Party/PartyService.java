@@ -55,6 +55,7 @@ public class PartyService {
 
     public boolean hasPartyByUserId(Long userId) {
         return partyRepo.existsByUserId(userId);
+    }
       
     public Optional<Party> findPartyByUserId(Long userId) {
         return Optional.ofNullable(partyRepo.findByUserId(userId));
