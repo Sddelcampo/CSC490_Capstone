@@ -233,7 +233,7 @@
 
            
             
-              <a href="#" class="btn">Browse All 52 Parties &raquo;</a>
+              
             </div>
 
           </div>

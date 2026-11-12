@@ -20,7 +20,7 @@
                 <h2 class="box-header">Account &amp; Site Info</h2>
 
                 <div class="user-row">
-                    <img class="user-avatar" src="images/user-avatar.png" alt="" />
+                    <img class="user-avatar" src="/images/user-avatar.png" alt="" />
                     <div>
                         <p class="welcome-text">Welcome, User!</p>
                         <div class="user-links">
@@ -111,8 +111,7 @@
                             <li class="current-item">Control panel</li>
                             <li><a href="#">New forum post</a></li>
                             <li><a href="#">Publish announcement</a></li>
-                            <li><a href="#">Edit party details</a></li>
-                            <li><a href="#">View public page</a></li>
+                           
                         </ul>
                     </section>
                 </div>
@@ -138,9 +137,7 @@
                                     ${description! "No Description"}
                                 </p>
                                 <div class="link-row">
-                                    <a href="#">View public page</a>
-                                    <span>|</span>
-                                    <a href="#">Edit party details</a>
+                                   
                                 </div>
                             </div>
                         </div>
@@ -151,14 +148,9 @@
                         <h2 class="box-header">Members</h2>
 
                         <form class="toolbar" action="#" method="get">
-                            <label for="member-filter">Show:</label>
-                            <select id="member-filter" name="memberStatus">
-                                <option value="all">All members</option>
-                                <option value="active">Active members</option>
-                                <option value="pending">Pending requests</option>
-                            </select>
-                            <button type="submit" style="color: blue" class="red-button">Apply</button>
-                            <span class="toolbar-count">22 members · 2 pending requests</span>
+                          
+                           
+                            <span class="toolbar-count toolbar-count-left">${memberCount} members</span>
                         </form>
 
                         <div class="table-scroll">
@@ -176,7 +168,12 @@
                                         <tr>
                                             <td><a href="#">${member.user.firstName} ${member.user.lastName}</a></td>
                                             <td class="status-red">${member.status}</td>
-                                            <td class="no-wrap"><a href="#">Approve</a></td>
+                                            <td class="no-wrap">
+                                                <form action="/partyManage/members/${member.user.userId}/remove"
+                                                      method="post" class="inline-form">
+                                                    <button type="submit" class="red-button">Remove</button>
+                                                </form>
+                                            </td>
                                         </tr>
                                     </#list>
                                    
