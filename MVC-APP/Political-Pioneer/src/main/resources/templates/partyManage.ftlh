@@ -1,3 +1,4 @@
+<#ftl output_format="HTML" auto_esc=true>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -111,7 +112,7 @@
                         <ul class="box-list">
                             <li class="current-item">Control panel</li>
                             <li><a href="#">New forum post</a></li>
-                            <li><a href="#">Publish announcement</a></li>
+                            <li><a href="/createannouncement">Publish announcement</a></li>
                            
                         </ul>
                     </section>
@@ -239,27 +240,45 @@
                         <h2 class="box-header">Announcements</h2>
 
                         <div class="toolbar">
-                            <a href="#" class="red-button">+ Publish Announcement</a>
+                            <a href="/createannouncement" class="red-button">+ Publish Announcement</a>
                             <span class="toolbar-count">${announcementCount} published</span>
                         </div>
 
-                        <#list announcements as announcement>
-                            <div class="announcement">
-                                <p class="party-title">${announcement.title!"Untitled"}</p>
-                                <p class="meta-text">Published ${announcement.createdAt!""}</p>
-                                <p class="summary-text">${announcement.description!""}</p>
-                                <div class="link-row">
-                                    <a href="#">Edit</a>
-                                    <span>|</span>
-                                    <form action="/partyManage/announcements/${announcement.id?c}/delete"
-                                          method="post" class="inline-form">
-                                        <button type="submit" class="red-button small-delete-button">Delete</button>
-                                    </form>
-                                </div>
-                            </div>
-                        <#else>
-                            <p class="summary-text">No announcements yet.</p>
-                        </#list>
+                        <div class="table-scroll">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Published</th>
+                                        <th>Message</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <#list announcements as announcement>
+                                        <tr>
+                                            <td>${announcement.title!"Untitled"}</td>
+                                            <td class="no-wrap">${announcement.createdAt!""}</td>
+                                            <td>${announcement.description!""}</td>
+                                            <td class="no-wrap">
+                                                <a href="/partyManage/announcements/${announcement.id?c}/edit">Edit</a> |
+                                                <form action="/partyManage/announcements/${announcement.id?c}/delete"
+                                                      method="post" class="inline-form">
+                                                    <button type="submit" class="red-button small-delete-button">Delete</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    <#else>
+                                        <tr><td colspan="4">No announcements yet.</td></tr>
+                                    </#list>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="box-footer">
+                            <span class="muted">Showing ${announcementCount} of ${announcementCount}</span>
+                            <span class="muted">published announcements</span>
+                        </div>
                     </section>
                 </main>
 

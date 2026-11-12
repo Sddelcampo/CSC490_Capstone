@@ -76,6 +76,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/createFP").hasAuthority("owner")
                 .requestMatchers(HttpMethod.POST, "/forum/post").hasAuthority("owner")
                 .requestMatchers(HttpMethod.POST, "/partyManage/**").hasAuthority("owner")
+                .requestMatchers("/partyManage/**").hasAuthority("owner")
+                .requestMatchers("/createannouncement").hasAuthority("owner")
                 .requestMatchers("/", "/home", "/user", "/users", "/user/userName/**", "/parties/**",
                     "/party/**", "/users/role/user", "/signup", "/platform",
                     "/resources", "/resources/**", "/events", "/aboutus", "/bugreport", "/contactdevteam", "/guide",
