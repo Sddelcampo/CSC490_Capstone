@@ -218,10 +218,16 @@ public class AppController {
                 .anyMatch(a -> a.getAuthority().equals("owner"));
         boolean isUser = authentication != null && authentication.getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("user"));
+        boolean canCreateParty = false;
+        if (isOwner) {
+            User owner = userService.getUserByUserName(authentication.getName());
+            canCreateParty = !partyService.hasPartyByUserId(owner.getUserId());
+        }
 
         model.addAttribute("isAdmin", isAdmin);
         model.addAttribute("isOwner", isOwner);
         model.addAttribute("isUser", isUser);
+        model.addAttribute("canCreateParty", canCreateParty);
     }
 
 }

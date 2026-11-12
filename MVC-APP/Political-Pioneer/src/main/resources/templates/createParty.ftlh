@@ -164,34 +164,39 @@
                             </div>
 
                         
-                            <div class="form-row">
+                            <div class="form-row location-form-row">
                                 <label for="party-address">
-                                    Location <span class="required">*</span>
+                                    Headquarters location <span class="required">*</span>
                                 </label>
                                 <div class="form-field">
-                                    <div class="address-row">
-                                        <input type="text" id="party-address" placeholder="Street, city, region" />
-                                        <button type="button" id="find-location" class="red-button">Find
-                                            Location</button>
+                                    <div class="location-picker">
+                                        <input type="text" id="party-address" maxlength="300"
+                                            autocomplete="street-address" placeholder="Street, city, region" />
+                                        <div class="location-actions">
+                                            <button type="button" id="find-location" class="red-button">
+                                                Find Location
+                                            </button>
+                                            <button type="button" id="use-browser-location" class="gray-button">
+                                                Use My Location
+                                            </button>
+                                        </div>
+                                        <p id="location-status" class="location-status" role="status"
+                                            aria-live="polite"></p>
+                                        <p id="location-error" class="location-error" role="alert" hidden></p>
+                                        <div id="location-result" class="location-result" hidden>
+                                            <strong>Selected location</strong>
+                                            <p id="location-name"></p>
+                                        </div>
+                                        <input type="hidden" id="party-latitude" name="latitude" />
+                                        <input type="hidden" id="party-longitude" name="longitude" />
+                                        <p class="geocoder-attribution">
+                                            Voters who search Find Parties near this address will see your party.
+                                            Address lookup by
+                                            <a href="https://www.openstreetmap.org/copyright" target="_blank"
+                                                rel="noopener noreferrer">OpenStreetMap contributors</a>.
+                                            Your address is sent to Nominatim for lookup.
+                                        </p>
                                     </div>
-
-                                    
-                                    <div id="location-result" class="location-result hidden">
-                                        <p><strong>Location found:</strong> <span id="location-name"></span></p>
-                                        <p class="location-coords" id="location-coords"></p>
-                                    </div>
-                                    <p id="location-error" class="error-text hidden"></p>
-
-                                 
-                                    <input type="hidden" name="latitude" value="40.7128" />
-                                    <input type="hidden" name="longitude" value="-74.0060" />
-                                    <p class="hint">
-                                        Voters who search Find Parties near this address will see your
-                                        party. Address lookup by
-                                        <a href="https://www.openstreetmap.org/copyright">OpenStreetMap
-                                            contributors</a>.
-                                        Your address is sent to Nominatim for lookup.
-                                    </p>
                                 </div>
                             </div>
 
@@ -249,7 +254,163 @@
         </div>
     </div>
 
-    <script src="create-party.js"></script>
+    <script>
+        const partyForm = document.getElementById("create-party-form");
+        const addressInput = document.getElementById("party-address");
+        const latitudeInput = document.getElementById("party-latitude");
+        const longitudeInput = document.getElementById("party-longitude");
+        const findLocationButton = document.getElementById("find-location");
+        const useBrowserLocationButton = document.getElementById("use-browser-location");
+        const locationResult = document.getElementById("location-result");
+        const locationName = document.getElementById("location-name");
+        const locationStatus = document.getElementById("location-status");
+        const locationError = document.getElementById("location-error");
+        let locationRequest = 0;
+
+        function setLocationButtonsDisabled(disabled) {
+            findLocationButton.disabled = disabled;
+            useBrowserLocationButton.disabled = disabled;
+        }
+
+        function clearSelectedLocation() {
+            locationRequest++;
+            setLocationButtonsDisabled(false);
+            latitudeInput.value = "";
+            longitudeInput.value = "";
+            locationResult.hidden = true;
+            locationError.hidden = true;
+            locationStatus.textContent = "";
+        }
+
+        function setSelectedLocation(latitude, longitude, label) {
+            if (!Number.isFinite(latitude) || !Number.isFinite(longitude)
+                || latitude < -90 || latitude > 90
+                || longitude < -180 || longitude > 180) {
+                throw new Error("The location lookup returned invalid coordinates.");
+            }
+
+            latitudeInput.value = String(latitude);
+            longitudeInput.value = String(longitude);
+            locationName.textContent = label;
+            locationResult.hidden = false;
+            locationError.hidden = true;
+            locationStatus.textContent = "Location selected.";
+        }
+
+        function showLocationError(message) {
+            locationError.textContent = message;
+            locationError.hidden = false;
+            locationStatus.textContent = "";
+        }
+
+        addressInput.addEventListener("input", clearSelectedLocation);
+        addressInput.addEventListener("keydown", function (event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                findLocationButton.click();
+            }
+        });
+
+        findLocationButton.addEventListener("click", async function () {
+            const address = addressInput.value.trim();
+            clearSelectedLocation();
+            if (!address) {
+                showLocationError("Enter the party headquarters address first.");
+                addressInput.focus();
+                return;
+            }
+
+            setLocationButtonsDisabled(true);
+            const requestId = locationRequest;
+            locationStatus.textContent = "Looking up address...";
+
+            try {
+                const geocoderUrl = new URL("https://nominatim.openstreetmap.org/search");
+                geocoderUrl.searchParams.set("format", "jsonv2");
+                geocoderUrl.searchParams.set("limit", "1");
+                geocoderUrl.searchParams.set("q", address);
+
+                const response = await fetch(geocoderUrl, {
+                    headers: { "Accept": "application/json" }
+                });
+                if (!response.ok) {
+                    throw new Error("The address lookup service returned an error. Try again.");
+                }
+
+                const results = await response.json();
+                if (requestId !== locationRequest) {
+                    return;
+                }
+                if (!Array.isArray(results) || results.length === 0) {
+                    throw new Error("No matching address was found. Add a city or region and try again.");
+                }
+
+                setSelectedLocation(
+                    Number(results[0].lat),
+                    Number(results[0].lon),
+                    results[0].display_name || address
+                );
+            } catch (error) {
+                if (requestId === locationRequest) {
+                    showLocationError(error.message || "Address lookup failed. Please try again.");
+                }
+            } finally {
+                if (requestId === locationRequest) {
+                    setLocationButtonsDisabled(false);
+                }
+            }
+        });
+
+        useBrowserLocationButton.addEventListener("click", function () {
+            clearSelectedLocation();
+            if (!navigator.geolocation) {
+                showLocationError("This browser does not support location access. Enter the address instead.");
+                return;
+            }
+
+            setLocationButtonsDisabled(true);
+            const requestId = locationRequest;
+            locationStatus.textContent = "Requesting your browser location...";
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    if (requestId !== locationRequest) {
+                        return;
+                    }
+                    try {
+                        setSelectedLocation(
+                            position.coords.latitude,
+                            position.coords.longitude,
+                            "Location from this browser"
+                        );
+                    } catch (error) {
+                        showLocationError(error.message);
+                    } finally {
+                        setLocationButtonsDisabled(false);
+                    }
+                },
+                function (error) {
+                    if (requestId !== locationRequest) {
+                        return;
+                    }
+                    const message = error.code === error.PERMISSION_DENIED
+                        ? "Location access was denied. Allow it in your browser or enter the address."
+                        : error.code === error.POSITION_UNAVAILABLE
+                            ? "Your browser could not determine your location. Enter the address instead."
+                            : "Location request timed out. Try again or enter the address.";
+                    showLocationError(message);
+                    setLocationButtonsDisabled(false);
+                },
+                { enableHighAccuracy: false, timeout: 10000, maximumAge: 60000 }
+            );
+        });
+
+        partyForm.addEventListener("submit", function (event) {
+            if (!latitudeInput.value || !longitudeInput.value) {
+                event.preventDefault();
+                showLocationError("Find the party address or use your browser location before continuing.");
+            }
+        });
+    </script>
 </body>
 
 </html>

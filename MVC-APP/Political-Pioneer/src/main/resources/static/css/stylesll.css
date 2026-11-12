@@ -314,6 +314,80 @@ a:visited {
   margin: 0;
 }
 
+.location-form-row {
+  flex-direction: column;
+  gap: 6px;
+}
+
+.location-form-row > label {
+  width: auto;
+  line-height: 16px;
+}
+
+.location-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.location-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.location-result {
+  padding: 8px;
+  border-left: 3px solid #003366;
+  background: #f5f7fa;
+  overflow-wrap: anywhere;
+}
+
+.location-result strong {
+  color: #003366;
+  font-size: 12px;
+}
+
+.location-result p + p {
+  margin-top: 4px;
+}
+
+.location-status:empty {
+  display: none;
+}
+
+.location-status,
+.location-error,
+.geocoder-attribution {
+  margin: 0;
+  font-size: 12px;
+  line-height: 16px;
+  overflow-wrap: anywhere;
+}
+
+.location-status {
+  color: #555555;
+}
+
+.location-error {
+  color: #b00020;
+}
+
+.geocoder-attribution {
+  color: #555555;
+  font-size: 11px;
+}
+
+.location-result[hidden],
+.location-error[hidden] {
+  display: none;
+}
+
+.location-actions button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
 .form-field input[type="text"],
 .form-field textarea {
   display: block;
