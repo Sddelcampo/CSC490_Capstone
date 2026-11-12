@@ -31,14 +31,15 @@ public class AppController {
     // we want to send them is not to login but rather
     // the dashboard
     @GetMapping("/")
-    public Object showStartPage(Model model) {
+    public Object showStartPage(Model model, Authentication authentication) {
+        addNavigationRoleAttributes(model, authentication);
         return "home";
     }
 
     @GetMapping("/account")
     public Object showAccountPage(Model model, Authentication authentication) {
         String name = authentication.getName();
-        
+        addNavigationRoleAttributes(model, authentication);
         model.addAttribute("name", name);
         return "account";
     }
@@ -60,13 +61,7 @@ public class AppController {
 
     @GetMapping("/home")
     public String home(Model model, Authentication authentication) {
-        boolean isAdmin = authentication != null && authentication.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("admin"));
-        boolean isOwner = authentication != null && authentication.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("owner"));
-        model.addAttribute("isOwner", isOwner);
-        
-        model.addAttribute("isAdmin", isAdmin);
+        addNavigationRoleAttributes(model, authentication);
         return "home";
     }
 
@@ -103,7 +98,8 @@ public class AppController {
     @GetMapping("/aboutus")
     public Object showAboutusPage(Model model, Authentication authentication) {
         String name = authentication.getName();
-        
+
+        addNavigationRoleAttributes(model, authentication);
         model.addAttribute("name", name);
         return "aboutus";
     }
@@ -183,6 +179,9 @@ public class AppController {
     public String voterResources(
             Model model,
             Authentication authentication) {
+        String name = authentication.getName();
+        addNavigationRoleAttributes(model, authentication);
+        model.addAttribute("name", name);
         return "voterresources";
     }
 
@@ -190,6 +189,9 @@ public class AppController {
     public String voterRegistration(
             Model model,
             Authentication authentication) {
+        String name = authentication.getName();
+        addNavigationRoleAttributes(model, authentication);
+        model.addAttribute("name", name);
         return "voterregistration";
     }
 
@@ -197,6 +199,7 @@ public class AppController {
     public String voterLookup(
             Model model,
             Authentication authentication) {
+        addNavigationRoleAttributes(model, authentication);
         return "voterlookup";
     }
 
@@ -204,9 +207,21 @@ public class AppController {
     public String pollingPlaces(
             Model model,
             Authentication authentication) {
+        addNavigationRoleAttributes(model, authentication);
         return "pollingplaces";
     }
 
-   
+    private void addNavigationRoleAttributes(Model model, Authentication authentication) {
+        boolean isAdmin = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("admin"));
+        boolean isOwner = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("owner"));
+        boolean isUser = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("user"));
+
+        model.addAttribute("isAdmin", isAdmin);
+        model.addAttribute("isOwner", isOwner);
+        model.addAttribute("isUser", isUser);
+    }
 
 }

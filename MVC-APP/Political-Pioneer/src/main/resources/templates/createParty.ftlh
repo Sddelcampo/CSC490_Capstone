@@ -64,13 +64,22 @@
 
                 <nav class="nav-links">
                     <a href="/home">Home</a>
-                    <a href="/account">My Account</a>
-                    <a href="/platforms">Platforms</a>
-                    <a href="/parties">Find Parties</a>
+                    <#if Session.SPRING_SECURITY_CONTEXT??>
+                        <a href="/account">My Account</a>
+                    </#if>
+                    <#if isUser!false>
+                        <a href="/search">Find Parties</a>
+                    </#if>
                     <a href="/resources">Resources</a>
                     <a href="/events">Events</a>
-                    <a href="/events" class="active">Create Party</a>
-
+                    <#if isOwner!false>
+                        <a href="/partyManage">Manage Party</a>
+                        <a href="/createParty" class="active">Create Party</a>
+                    </#if>
+                    <#if isAdmin!false>
+                        <a href="/admin">Admin Dashboard</a>
+                        <a href="/createAdmin">Create Admin</a>
+                    </#if>
                 </nav>
 
                 <form class="search-form" action="/search" method="get">
@@ -200,7 +209,7 @@
                             </div>
 
                             <div class="form-buttons">
-                                <button type="submit" class="red-button">Create Party Page</button>
+                                <button type="submit" class="red-button">Create Party</button>
                                 <a href="/parties" class="gray-button">Cancel</a>
                             </div>
                         </form>
