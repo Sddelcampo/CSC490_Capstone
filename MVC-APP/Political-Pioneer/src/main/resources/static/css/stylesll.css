@@ -472,6 +472,12 @@ a:visited {
   margin: 0;
 }
 
+.small-delete-button {
+  padding: 2px 6px;
+  font-size: 11px;
+  line-height: 12px;
+}
+
 .gray-button,
 .gray-button:visited {
   background-color: #f0f0f0;

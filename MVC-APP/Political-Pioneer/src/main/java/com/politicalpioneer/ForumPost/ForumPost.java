@@ -72,6 +72,10 @@ public class ForumPost {
         this.party = party;
     }
 
+    public User getUser() {
+        return user;
+    }
+
     public String getTitle() {
         return this.title;
     }

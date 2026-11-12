@@ -1,13 +1,19 @@
 package com.politicalpioneer.Party;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.politicalpioneer.BadRequestException;
 import com.politicalpioneer.Announcement.Announcement;
+import com.politicalpioneer.Announcement.AnnouncementService;
 import com.politicalpioneer.ForumPost.ForumPost;
+import com.politicalpioneer.ForumPost.ForumPostService;
 import com.politicalpioneer.Party.PartyController.GeoJsonPoint;
 import com.politicalpioneer.Party.PartyAlignment.PartyAlignment;
 import com.politicalpioneer.PartyMember.PartyMember;
@@ -24,6 +30,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.locationtech.jts.geom.Point;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -80,11 +87,20 @@ public class PartyController {
     private final PartyService partyService;
     private final UserService userService;
     private final PartyMemberService memService;
+    private final ForumPostService forumPostService;
+    private final AnnouncementService announcementService;
 
-    public PartyController(PartyService partyService, UserService userService, PartyMemberService memService) {
+    public PartyController(
+            PartyService partyService,
+            UserService userService,
+            PartyMemberService memService,
+            ForumPostService forumPostService,
+            AnnouncementService announcementService) {
         this.partyService = partyService;
         this.userService = userService;
         this.memService = memService;
+        this.forumPostService = forumPostService;
+        this.announcementService = announcementService;
     }
 
     @GetMapping("/party")
@@ -170,6 +186,12 @@ public String joinParty(@PathVariable("id") Long id, Authentication authenticati
         String status = party.getStatus();
         String lastName = user.getLastName();
         List<PartyMember> pm = memService.getPMByPartyId(party.getPartyId());
+        List<Map<String, Object>> forumPosts = party.getForumPost().stream()
+                .map(this::toForumPostView)
+                .toList();
+        List<Map<String, Object>> announcements = party.getAnn().stream()
+                .map(this::toAnnouncementView)
+                .toList();
 
 
        
@@ -190,10 +212,41 @@ public String joinParty(@PathVariable("id") Long id, Authentication authenticati
         model.addAttribute("description", description);
         model.addAttribute("pm", pm);
         model.addAttribute("memberCount", pm.size());
-        
+        model.addAttribute("forumPosts", forumPosts);
+        model.addAttribute("forumPostCount", forumPosts.size());
+        model.addAttribute("hiddenForumPostCount", forumPosts.stream()
+                .filter(post -> Boolean.FALSE.equals(post.get("visible")))
+                .count());
+        model.addAttribute("announcements", announcements);
+        model.addAttribute("announcementCount", announcements.size());
+
         
         // System.out.println(party.getPartyName());
         return "partyManage";
+    }
+
+    private Map<String, Object> toForumPostView(ForumPost forumPost) {
+        Map<String, Object> post = new LinkedHashMap<>();
+        post.put("id", forumPost.getFormPostId());
+        post.put("title", forumPost.getTitle());
+        post.put("author", forumPost.getUser().getUserName());
+        post.put("createdAt", formatDate(forumPost.getCreatedTime()));
+        post.put("visible", forumPost.getVisiblity());
+        post.put("visibility", Boolean.TRUE.equals(forumPost.getVisiblity()) ? "visible" : "hidden");
+        return post;
+    }
+
+    private Map<String, Object> toAnnouncementView(Announcement announcement) {
+        Map<String, Object> announcementView = new LinkedHashMap<>();
+        announcementView.put("id", announcement.getId());
+        announcementView.put("title", announcement.getTitle());
+        announcementView.put("description", announcement.getDescription());
+        announcementView.put("createdAt", formatDate(announcement.getCreatedDate()));
+        return announcementView;
+    }
+
+    private String formatDate(LocalDateTime dateTime) {
+        return dateTime == null ? "" : dateTime.format(DateTimeFormatter.ofPattern("MMM d, yyyy"));
     }
 
     @PostMapping("/partyManage/members/{memberUserId}/remove")
@@ -204,6 +257,37 @@ public String joinParty(@PathVariable("id") Long id, Authentication authenticati
         Party party = partyService.getPartyByUserId(owner.getUserId());
         memService.deletePartyMemberById(memberUserId, party.getPartyId());
         return "redirect:/partyManage";
+    }
+
+    @PostMapping("/partyManage/forum-posts/{postId}/delete")
+    public String deleteForumPost(@PathVariable Long postId, Authentication authentication) {
+        Party ownerParty = getOwnerParty(authentication);
+        ForumPost forumPost = forumPostService.getForumPostById(postId);
+        if (!ownerParty.getPartyId().equals(forumPost.getParty().getPartyId())) {
+            throw new AccessDeniedException("Cannot delete a forum post from another party");
+        }
+
+        forumPostService.deleteForumPostById(postId);
+        return "redirect:/partyManage";
+    }
+
+    @PostMapping("/partyManage/announcements/{announcementId}/delete")
+    public String deleteAnnouncement(
+            @PathVariable Long announcementId,
+            Authentication authentication) {
+        Party ownerParty = getOwnerParty(authentication);
+        Announcement announcement = announcementService.getAnnById(announcementId);
+        if (!ownerParty.getPartyId().equals(announcement.getParty().getPartyId())) {
+            throw new AccessDeniedException("Cannot delete an announcement from another party");
+        }
+
+        announcementService.deleteAnnById(announcementId);
+        return "redirect:/partyManage";
+    }
+
+    private Party getOwnerParty(Authentication authentication) {
+        User owner = userService.getUserByUserName(authentication.getName());
+        return partyService.getPartyByUserId(owner.getUserId());
     }
 
 
