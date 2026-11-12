@@ -1,6 +1,7 @@
 package com.politicalpioneer.Party;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
@@ -151,7 +152,7 @@ public String joinParty(@PathVariable("id") Long id, Authentication authenticati
     } catch (BadRequestException e) {
         System.out.println("User can not join a party more than once");
     }
-    return "redirect:/home";
+    return "redirect:/partyDetail/" + party.getPartyId();
 }
 
 //I will pull just the first party for now
@@ -159,7 +160,11 @@ public String joinParty(@PathVariable("id") Long id, Authentication authenticati
     public Object manageParty(Model model, Authentication authentication) {
         User user = userService.getUserByUserName(authentication.getName());
         Long userId = user.getUserId();
-        Party party = partyService.getPartyByUserId(userId);
+        Optional<Party> partyResult = partyService.findPartyByUserId(userId);
+        if (partyResult.isEmpty()) {
+            return "redirect:/createParty";
+        }
+        Party party = partyResult.get();
         String partyName = party.getPartyName();
         String description = party.getDescription();
         String status = party.getStatus();
@@ -184,10 +189,21 @@ public String joinParty(@PathVariable("id") Long id, Authentication authenticati
         model.addAttribute("partyName", partyName);
         model.addAttribute("description", description);
         model.addAttribute("pm", pm);
+        model.addAttribute("memberCount", pm.size());
         
         
         // System.out.println(party.getPartyName());
         return "partyManage";
+    }
+
+    @PostMapping("/partyManage/members/{memberUserId}/remove")
+    public String removePartyMember(
+            @PathVariable Long memberUserId,
+            Authentication authentication) {
+        User owner = userService.getUserByUserName(authentication.getName());
+        Party party = partyService.getPartyByUserId(owner.getUserId());
+        memService.deletePartyMemberById(memberUserId, party.getPartyId());
+        return "redirect:/partyManage";
     }
 
 

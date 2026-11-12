@@ -23,7 +23,7 @@
                 <h2 class="box-header">Account &amp; Site Info</h2>
 
                 <div class="user-row">
-                    <img class="user-avatar" src="images/user-avatar.png" alt="" />
+                    <img class="user-avatar" src="/images/user-avatar.png" alt="" />
                     <div>
                         <p class="welcome-text">Welcome, User!</p>
                         <div class="user-links">
@@ -82,10 +82,7 @@
                     </#if>
                 </nav>
 
-                <form class="search-form" action="/search" method="get">
-                    <input type="text" name="q" placeholder="Search parties, platforms, events" />
-                    <button type="submit">Search</button>
-                </form>
+              
             </header>
 
             <div class="breadcrumb">Home &gt; Find Parties &gt; Start a New Party Page</div>
