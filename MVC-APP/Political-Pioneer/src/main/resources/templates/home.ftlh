@@ -99,6 +99,7 @@
             <a href="/resources">Resources</a>
            
             <a href="/events">Events</a>
+            <#if isOwner!false><a href="/createFP">Create Forum Post</a></#if>
 
 
             <#if isOwner!false>

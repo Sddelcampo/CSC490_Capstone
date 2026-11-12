@@ -71,6 +71,7 @@
             </#if>
               <a href="/resources">Resources</a>
                 <a href="/events">Events</a>
+                <#if isOwner!false><a href="/createFP">Create Forum Post</a></#if>
                 <#if isOwner!false>
                      <a href="/partyManage" class="active">Manage Party</a>
             </#if>
@@ -192,7 +193,7 @@
                         <h2 class="box-header">Forum Posts</h2>
 
                         <div class="toolbar">
-                            <a href="#" class="red-button">+ New Forum Post</a>
+                            <a href="/createFP" class="red-button">+ New Forum Post</a>
                             <span class="toolbar-count">${forumPostCount} posts · ${hiddenForumPostCount} hidden</span>
                         </div>
 
@@ -215,7 +216,6 @@
                                             <td class="no-wrap">${post.createdAt!""}</td>
                                             <td<#if post.visible?? && !post.visible> class="status-red"</#if>>${post.visibility!"unknown"}</td>
                                             <td class="no-wrap">
-                                                <a href="#">${(post.visible!false)?then("Hide", "Show")}</a> |
                                                 <form action="/partyManage/forum-posts/${post.id?c}/delete"
                                                       method="post" class="inline-form">
                                                     <button type="submit" class="red-button small-delete-button">Remove</button>

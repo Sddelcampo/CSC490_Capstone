@@ -90,6 +90,7 @@
             <a href="/search">Find Parties</a>
             <a href="/resources">Resources</a>
             <a href="/events">Events</a>
+            <#if isOwner!false><a href="/createFP">Create Forum Post</a></#if>
          </nav>
           <div class="search">
             <input type="text" placeholder="Search parties, platforms, issues...">

@@ -73,6 +73,9 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
                 .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
                 .requestMatchers("/party/search/alignment").authenticated()
+                .requestMatchers(HttpMethod.GET, "/createFP").hasAuthority("owner")
+                .requestMatchers(HttpMethod.POST, "/forum/post").hasAuthority("owner")
+                .requestMatchers(HttpMethod.POST, "/partyManage/**").hasAuthority("owner")
                 .requestMatchers("/partyManage/**").hasAuthority("owner")
                 .requestMatchers("/createannouncement").hasAuthority("owner")
                 .requestMatchers("/", "/home", "/user", "/users", "/user/userName/**", "/parties/**",

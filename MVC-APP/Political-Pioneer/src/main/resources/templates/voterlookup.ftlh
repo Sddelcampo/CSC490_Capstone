@@ -88,6 +88,7 @@
             </#if>
             <a href="/resources" class="active">Resources</a>
             <a href="/events">Events</a>
+            <#if isOwner!false><a href="/createFP">Create Forum Post</a></#if>
             <#if isOwner!false>
               <a href="/partyManage">Manage Party</a>
             </#if>

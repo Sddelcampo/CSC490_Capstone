@@ -92,6 +92,7 @@
             <a href="/resources" class="active">Resources</a>
             <!--<a href="#">Collaborate</a> might remove as it could be merged with /account or /events-->
             <a href="/events">Events</a>
+            <#if isOwner!false><a href="/createFP">Create Forum Post</a></#if>
               <#if isAdmin!false>
               <a href="/admin">Admin Dashboard</a>
               <a href="/createAdmin">Create Admin</a>
