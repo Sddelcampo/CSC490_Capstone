@@ -43,20 +43,7 @@ public class PartyMemberService {
 
     }
 
-    // //Work on passing original composite key
-    // public PartyMember addPartyMember(PartyMember newPm) {
-
-    // // PartyMemberId id = new PartyMemberId(
-    // // partyMember.getPartyId(),
-    // // partyMember.getUserId()
-    // // );
-
-    // // if (memberRepo.existsById(id)) {
-    // // throw new IllegalStateException("This user already exisits");
-    // // }
-
-    // return memberRepo.save(newPm);
-    // }
+   
 
     public PartyMember addPartyMember(User user, Party party) {
         PartyMemberId id = new PartyMemberId(user.getUserId(), party.getPartyId());

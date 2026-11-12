@@ -54,7 +54,7 @@ public class User {
         }
     }
 
-    @Column(name = "role")
+    @Column(name = "role", nullable = false)
     private String role;
 
     // Temporary Cascade effect

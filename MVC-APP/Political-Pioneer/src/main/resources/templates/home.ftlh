@@ -113,7 +113,7 @@
           <!-- Left Sidebar -->
           <div class="col-left">
             <div class="module">
-              <h2>Browse by Category</h2>
+              <a href="/"> <h2>Browse by Category</h2></a>
               <div class="module-body">
                 <ul>
                   <li><a href="#">Environmental (12)</a></li>

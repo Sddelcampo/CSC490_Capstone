@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import com.politicalpioneer.BadRequestException;
 import com.politicalpioneer.Announcement.Announcement;
 import com.politicalpioneer.ForumPost.ForumPost;
 import com.politicalpioneer.Party.PartyController.GeoJsonPoint;
@@ -91,11 +92,7 @@ public class PartyController {
         return ResponseEntity.ok(parties.stream().map(this::toResponse).collect(Collectors.toList()));
     }
 
-    // @GetMapping("/party/{id}")
-    // public ResponseEntity<PartyResponse> getPartyById(@PathVariable("id") Long id) {
-    //     Party party = partyService.getPartyById(id);
-    //     return ResponseEntity.ok(toResponse(party));
-    // }
+  
     
     @GetMapping("/party/status/{status}")
     public ResponseEntity<List<PartyResponse>> getPartyByStatus(@PathVariable("status") String status) {
@@ -136,31 +133,43 @@ public class PartyController {
         return "partyPage";
     }
 
-    // @PostMapping("/joinParty/{id}")
-    // public String joinParty(@PathVariable("id") Long id, Model model, Authentication authentication) {
-    //     String userName = authentication.getName();
-    //     User user = userService.getUserByUserName(userName);
 
-    //     Party party = partyService.getPartyById(id);
-
-        
-
-    //     // PartyMember pm = memService.addPartyMember(user, party);
-
-
-    //     return "partysearch";
-    // }
-
-  @PostMapping("/joinParty/{id}")
+@PostMapping("/joinParty/{id}")
 public String joinParty(@PathVariable("id") Long id, Authentication authentication) {
     User user = userService.getUserByUserName(authentication.getName());
     Party party = partyService.getPartyById(id);
+    try {
+        memService.addPartyMember(user, party);
 
-    memService.addPartyMember(user, party);
-
+    } catch (BadRequestException e) {
+        System.out.println("User can not join a party more than once");
+    }
     return "redirect:/home";
 }
 
+//I will pull just the first party for now
+ @GetMapping("/partyManage") 
+    public Object manageParty(Model model, Authentication authentication) {
+        User user = userService.getUserByUserName(authentication.getName());
+        Long userId = user.getUserId();
+        Party party = partyService.getPartyByUserId(userId);
+        String partyName = party.getPartyName();
+        String description = party.getDescription();
+        String status = party.getStatus();
+        String lastName = user.getLastName();
+        List<PartyMember> pm = memService.getPMByPartyId(party.getPartyId());
+        
+        
+        model.addAttribute("status", status);
+        model.addAttribute("lastName",lastName);
+        model.addAttribute("partyName", partyName);
+        model.addAttribute("description", description);
+        model.addAttribute("pm", pm);
+        
+        
+        // System.out.println(party.getPartyName());
+        return "partyManage";
+    }
 
 
     @PostMapping("/party")
