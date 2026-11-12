@@ -91,7 +91,8 @@ public class AppController {
     }*/
 
     @GetMapping("/events")
-    public Object showEventsPage(Model model) {
+    public Object showEventsPage(Model model, Authentication authentication) {
+        addNavigationRoleAttributes(model, authentication);
         return "events";
     }
 

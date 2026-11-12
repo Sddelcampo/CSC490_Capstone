@@ -192,7 +192,7 @@
 
                         <div class="toolbar">
                             <a href="#" class="red-button">+ New Forum Post</a>
-                            <span class="toolbar-count">8 posts · 1 hidden</span>
+                            <span class="toolbar-count">${forumPostCount} posts · ${hiddenForumPostCount} hidden</span>
                         </div>
 
                         <div class="table-scroll">
@@ -207,33 +207,29 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td><a href="#">Volunteers needed for Saturday street cleanup</a></td>
-                                        <td class="no-wrap">m_okafor</td>
-                                        <td class="no-wrap">Nov 9, 2026</td>
-                                        <td>visible</td>
-                                        <td class="no-wrap"><a href="#">Hide</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td><a href="#">Notes from the October library budget hearing</a></td>
-                                        <td class="no-wrap">User (you)</td>
-                                        <td class="no-wrap">Nov 7, 2026</td>
-                                        <td>visible</td>
-                                        <td class="no-wrap"><a href="#">Edit</a> | <a href="#">Hide</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td><a href="#">Draft wording for the crosswalk petition</a></td>
-                                        <td class="no-wrap">User (you)</td>
-                                        <td class="no-wrap">Nov 2, 2026</td>
-                                        <td class="status-red">hidden</td>
-                                        <td class="no-wrap"><a href="#">Edit</a> | <a href="#">Show</a></td>
-                                    </tr>
+                                    <#list forumPosts as post>
+                                        <tr>
+                                            <td>${post.title!"Untitled"}</td>
+                                            <td class="no-wrap">${post.author!"Unknown"}</td>
+                                            <td class="no-wrap">${post.createdAt!""}</td>
+                                            <td<#if post.visible?? && !post.visible> class="status-red"</#if>>${post.visibility!"unknown"}</td>
+                                            <td class="no-wrap">
+                                                <a href="#">${(post.visible!false)?then("Hide", "Show")}</a> |
+                                                <form action="/partyManage/forum-posts/${post.id?c}/delete"
+                                                      method="post" class="inline-form">
+                                                    <button type="submit" class="red-button small-delete-button">Remove</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    <#else>
+                                        <tr><td colspan="5">No forum posts yet.</td></tr>
+                                    </#list>
                                 </tbody>
                             </table>
                         </div>
 
                         <div class="box-footer">
-                            <span class="muted">Showing 3 of 8</span>
+                            <span class="muted">Showing ${forumPostCount} of ${forumPostCount}</span>
                             <a href="#">View all forum posts »</a>
                         </div>
                     </section>
@@ -244,36 +240,26 @@
 
                         <div class="toolbar">
                             <a href="#" class="red-button">+ Publish Announcement</a>
-                            <span class="toolbar-count">2 published</span>
+                            <span class="toolbar-count">${announcementCount} published</span>
                         </div>
 
-                        <div class="announcement">
-                            <p class="party-title">November general meeting: Nov 18 at 7:00 PM</p>
-                            <p class="meta-text">Published Nov 6, 2026</p>
-                            <p class="summary-text">
-                                Join us at Riverbend Community Hall. On the agenda: the winter
-                                volunteer drive and committee sign-ups.
-                            </p>
-                            <div class="link-row">
-                                <a href="#">Edit</a>
-                                <span>|</span>
-                                <a href="#">Delete</a>
+                        <#list announcements as announcement>
+                            <div class="announcement">
+                                <p class="party-title">${announcement.title!"Untitled"}</p>
+                                <p class="meta-text">Published ${announcement.createdAt!""}</p>
+                                <p class="summary-text">${announcement.description!""}</p>
+                                <div class="link-row">
+                                    <a href="#">Edit</a>
+                                    <span>|</span>
+                                    <form action="/partyManage/announcements/${announcement.id?c}/delete"
+                                          method="post" class="inline-form">
+                                        <button type="submit" class="red-button small-delete-button">Delete</button>
+                                    </form>
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="announcement">
-                            <p class="party-title">Our party page is live</p>
-                            <p class="meta-text">Published Oct 28, 2026</p>
-                            <p class="summary-text">
-                                Riverbend Neighbors Party is now listed on The Political Pioneer.
-                                Invite a neighbor to join and say hello in the forum.
-                            </p>
-                            <div class="link-row">
-                                <a href="#">Edit</a>
-                                <span>|</span>
-                                <a href="#">Delete</a>
-                            </div>
-                        </div>
+                        <#else>
+                            <p class="summary-text">No announcements yet.</p>
+                        </#list>
                     </section>
                 </main>
 
