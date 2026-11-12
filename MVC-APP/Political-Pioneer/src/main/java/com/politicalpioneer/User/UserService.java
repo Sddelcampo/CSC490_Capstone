@@ -62,16 +62,23 @@ public class UserService {
         return userRepo.findByUserName(userName);
     }
 
-    //Add protectionns for similar username****
     public User addUser(User user) {
         if (user == null) {
             throw new BadRequestException("User object null");
         }
+
+       
+            if (userRepo.findByUserName(user.getUserName()) != null) {
+            throw new BadRequestException("Username is already taken");
+            }
+        
+        
         if (user.getUserAlignment() == null) {
             user.setUserAlignment(new UserAlignment());
         } else {
             user.getUserAlignment().setUser(user);
         }
+
         User newUser = userRepo.save(user);
         newUser.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepo.save(newUser);

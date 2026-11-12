@@ -1,9 +1,11 @@
 package com.politicalpioneer.Party;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import com.politicalpioneer.BadRequestException;
 import com.politicalpioneer.Announcement.Announcement;
 import com.politicalpioneer.ForumPost.ForumPost;
 import com.politicalpioneer.Party.PartyController.GeoJsonPoint;
@@ -91,11 +93,7 @@ public class PartyController {
         return ResponseEntity.ok(parties.stream().map(this::toResponse).collect(Collectors.toList()));
     }
 
-    // @GetMapping("/party/{id}")
-    // public ResponseEntity<PartyResponse> getPartyById(@PathVariable("id") Long id) {
-    //     Party party = partyService.getPartyById(id);
-    //     return ResponseEntity.ok(toResponse(party));
-    // }
+  
     
     @GetMapping("/party/status/{status}")
     public ResponseEntity<List<PartyResponse>> getPartyByStatus(@PathVariable("status") String status) {
@@ -105,7 +103,17 @@ public class PartyController {
 
 
     @GetMapping("/createParty")
-    public String createParty() {
+    public String createParty(Model model, Authentication authentication) {
+        boolean isAdmin = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("admin"));
+        boolean isOwner = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("owner"));
+        boolean isUser = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("user"));
+
+        model.addAttribute("isAdmin", isAdmin);
+        model.addAttribute("isOwner", isOwner);
+        model.addAttribute("isUser", isUser);
         return "createParty";
     }
 
@@ -117,10 +125,7 @@ public class PartyController {
         return "redirect:/home";
     }
 
-    @GetMapping("/partyPage")
-    public String partyPage() {
-        return "partyPage";
-    }
+   
     
     @GetMapping("/partyDetail/{id}")
     public String partyDetail(@PathVariable("id") Long id, Model model) {
@@ -136,31 +141,70 @@ public class PartyController {
         return "partyPage";
     }
 
-    // @PostMapping("/joinParty/{id}")
-    // public String joinParty(@PathVariable("id") Long id, Model model, Authentication authentication) {
-    //     String userName = authentication.getName();
-    //     User user = userService.getUserByUserName(userName);
 
-    //     Party party = partyService.getPartyById(id);
-
-        
-
-    //     // PartyMember pm = memService.addPartyMember(user, party);
-
-
-    //     return "partysearch";
-    // }
-
-  @PostMapping("/joinParty/{id}")
+@PostMapping("/joinParty/{id}")
 public String joinParty(@PathVariable("id") Long id, Authentication authentication) {
     User user = userService.getUserByUserName(authentication.getName());
     Party party = partyService.getPartyById(id);
+    try {
+        memService.addPartyMember(user, party);
 
-    memService.addPartyMember(user, party);
-
-    return "redirect:/home";
+    } catch (BadRequestException e) {
+        System.out.println("User can not join a party more than once");
+    }
+    return "redirect:/partyDetail/" + party.getPartyId();
 }
 
+//I will pull just the first party for now
+ @GetMapping("/partyManage") 
+    public Object manageParty(Model model, Authentication authentication) {
+        User user = userService.getUserByUserName(authentication.getName());
+        Long userId = user.getUserId();
+        Optional<Party> partyResult = partyService.findPartyByUserId(userId);
+        if (partyResult.isEmpty()) {
+            return "redirect:/createParty";
+        }
+        Party party = partyResult.get();
+        String partyName = party.getPartyName();
+        String description = party.getDescription();
+        String status = party.getStatus();
+        String lastName = user.getLastName();
+        List<PartyMember> pm = memService.getPMByPartyId(party.getPartyId());
+
+
+       
+        boolean isOwner = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("owner"));
+        model.addAttribute("isOwner", isOwner);
+        boolean isUser = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("user"));
+
+
+        model.addAttribute("isOwner", isOwner);
+        model.addAttribute("isUser", isUser);   
+        
+        
+        model.addAttribute("status", status);
+        model.addAttribute("lastName",lastName);
+        model.addAttribute("partyName", partyName);
+        model.addAttribute("description", description);
+        model.addAttribute("pm", pm);
+        model.addAttribute("memberCount", pm.size());
+        
+        
+        // System.out.println(party.getPartyName());
+        return "partyManage";
+    }
+
+    @PostMapping("/partyManage/members/{memberUserId}/remove")
+    public String removePartyMember(
+            @PathVariable Long memberUserId,
+            Authentication authentication) {
+        User owner = userService.getUserByUserName(authentication.getName());
+        Party party = partyService.getPartyByUserId(owner.getUserId());
+        memService.deletePartyMemberById(memberUserId, party.getPartyId());
+        return "redirect:/partyManage";
+    }
 
 
     @PostMapping("/party")

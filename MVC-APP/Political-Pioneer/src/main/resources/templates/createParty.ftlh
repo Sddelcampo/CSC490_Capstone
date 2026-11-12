@@ -23,7 +23,7 @@
                 <h2 class="box-header">Account &amp; Site Info</h2>
 
                 <div class="user-row">
-                    <img class="user-avatar" src="images/user-avatar.png" alt="" />
+                    <img class="user-avatar" src="/images/user-avatar.png" alt="" />
                     <div>
                         <p class="welcome-text">Welcome, User!</p>
                         <div class="user-links">
@@ -63,20 +63,26 @@
                 <div class="brand">TP2 <span>Portal</span></div>
 
                 <nav class="nav-links">
-                    <a href="/">Home</a>
-                    <a href="/account">My Account</a>
-                    <a href="/platforms">Platforms</a>
-                    <a href="/parties">Find Parties</a>
+                    <a href="/home">Home</a>
+                    <#if Session.SPRING_SECURITY_CONTEXT??>
+                        <a href="/account">My Account</a>
+                    </#if>
+                    <#if isUser!false>
+                        <a href="/search">Find Parties</a>
+                    </#if>
                     <a href="/resources">Resources</a>
                     <a href="/events">Events</a>
-                    <a href="/events" class="active">Create Party</a>
-
+                    <#if isOwner!false>
+                        <a href="/partyManage">Manage Party</a>
+                        <a href="/createParty" class="active">Create Party</a>
+                    </#if>
+                    <#if isAdmin!false>
+                        <a href="/admin">Admin Dashboard</a>
+                        <a href="/createAdmin">Create Admin</a>
+                    </#if>
                 </nav>
 
-                <form class="search-form" action="/search" method="get">
-                    <input type="text" name="q" placeholder="Search parties, platforms, events" />
-                    <button type="submit">Search</button>
-                </form>
+              
             </header>
 
             <div class="breadcrumb">Home &gt; Find Parties &gt; Start a New Party Page</div>
@@ -205,7 +211,7 @@
                             </div>
 
                             <div class="form-buttons">
-                                <button type="submit" class="red-button">Create Party Page</button>
+                                <button type="submit" class="red-button">Create Party</button>
                                 <a href="/parties" class="gray-button">Cancel</a>
                             </div>
                         </form>

@@ -459,8 +459,17 @@ a:visited {
   color: white;
 }
 
+.red-button:visited {
+  color: white;
+}
+
 .red-button:active {
   border-color: #440000 #ee0000 #ee0000 #440000;
+}
+
+.inline-form {
+  display: inline;
+  margin: 0;
 }
 
 .gray-button,
@@ -586,6 +595,10 @@ a:visited {
   margin-left: auto;
   font-size: 12px;
   color: #666666;
+}
+
+.toolbar-count-left {
+  margin-left: 0;
 }
 
 

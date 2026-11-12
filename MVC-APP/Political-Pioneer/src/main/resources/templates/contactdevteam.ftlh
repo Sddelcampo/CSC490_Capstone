@@ -70,7 +70,10 @@
         <div class="mastbar">
           <div class="logo">TP2 <span>Portal</span></div>
           <nav class="tabs">
+
             <a href="/home">Home</a>
+
+            
             <a href="/account">My Account</a>
             <a href="/platform">Platforms</a>
             <a href="/resources">Resources</a>

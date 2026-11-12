@@ -80,21 +80,24 @@
           <div class="logo">TP2 <span>Portal</span></div>
           <nav class="tabs">
             <a href="/home">Home</a>
-            <a href="/account">My Account</a>
-            <a href="/platform">Platforms</a>
-            <a href="/search">Find Parties</a>
+            <#if Session.SPRING_SECURITY_CONTEXT??>
+              <a href="/account">My Account</a>
+            </#if>
+            <#if isUser!false>
+              <a href="/search">Find Parties</a>
+            </#if>
             <a href="/resources" class="active">Resources</a>
-            <!--<a href="#">Collaborate</a> might remove as it could be merged with /account or /events-->
             <a href="/events">Events</a>
-            <!--<a href="#">Voter Tools</a> may remove as it can be merged with resources-->
-
-
+            <#if isOwner!false>
+              <a href="/partyManage">Manage Party</a>
+            </#if>
             <#if isAdmin!false>
               <a href="/admin">Admin Dashboard</a>
               <a href="/createAdmin">Create Admin</a>
             </#if>
-
-
+            <#if isOwner!false>
+              <a href="/createParty">Create Party</a>
+            </#if>
           </nav>
           <div class="search">
             <input type="text" placeholder="Search parties, platforms, issues...">

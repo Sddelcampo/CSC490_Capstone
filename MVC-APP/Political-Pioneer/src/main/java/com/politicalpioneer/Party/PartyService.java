@@ -1,6 +1,7 @@
 package com.politicalpioneer.Party;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -54,6 +55,9 @@ public class PartyService {
 
     public boolean hasPartyByUserId(Long userId) {
         return partyRepo.existsByUserId(userId);
+      
+    public Optional<Party> findPartyByUserId(Long userId) {
+        return Optional.ofNullable(partyRepo.findByUserId(userId));
     }
 
     
