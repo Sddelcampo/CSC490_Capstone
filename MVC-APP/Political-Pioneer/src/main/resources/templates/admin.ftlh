@@ -37,7 +37,11 @@
         <div class="account-block">
           <div class="avatar-circle">&#128100;</div>
           <div>
-            <p class="welcome-text">Welcome, Admin!</p>
+            <#if Session.SPRING_SECURITY_CONTEXT??>
+              <p class="welcome-text">Welcome, ${name !"Guest!"}</p>
+            <#else>
+              <p class="welcome-text">Welcome, Guest!</p>
+            </#if>
             <div class="account-links">
             
               <#if Session.SPRING_SECURITY_CONTEXT??>

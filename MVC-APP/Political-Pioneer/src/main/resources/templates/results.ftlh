@@ -53,7 +53,11 @@
         <div class="account-block">
           <div class="avatar-circle">&#128100;</div>
           <div>
-            <p class="welcome-text">Welcome, User!</p>
+            <#if Session.SPRING_SECURITY_CONTEXT??>
+              <p class="welcome-text">Welcome, ${name !"Guest!"}</p>
+            <#else>
+              <p class="welcome-text">Welcome, Guest!</p>
+            </#if>
             <div class="account-links">
               <a href="/acctlogin">Log Out</a>
               <a href="/account">My Account</a>

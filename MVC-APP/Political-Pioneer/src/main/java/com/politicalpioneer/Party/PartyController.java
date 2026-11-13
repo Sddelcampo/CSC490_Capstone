@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import com.politicalpioneer.AuthenticatedNameModel;
 import com.politicalpioneer.BadRequestException;
 import com.politicalpioneer.Announcement.Announcement;
 import com.politicalpioneer.Announcement.AnnouncementService;
@@ -131,6 +132,7 @@ public class PartyController {
         model.addAttribute("isAdmin", isAdmin);
         model.addAttribute("isOwner", isOwner);
         model.addAttribute("isUser", isUser);
+        AuthenticatedNameModel.addNameIfAuthenticated(model, authentication);
         return "createParty";
     }
 
@@ -190,6 +192,7 @@ public class PartyController {
         // model.addAttribute("owner", partyOwner);
       
         model.addAttribute("party", party);
+        AuthenticatedNameModel.addNameIfAuthenticated(model, authentication);
         return "partyPage";
     }
 
@@ -255,6 +258,7 @@ public String joinParty(@PathVariable("id") Long id, Authentication authenticati
                 .count());
         model.addAttribute("announcements", announcements);
         model.addAttribute("announcementCount", announcements.size());
+        AuthenticatedNameModel.addNameIfAuthenticated(model, authentication);
 
         
         // System.out.println(party.getPartyName());
@@ -369,6 +373,7 @@ public String joinParty(@PathVariable("id") Long id, Authentication authenticati
         model.addAttribute("isOwner", isOwner);
         model.addAttribute("isUser", isUser);
         model.addAttribute("isAdmin", isAdmin);
+        AuthenticatedNameModel.addNameIfAuthenticated(model, authentication);
         model.addAttribute("partyName", party.getPartyName());
         model.addAttribute("memberCount", memService.getPMByPartyId(party.getPartyId()).size());
     }

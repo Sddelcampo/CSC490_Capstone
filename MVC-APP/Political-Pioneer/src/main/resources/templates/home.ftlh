@@ -1,36 +1,40 @@
-<!-- 
+<#--
  CSC 490: The Political Pioneer
- home.ftlh 
- Last updated: October 5, 2026
+ home.ftlh
+ Last updated: November 12, 2026
 
- Description: This is the main file for The Political Pioneer Web App, this will contain the
- main structure including navigation, user information and login on the left side of the page, and 
- the dashboard and main content of the app on the bottom right quadrant of the page.
--->
+ Description: Landing page. Content changes depending on who is viewing it:
+   - Guest (not logged in): description of the app + log in / sign up buttons
+   - Logged-in user WITH a party: greeting, short description, and a party summary
+   - Logged-in user WITHOUT a party: greeting, short description, and options to take the
+     questionnaire (/questionnaire) or search for a party (/search)
+
+ MODEL EXPECTED FROM THE CONTROLLER:
+   loggedIn        : boolean (true only for a real authenticated user, never anonymous)
+   party           : Party (optional, only present when the logged-in user belongs to a party)
+   name            : string (optional, added by AuthenticatedNameModel)
+   isAdmin / isOwner / isUser / canCreateParty : booleans (added by addNavigationRoleAttributes)
+
+ NOTE: FreeMarker comment (not an HTML comment) on purpose, so ${...} and <#...> are never parsed.-->
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8">
-  <title>The Political Pioneer — User Homepage</title>
-  <!-- <link rel="stylesheet" href="styles.css"> -->
-  <!-- <link rel="stylesheet" type="text/css" href="/"> -->
+  <title>The Political Pioneer — Home</title>
   <link rel="stylesheet" type="text/css" href="/css/styles.css">
-
-  <!-- <script src="script.js" defer></script> -->
 </head>
 
 <body class="page-dashboard page-portal">
 
-  <!-- Creates a grid class to ensure we can split quadrants for logo, navigation, and the portal -->
   <div class="grid">
 
     <!-- Top Left Quadrant: Logo Implementation -->
     <div class="quadrant q-logo">
       <a href="/home">
-        <!-- The Political Pioneer Logo: Created by Sebastian Del Campo -->
-        <img src="images/deSebastian_TPP_Logo.png" alt="The Political Pioneer Logo">
+        <#-- The Political Pioneer Logo: Created by Sebastian Del Campo -->
+        <img src="/images/deSebastian_TPP_Logo.png" alt="The Political Pioneer Logo">
       </a>
     </div>
 
@@ -41,24 +45,26 @@
         <div class="account-block">
           <div class="avatar-circle">&#128100;</div>
           <div>
-            <p class="welcome-text">Welcome, User!</p>
+            <#if Session.SPRING_SECURITY_CONTEXT??>
+              <p class="welcome-text">Welcome, ${name!"User"}</p>
+            <#else>
+              <p class="welcome-text">Welcome, Guest!</p>
+            </#if>
             <div class="account-links">
-              <!-- <a href="/acctlogin">Log In</a> Might be useless if we start at the login page-->
-               <#if Session.SPRING_SECURITY_CONTEXT??>
-              <a href="/logout">Log Out</a>
-              <a href="/account">My Account</a>
+              <#if Session.SPRING_SECURITY_CONTEXT??>
+                <a href="/logout">Log Out</a>
+                <a href="/account">My Account</a>
               <#else>
-              <a href="/acctlogin">Log In</a>
-              <a href="/signup">Sign Up</a>
+                <a href="/acctlogin">Log In</a>
+                <a href="/signup">Sign Up</a>
               </#if>
             </div>
           </div>
         </div>
         <nav>
-          <a href="/home">Home</a>
+          <a href="/home" class="active">Home</a>
           <a href="/aboutus">About Us</a>
           <a href="/guide">Guide</a>
-          <!-- <a href="#">Settings</a> Unsure if settings may be necessary for the project-->
           <a href="/contactdevteam">Report a Concern</a>
         </nav>
         <div class="info-text">
@@ -72,12 +78,10 @@
       </div>
     </div>
 
-    <!-- Right Quadrant: The Political Pioneer Portal (TP2 Portal)
-     (largest area — Provides portal navigation and user/party usage) -->
+    <!-- Right Quadrant: The Political Pioneer Portal (TP2 Portal) -->
     <div class="quadrant q-portal">
       <div class="body">
 
-        <!--Provides information for navigation within the portal along with a search bar and button-->
         <div class="mastbar">
           <div class="logo">TP2 <span>Portal</span></div>
           <nav class="tabs">
@@ -87,185 +91,151 @@
               <a href="/account">My Account</a>
             </#if>
 
-          
-
-
-           
             <#if isUser!false>
-               <a href="/search">Find Parties</a>
+              <a href="/search">Find Parties</a>
             </#if>
 
-         
             <a href="/resources">Resources</a>
-           
             <a href="/events">Events</a>
-            <#if isOwner!false><a href="/createFP">Create Forum Post</a></#if>
-
 
             <#if isOwner!false>
-               <a href="/partyManage">Manage Party</a>
+              <a href="/createFP">Create Forum Post</a>
+              <a href="/partyManage">Manage Party</a>
             </#if>
-           
-
-         
-
 
             <#if isAdmin!false>
               <a href="/admin">Admin Dashboard</a>
               <a href="/createAdmin">Create Admin</a>
             </#if>
+
             <#if canCreateParty!false>
               <a href="/createParty">Create Party</a>
-              
             </#if>
-
           </nav>
-         
         </div>
 
-        <!-- Provies a way to navigate within the portal -->
-        <div class="breadcrumb">Home &gt; Directory</div>
+        <div class="breadcrumb">Home</div>
 
-        <!-- Ensures that the portal is formatted in a layout where you can read within 3 column blocks -->
-        <div class="layout">
+        <div class="content-area">
 
-          <!-- Left Sidebar -->
-          <div class="col-left">
-            <div class="module">
-              <a href="/"> <h2>Browse by Category</h2></a>
+          <#if !Session.SPRING_SECURITY_CONTEXT??>
+            <!-- ================= GUEST VIEW ================= -->
+
+            <div class="module red">
+              <h2>Welcome to The Political Pioneer</h2>
               <div class="module-body">
-                <ul>
-                  <li><a href="#">Environmental (12)</a></li>
-                  <li><a href="#">Labor &amp; Economy (9)</a></li>
-                  <li><a href="#">Civil Liberties (7)</a></li>
-                  <li><a href="#">Rural &amp; Agriculture (5)</a></li>
-                  <li><a href="#">Tech &amp; Innovation (4)</a></li>
-                  <li><a href="#">Regional / Local (18)</a></li>
-                </ul>
+                <p style="margin-top:0;">The Political Pioneer is an independent, nonpartisan platform
+                  built to help third-party and independent political organizations organize, publish
+                  their platforms, and connect with voters who are looking for alternatives beyond the
+                  two major parties.</p>
+                <p>Independent parties often have the hardest time getting their message in front of
+                  voters, despite having real platforms and real communities behind them. The Political
+                  Pioneer gives any registered independent party a home — a directory listing, a space
+                  to publish their platform, and tools to organize their base.</p>
               </div>
             </div>
 
             <div class="module gold">
-              <h2>By Region</h2>
+              <h2>Our Mission</h2>
               <div class="module-body">
-                <ul>
-                  <li><a href="#">Northeast</a></li>
-                  <li><a href="#">Midwest</a></li>
-                  <li><a href="#">South</a></li>
-                  <li><a href="#">West</a></li>
-                  <li><a href="#">National</a></li>
-                </ul>
+                <p style="margin-top:0;">To make independent political organizing more visible,
+                  more accessible, and more collaborative — without favoring any single party or
+                  ideology.</p>
               </div>
             </div>
+
+            <div class="module">
+              <h2>Get Started</h2>
+              <div class="module-body">
+                <p style="margin-top:0;">Create a free account to take the political questionnaire,
+                  find parties that line up with your views, and join the conversation.</p>
+                <div style="text-align:center; margin: 10px 0;">
+                  <a href="/signup" class="btn primary">Sign Up</a>
+                  <a href="/acctlogin" class="btn">Log In</a>
+                </div>
+                <p style="text-align:center; margin-bottom:0;">
+                  Want to know more? <a href="/aboutus">Read About Us</a> or
+                  <a href="/guide">view the Guide</a>.
+                </p>
+              </div>
+            </div>
+
+          <#else>
+            <!-- ================= LOGGED-IN VIEW ================= -->
+
+            <div class="module red">
+              <h2>Welcome back, ${name!"User"}!</h2>
+              <div class="module-body">
+                <p style="margin-top:0;">The Political Pioneer is an independent, nonpartisan platform
+                  that helps voters discover third-party and independent organizations, and helps those
+                  organizations publish their platforms and connect with their communities.</p>
+              </div>
+            </div>
+
+            <#if party??>
+              <!-- ---- User belongs to a party ---- -->
+              <div class="module gold">
+                <h2>Your Party</h2>
+                <div class="module-body" style="padding:0;">
+                  <div class="party-row">
+                    <div class="party-info">
+                      <div class="name">${party.name!"Your Party"}</div>
+                      <#if (party.description)?has_content>
+                        <div class="tagline">${party.description}</div>
+                      </#if>
+                      <#if isOwner!false>
+                        <a href="/partyManage">Manage party</a> &nbsp;|&nbsp;
+                        <a href="/createFP">Create forum post</a>
+                      <#else>
+                        <a href="/events">Party events</a> &nbsp;|&nbsp;
+                        <a href="/search">Explore other parties</a>
+                      </#if>
+                    </div>
+                  </div>
+                </div>
+
+            <#else>
+              <!-- ---- User does NOT belong to a party yet ---- -->
+              <div class="module gold">
+                <h2>You're not part of a party yet</h2>
+                <div class="module-body">
+                  <p style="margin-top:0;">Not sure where you fit? Here are two ways to get started:</p>
+                  <ul>
+                    <li>
+                      <a href="/questionnaire"><b>Take the Political Questionnaire</b></a>
+                      — answer a few statements and find your alignment.
+                    </li>
+                    <li>
+                      <a href="/search"><b>Search for a Party</b></a>
+                      — browse parties by alignment or by location.
+                    </li>
+                    <#if canCreateParty!false>
+                      <li>
+                        <a href="/createParty"><b>Start your own Party</b></a>
+                        — create a page for your organization.
+                      </li>
+                    </#if>
+                  </ul>
+                  <div style="text-align:center; margin: 10px 0;">
+                    <a href="/questionnaire" class="btn primary">Take the Questionnaire</a>
+                    <a href="/search" class="btn">Find a Party &raquo;</a>
+                  </div>
+                </div>
+              </div>
+            </#if>
 
             <div class="module">
               <h2>Quick Links</h2>
               <div class="module-body">
                 <ul>
-                  <li><a href="#">How to register a party</a></li>
-                  <li><a href="#">Ballot access guide</a></li>
-                  <li><a href="#">Collaboration board</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <!-- Center Bar -->
-          <div class="col-center">
-
-            <div class="stat-strip">
-              <span>Active parties: <b>52</b></span>
-              <span>Platforms updated this week: <b>14</b></span>
-              <span>Voters engaged: <b>8,204</b></span>
-            </div>
-
-            <div class="module red">
-              <h2>Featured Independent Parties</h2>
-              <div class="module-body" style="padding:0;">
-
-                <div class="party-row">
-                  <div class="party-swatch" style="background:#2E7D32;"></div>
-                  <div class="party-info">
-                    <div class="name">New Horizon Coalition</div>
-                    <div class="meta">Environmental &middot; National &middot; Founded 2019</div>
-                    <div class="tagline">Community-first climate policy and local resource cooperatives.</div>
-                    <a href="#">View platform</a> &nbsp;|&nbsp; <a href="#">Join discussion</a>
-                  </div>
-                </div>
-
-                <div class="party-row">
-                  <div class="party-swatch" style="background:#8E24AA;"></div>
-                  <div class="party-info">
-                    <div class="name">Union of Independent Workers</div>
-                    <div class="meta">Labor &amp; Economy &middot; Midwest &middot; Founded 2021</div>
-                    <div class="tagline">Cooperative ownership models and fair-wage advocacy.</div>
-                    <a href="#">View platform</a> &nbsp;|&nbsp; <a href="#">Join discussion</a>
-                  </div>
-                </div>
-
-                <div class="party-row">
-                  <div class="party-swatch" style="background:#EF6C00;"></div>
-                  <div class="party-info">
-                    <div class="name">Open Ledger Party</div>
-                    <div class="meta">Tech &amp; Innovation &middot; National &middot; Founded 2023</div>
-                    <div class="tagline">Transparent governance tools and civic tech infrastructure.</div>
-                    <a href="#">View platform</a> &nbsp;|&nbsp; <a href="#">Join discussion</a>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-
-            <div class="module">
-              <h2>Recently Updated Platforms</h2>
-              <div class="module-body">
-                <ul>
-                  <li><a href="#">Rural Renewal Alliance</a> updated their agriculture policy — 2 hours ago</li>
-                  <li><a href="#">Civic Trust Party</a> added a new resource guide — yesterday</li>
-                  <li><a href="#">Coastal Futures</a> posted an event: town hall, Sept 20 — 2 days ago</li>
+                  <li><a href="/resources">Voter Resources</a></li>
+                  <li><a href="/events">Upcoming Events</a></li>
+                  <li><a href="/guide">Site Navigation Guide</a></li>
                 </ul>
               </div>
             </div>
 
-            <div style="text-align:center; margin: 10px 0;">
-              <#if canCreateParty!false>
-                <a href="/createParty" class="btn primary">+ Start a New Party Page</a>
-              </#if>
-              <a href="#" class="btn">Browse All 52 Parties &raquo;</a>
-            </div>
-
-          </div>
-
-          <!-- Right Sidebar -->
-          <div class="col-right">
-            <div class="module">
-              <h2>Resources</h2>
-              <div class="module-body">
-                <ul>
-                  <li><a href="#">Petition builder</a></li>
-                  <li><a href="#">Volunteer matcher</a></li>
-                  <li><a href="#">Fundraising toolkit</a></li>
-                  <li><a href="#">Media kit templates</a></li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="module gold">
-              <h2>Collaboration Board</h2>
-              <div class="module-body">
-                <p style="margin-top:0;">Parties looking for partners on shared initiatives:</p>
-                <ul>
-                  <li><a href="#">Water rights coalition (3 parties)</a></li>
-                  <li><a href="#">Small business relief (5 parties)</a></li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="ticker">
-              <b>Ticker:</b> New voter guide published &middot; 3 parties merged resources this week
-              &middot; Registration deadline in 12 days
-            </div>
-          </div>
+          </#if>
 
         </div>
 
