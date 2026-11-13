@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.politicalpioneer.AuthenticatedNameModel;
 import com.politicalpioneer.Party.Party;
 import com.politicalpioneer.Party.PartyService;
 import com.politicalpioneer.User.UserAlignment.UserAlignment;
@@ -58,6 +59,7 @@ public class QuestionnaireController {
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("sectionTitles", sectionTitles);
         model.addAttribute("section", section);
+        AuthenticatedNameModel.addNameIfAuthenticated(model, authentication);
         return "questionnaire";
     }
 
@@ -65,6 +67,7 @@ public class QuestionnaireController {
     public String showResults(Authentication authentication, Model model) {
         User user = userService.getUserByUserName(authentication.getName());
         model.addAllAttributes(questionnaireService.getResults(user.getUserId()));
+        AuthenticatedNameModel.addNameIfAuthenticated(model, authentication);
         return "results";
     }
 

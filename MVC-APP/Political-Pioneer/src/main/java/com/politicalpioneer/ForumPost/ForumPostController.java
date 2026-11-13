@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.politicalpioneer.AuthenticatedNameModel;
 import com.politicalpioneer.Comment.Comment;
 import com.politicalpioneer.Comment.CommentService;
 import com.politicalpioneer.Party.Party;
@@ -117,6 +118,7 @@ public class ForumPostController {
                         party.get().getPartyId(), user.getUserId()).stream()
                 .map(this::toRecentPostView)
                 .toList());
+        AuthenticatedNameModel.addNameIfAuthenticated(model, authentication);
         return "createFP";
     }
 
@@ -139,8 +141,12 @@ public class ForumPostController {
     public String showForumPost(
             @PathVariable("id") Long id,
             Model model,
+<<<<<<< Updated upstream
             Authentication authentication,
             @RequestParam(defaultValue = "false") boolean edit) {
+=======
+            Authentication authentication) {
+>>>>>>> Stashed changes
         ForumPost forumPost = forumService.getForumPostById(id);
         ensureCanViewPost(forumPost, authentication);
         boolean isOwner = isOwner(authentication);
@@ -154,6 +160,7 @@ public class ForumPostController {
                         Comparator.nullsFirst(Comparator.naturalOrder())))
                 .map(this::toCommentView)
                 .toList());
+        AuthenticatedNameModel.addNameIfAuthenticated(model, authentication);
         return "forumpost";
     }
 
