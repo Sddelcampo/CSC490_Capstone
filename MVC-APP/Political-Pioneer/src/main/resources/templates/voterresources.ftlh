@@ -82,14 +82,52 @@
           <div class="logo">TP2 <span>Portal</span></div>
           <nav class="tabs">
             <a href="/home">Home</a>
-            <a href="/account">My Account</a>
-            <a href="/platform">Platforms</a>
-            <a href="/search">Find Parties</a>
-            <a href="/resources" class="active">Resources</a>
+           
+         
+          
+
+            
             <!--<a href="#">Collaborate</a> might remove as it could be merged with /account or /events-->
-            <a href="/events">Events</a>
+    
             <!--<a href="#">Voter Tools</a> may remove as it can be merged with resources-->
 
+             <#if Session.SPRING_SECURITY_CONTEXT??>
+              <a href="/account">My Account</a>
+            </#if>
+              <a href="/resources" class="active">Resources</a>
+               <a href="/platform">Platforms</a>
+            
+          
+
+
+           
+            <#if isUser!false>
+               <a href="/search">Find Parties</a>
+            </#if>
+
+         
+          
+           
+            <a href="/events">Events</a>
+            <#if isOwner!false><a href="/createFP">Create Forum Post</a></#if>
+
+
+            <#if isOwner!false>
+               <a href="/partyManage">Manage Party</a>
+            </#if>
+           
+
+         
+
+
+            <#if isAdmin!false>
+              <a href="/admin">Admin Dashboard</a>
+              <a href="/createAdmin">Create Admin</a>
+            </#if>
+            <#if isOwner!false>
+              <a href="/createParty">Create Party</a>
+              
+            </#if>
 
             <#if isAdmin!false>
               <a href="/admin">Admin Dashboard</a>
@@ -149,6 +187,12 @@
                     <span class="voter-tool-title">Find a Polling Place</span>
                     <span class="voter-tool-description">Find where to vote using your location or address.</span>
                     <span class="voter-tool-action">Go to polling place lookup &raquo;</span>
+                  </a>
+                  <a class="voter-tool-card" href="/questionnaire">
+                    <span class="voter-tool-icon" aria-hidden="true">&#x1f4dd;</span>
+                    <span class="voter-tool-title">Take The Political Questionnaire</span>
+                    <span class="voter-tool-description">Want to know what you what you belive? Take our original questionnaire!</span>
+                    <span class="voter-tool-action">Go to Questionnaire &raquo;</span>
                   </a>
                 </div>
               </div>

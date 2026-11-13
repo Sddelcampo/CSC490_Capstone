@@ -2,6 +2,7 @@ package com.politicalpioneer.ForumPost;
 
 import java.util.List;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.politicalpioneer.BadRequestException;
@@ -22,6 +23,10 @@ public class ForumPostService {
 
     public List<ForumPost> getAllForumPosts() {
         return forumRepo.findAll();
+    }
+
+    public List<ForumPost> getRecentForumPostsByPartyIdAndOwnerId(Long partyId, Long ownerId) {
+        return forumRepo.findRecentByPartyIdAndOwnerId(partyId, ownerId, PageRequest.of(0, 5));
     }
 
     public ForumPost getForumPostById(Long id) {

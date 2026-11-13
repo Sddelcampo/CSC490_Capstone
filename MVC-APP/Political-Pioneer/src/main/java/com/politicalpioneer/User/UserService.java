@@ -62,16 +62,23 @@ public class UserService {
         return userRepo.findByUserName(userName);
     }
 
-    //Add protectionns for similar username****
     public User addUser(User user) {
         if (user == null) {
             throw new BadRequestException("User object null");
         }
+
+       
+            if (userRepo.findByUserName(user.getUserName()) != null) {
+            throw new BadRequestException("Username is already taken");
+            }
+        
+        
         if (user.getUserAlignment() == null) {
             user.setUserAlignment(new UserAlignment());
         } else {
             user.getUserAlignment().setUser(user);
         }
+
         User newUser = userRepo.save(user);
         newUser.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepo.save(newUser);
@@ -84,6 +91,19 @@ public class UserService {
         existingUser.setLastName(updatedUser.getLastName());
         existingUser.setPassword(updatedUser.getPassword());
         existingUser.setEmail(updatedUser.getEmail());
+        return userRepo.save(existingUser);
+    }
+
+    public User updateProfile(Long userId, String firstName, String lastName, String email) {
+        if (firstName == null || firstName.isBlank() || lastName == null || lastName.isBlank()) {
+            throw new BadRequestException("First name and last name are required");
+        }
+
+        User existingUser = userRepo.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User with ID " + userId + " not found"));
+        existingUser.setFirstName(firstName.trim());
+        existingUser.setLastName(lastName.trim());
+        existingUser.setEmail(email == null || email.isBlank() ? null : email.trim());
         return userRepo.save(existingUser);
     }
 

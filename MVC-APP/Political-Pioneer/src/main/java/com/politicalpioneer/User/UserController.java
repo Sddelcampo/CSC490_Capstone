@@ -82,13 +82,16 @@ public ResponseEntity<Void> deleteUserById(@PathVariable("userId") Long userId) 
 
 @PostMapping("/userSignup")
     public Object userSignUp(@ModelAttribute User user, Model model) {
-        userService.addUser(user);
+        try {
+             userService.addUser(user);
+        }
+        catch(Exception e) {
+            System.out.print("User name already exists");
+        }
+       
         return "redirect:/acctlogin";   
 }
 
- @GetMapping("/partyManage") 
-    public Object manageParty(Model model) {
-        return "partyManage";
-    }
+
 
 }

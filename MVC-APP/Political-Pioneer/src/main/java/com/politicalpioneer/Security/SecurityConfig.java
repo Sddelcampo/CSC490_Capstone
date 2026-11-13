@@ -73,12 +73,24 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
                 .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
                 .requestMatchers("/party/search/alignment").authenticated()
+                .requestMatchers(HttpMethod.GET, "/createFP").hasAuthority("owner")
+                .requestMatchers(HttpMethod.GET, "/forum", "/forum/post/**").hasAnyAuthority("owner", "user")
+                .requestMatchers(HttpMethod.POST, "/forum/post").hasAuthority("owner")
+                .requestMatchers(HttpMethod.POST, "/forum/post/*/edit").hasAuthority("owner")
+                .requestMatchers(HttpMethod.POST, "/forum/post/*/comment").hasAnyAuthority("owner", "user")
+                .requestMatchers(HttpMethod.GET, "/fp", "/fp/**").hasAnyAuthority("owner", "user")
+                .requestMatchers(HttpMethod.PUT, "/fp/*").hasAuthority("owner")
+                .requestMatchers(HttpMethod.POST, "/fp").hasAuthority("owner")
+                .requestMatchers(HttpMethod.POST, "/partyManage/**").hasAuthority("owner")
+                .requestMatchers("/partyManage/**").hasAuthority("owner")
+                .requestMatchers("/createannouncement").hasAuthority("owner")
                 .requestMatchers("/", "/home", "/user", "/users", "/user/userName/**", "/parties/**",
-                    "/party/**", "/users/role/user", "/questionnaire", "/signup", "/platform",
+                    "/party/**", "/users/role/user", "/signup", "/platform",
                     "/resources", "/resources/**", "/events", "/aboutus", "/bugreport", "/contactdevteam", "/guide",
                     "/userSignup", "/getAllAdmin", "/adminUsername/**", "/createAdmin", "/addAdmin", "/createParty", "/partyPage", "/joinParty/**").permitAll()
                 .requestMatchers("/css/**","/js/**", "/images/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/user").permitAll()
+                .requestMatchers(HttpMethod.POST, "/account/profile").hasAnyAuthority("owner", "user", "admin")
                 .requestMatchers("/account").hasAnyAuthority("owner", "user", "admin")
                 .requestMatchers("/createParty").hasAuthority("owner")
                 .requestMatchers("/partyManage").hasAuthority("owner")

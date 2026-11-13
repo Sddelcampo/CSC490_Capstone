@@ -10,7 +10,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 // import ch.qos.logback.core.model.Model;
 
@@ -31,21 +33,40 @@ public class AppController {
     // we want to send them is not to login but rather
     // the dashboard
     @GetMapping("/")
-    public Object showStartPage(Model model) {
-        return "platform";
+    public Object showStartPage(Model model, Authentication authentication) {
+        addNavigationRoleAttributes(model, authentication);
+        return "home";
     }
 
     @GetMapping("/account")
     public Object showAccountPage(Model model, Authentication authentication) {
         String name = authentication.getName();
-        
+        addNavigationRoleAttributes(model, authentication);
         model.addAttribute("name", name);
+        boolean isProfileUser = authentication.getAuthorities().stream()
+                .anyMatch(authority -> "owner".equals(authority.getAuthority())
+                        || "user".equals(authority.getAuthority()));
+        if (isProfileUser) {
+            User user = userService.getUserByUserName(name);
+            model.addAttribute("profileFirstName", user.getFirstName());
+            model.addAttribute("profileLastName", user.getLastName());
+            model.addAttribute("profileUserName", user.getUserName());
+            model.addAttribute("profileEmail", user.getEmail());
+        }
         return "account";
     }
 
-    @GetMapping("/questionnaire")
-    public Object showQuestionnairePage(Model model) {
-        return "questionnaire";
+    @PostMapping("/account/profile")
+    public String updateAccountProfile(
+            Authentication authentication,
+            @RequestParam String firstName,
+            @RequestParam String lastName,
+            @RequestParam(required = false) String email,
+            RedirectAttributes redirectAttributes) {
+        User user = userService.getUserByUserName(authentication.getName());
+        userService.updateProfile(user.getUserId(), firstName, lastName, email);
+        redirectAttributes.addFlashAttribute("profileUpdated", true);
+        return "redirect:/account";
     }
 
     @GetMapping("/admin")
@@ -65,13 +86,7 @@ public class AppController {
 
     @GetMapping("/home")
     public String home(Model model, Authentication authentication) {
-        boolean isAdmin = authentication != null && authentication.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("admin"));
-        boolean isOwner = authentication != null && authentication.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("owner"));
-        model.addAttribute("isOwner", isOwner);
-        
-        model.addAttribute("isAdmin", isAdmin);
+        addNavigationRoleAttributes(model, authentication);
         return "home";
     }
 
@@ -101,14 +116,16 @@ public class AppController {
     }*/
 
     @GetMapping("/events")
-    public Object showEventsPage(Model model) {
+    public Object showEventsPage(Model model, Authentication authentication) {
+        addNavigationRoleAttributes(model, authentication);
         return "events";
     }
 
     @GetMapping("/aboutus")
     public Object showAboutusPage(Model model, Authentication authentication) {
         String name = authentication.getName();
-        
+
+        addNavigationRoleAttributes(model, authentication);
         model.addAttribute("name", name);
         return "aboutus";
     }
@@ -188,6 +205,10 @@ public class AppController {
     public String voterResources(
             Model model,
             Authentication authentication) {
+        addNavigationRoleAttributes(model, authentication);
+        if (authentication != null) {
+            model.addAttribute("name", authentication.getName());
+        }
         return "voterresources";
     }
 
@@ -195,6 +216,10 @@ public class AppController {
     public String voterRegistration(
             Model model,
             Authentication authentication) {
+        addNavigationRoleAttributes(model, authentication);
+        if (authentication != null) {
+            model.addAttribute("name", authentication.getName());
+        }
         return "voterregistration";
     }
 
@@ -202,6 +227,7 @@ public class AppController {
     public String voterLookup(
             Model model,
             Authentication authentication) {
+        addNavigationRoleAttributes(model, authentication);
         return "voterlookup";
     }
 
@@ -209,9 +235,27 @@ public class AppController {
     public String pollingPlaces(
             Model model,
             Authentication authentication) {
+        addNavigationRoleAttributes(model, authentication);
         return "pollingplaces";
     }
 
-   
+    private void addNavigationRoleAttributes(Model model, Authentication authentication) {
+        boolean isAdmin = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("admin"));
+        boolean isOwner = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("owner"));
+        boolean isUser = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("user"));
+        boolean canCreateParty = false;
+        if (isOwner) {
+            User owner = userService.getUserByUserName(authentication.getName());
+            canCreateParty = !partyService.hasPartyByUserId(owner.getUserId());
+        }
+
+        model.addAttribute("isAdmin", isAdmin);
+        model.addAttribute("isOwner", isOwner);
+        model.addAttribute("isUser", isUser);
+        model.addAttribute("canCreateParty", canCreateParty);
+    }
 
 }

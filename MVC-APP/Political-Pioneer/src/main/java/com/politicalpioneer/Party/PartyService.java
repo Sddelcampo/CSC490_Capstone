@@ -1,6 +1,7 @@
 package com.politicalpioneer.Party;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -52,6 +53,14 @@ public class PartyService {
         return partyRepo.findByUserId(userId);
     }
 
+    public boolean hasPartyByUserId(Long userId) {
+        return partyRepo.existsByUserId(userId);
+    }
+      
+    public Optional<Party> findPartyByUserId(Long userId) {
+        return Optional.ofNullable(partyRepo.findByUserId(userId));
+    }
+
     
     public List<Party> getPartiesDefault(Long userID, double lng, double lat, double radius) {
         User user = userRepository.findById(userID).orElse(null);
@@ -64,10 +73,10 @@ public class PartyService {
             partiesDistance.sort((p1, p2) -> {
                 Party party1 = partyRepo.findById(p1.getPartyId()).orElse(null);
                 Party party2 = partyRepo.findById(p2.getPartyId()).orElse(null);
-                float p1Weight = (float) ((party1.getPartyAlignment().getAlignmentDifference(user.getUserAlignment()) / 140) * 0.7) + 
-                                 (float) ((p1.getDistanceMeters() / radius) * 0.3);
-                float p2Weight = (float) ((party2.getPartyAlignment().getAlignmentDifference(user.getUserAlignment()) / 140) * 0.7) +
-                                 (float) ((p2.getDistanceMeters() / radius) * 0.3);
+                float p1Weight = (float) ((party1.getPartyAlignment().getAlignmentDifference(user.getUserAlignment()) / 175.0) * 0.40) + 
+                                 (float) ((p1.getDistanceMeters() / radius) * 0.60);
+                float p2Weight = (float) ((party2.getPartyAlignment().getAlignmentDifference(user.getUserAlignment()) / 175.0) * 0.40) +
+                                 (float) ((p2.getDistanceMeters() / radius) * 0.60);
                 return Float.compare(p1Weight, p2Weight);
             });
             return partiesDistance.stream().map(partyDistance -> {
