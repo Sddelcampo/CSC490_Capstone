@@ -1,3 +1,4 @@
+<#ftl output_format="HTML" auto_esc=true>
 <!--
  CSC 490: The Political Pioneer
  forumpost.ftlh
@@ -44,7 +45,6 @@
 <meta charset="UTF-8">
 <title>The Political Pioneer — ${post.title}</title>
   <link rel="stylesheet" type="text/css" href="/css/styles.css">
-  <script src="/js/forum.js" defer></script>
 </head>
 <body class="page-dashboard page-portal">
 
@@ -127,6 +127,26 @@
                 Posted by <strong>${post.authorName}</strong> in ${post.partyName} &middot; ${post.createdAt}
               </div>
               <p class="post-body">${post.body}</p>
+              <#if canEditPost!false>
+                <details id="edit-post" class="post-edit"<#if editError?? || editPostOpen!false> open</#if>>
+                  <summary>Edit your forum post</summary>
+                  <div class="post-edit-body">
+                    <#if editError??>
+                      <p class="flash-error" role="alert">${editError}</p>
+                    </#if>
+                    <form action="/forum/post/${post.id?c}/edit" method="post" class="post-edit-form">
+                      <label for="post-title">Title</label>
+                      <input type="text" id="post-title" name="title"
+                             value="${editTitle!post.title}" maxlength="255" required>
+                      <label for="post-content">Post</label>
+                      <textarea id="post-content" name="content" rows="8"
+                                maxlength="10000" required>${editContent!post.body}</textarea>
+                      <input type="hidden" name="${(_csrf.parameterName)!'_csrf'}" value="${(_csrf.token)!''}">
+                      <button type="submit" class="btn primary">Save Changes</button>
+                    </form>
+                  </div>
+                </details>
+              </#if>
               <p style="margin-bottom:0;">
                 <a class="btn" href="/forum?party=${post.partyId?c}">&laquo; Back to ${post.partyName} Forum</a>
               </p>
@@ -134,38 +154,43 @@
           </div>
 
           <!-- Comments -->
-          <div class="module">
+          <section class="module">
             <h2>Comments (${comments?size})</h2>
             <div class="module-body">
-
               <#if error??>
                 <p class="flash-error" role="alert">${error}</p>
               </#if>
+              <#if commentPosted??>
+                <p class="comment-success" role="status">Your comment was posted.</p>
+              </#if>
 
-              <#list comments as c>
-                <div class="forum-comment">
-                  <div class="forum-meta"><strong>${c.authorName}</strong> &middot; ${c.createdAt}</div>
-                  <p class="post-body">${c.body}</p>
+              <details class="comment-form-collapse"<#if error??> open</#if>>
+                <summary>Add a comment</summary>
+                <div class="comment-form-body">
+                  <form action="/forum/post/${post.id?c}/comment" method="post" class="forum-form">
+                    <input type="hidden" name="${(_csrf.parameterName)!'_csrf'}" value="${(_csrf.token)!''}">
+                    <div class="field">
+                      <label for="comment-body">Comment</label>
+                      <textarea id="comment-body" name="body" rows="4" maxlength="2000"
+                                required>${commentBody!''}</textarea>
+                    </div>
+                    <button type="submit" class="btn primary">Post Comment</button>
+                  </form>
                 </div>
-              <#else>
-                <p class="forum-empty">No comments yet. Add the first one below.</p>
-              </#list>
+              </details>
 
-              <form action="/forum/post/${post.id?c}/comment" method="post" class="forum-form">
-                <input type="hidden" name="${(_csrf.parameterName)!'_csrf'}" value="${(_csrf.token)!''}">
-
-                <div class="field">
-                  <label for="comment-body">Add a comment</label>
-                  <textarea id="comment-body" name="body" rows="4" maxlength="2000"
-                            data-maxlength="2000" required></textarea>
-                  <span class="char-count"></span>
-                </div>
-
-                <button type="submit" class="btn primary">Post Comment</button>
-              </form>
-
+              <div class="forum-comments">
+                <#list comments as c>
+                  <div class="forum-comment">
+                    <div class="forum-meta"><strong>${c.authorName}</strong> &middot; ${c.createdAt}</div>
+                    <p class="post-body">${c.body}</p>
+                  </div>
+                <#else>
+                  <p class="forum-empty">No comments yet. Add the first one above.</p>
+                </#list>
+              </div>
             </div>
-          </div>
+          </section>
 
         </div>
 

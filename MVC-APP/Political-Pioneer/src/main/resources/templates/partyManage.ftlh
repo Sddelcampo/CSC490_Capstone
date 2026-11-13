@@ -216,9 +216,12 @@
                                             <td class="no-wrap">${post.createdAt!""}</td>
                                             <td<#if post.visible?? && !post.visible> class="status-red"</#if>>${post.visibility!"unknown"}</td>
                                             <td class="no-wrap">
+                                                <#if post.canEdit!false>
+                                                    <a href="/forum/post/${post.id?c}?edit=true#edit-post">Edit</a> |
+                                                </#if>
                                                 <form action="/partyManage/forum-posts/${post.id?c}/delete"
                                                       method="post" class="inline-form">
-                                                    <button type="submit" class="red-button small-delete-button">Remove</button>
+                                                    <button type="submit" class="red-button small-delete-button">Delete</button>
                                                 </form>
                                             </td>
                                         </tr>
@@ -231,7 +234,7 @@
 
                         <div class="box-footer">
                             <span class="muted">Showing ${forumPostCount} of ${forumPostCount}</span>
-                            <a href="#">View all forum posts »</a>
+                            <a href="/forum">View all forum posts »</a>
                         </div>
                     </section>
 

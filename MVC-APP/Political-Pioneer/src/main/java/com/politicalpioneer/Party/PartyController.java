@@ -2,6 +2,7 @@ package com.politicalpioneer.Party;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -144,18 +145,48 @@ public class PartyController {
    
     
     @GetMapping("/partyDetail/{id}")
-    public String partyDetail(@PathVariable("id") Long id, Model model) {
+    public String partyDetail(
+            @PathVariable("id") Long id,
+            Model model,
+            Authentication authentication) {
         Party party = partyService.getPartyById(id);
         User partyOwner = party.getUser();
         String lastName = partyOwner.getLastName();
         List<Map<String, Object>> announcements = party.getAnn().stream()
                 .map(this::toAnnouncementView)
                 .toList();
+        boolean isUser = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("user"));
+        boolean isOwner = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("owner"));
+        User currentUser = isUser || isOwner
+                ? userService.getUserByUserName(authentication.getName())
+                : null;
+        boolean isMember = isUser && memService.getPMByUserId(currentUser.getUserId()).stream()
+                .anyMatch(member -> id.equals(member.getPartyId()));
+        boolean canViewForumPosts = isMember || (isOwner
+                && currentUser.getUserId().equals(partyOwner.getUserId()));
+        List<ForumPost> visibleForumPosts = canViewForumPosts
+                ? party.getForumPost().stream()
+                        .filter(post -> !Boolean.FALSE.equals(post.getVisiblity()))
+                        .sorted(Comparator.comparing(
+                                ForumPost::getCreatedTime,
+                                Comparator.nullsLast(Comparator.reverseOrder())))
+                        .toList()
+                : List.of();
+        List<Map<String, Object>> recentForumPosts = visibleForumPosts.stream()
+                .limit(4)
+                .map(this::toPartyForumPostView)
+                .toList();
 
         model.addAttribute("lastName", lastName);
         model.addAttribute("announcements", announcements);
         model.addAttribute("announcementCount", announcements.size());
-        
+        model.addAttribute("isMember", isMember);
+        model.addAttribute("canJoinParty", isUser && !isMember);
+        model.addAttribute("canViewForumPosts", canViewForumPosts);
+        model.addAttribute("forumPosts", recentForumPosts);
+        model.addAttribute("forumPostCount", visibleForumPosts.size());
         // model.addAttribute("owner", partyOwner);
       
         model.addAttribute("party", party);
@@ -192,7 +223,7 @@ public String joinParty(@PathVariable("id") Long id, Authentication authenticati
         String lastName = user.getLastName();
         List<PartyMember> pm = memService.getPMByPartyId(party.getPartyId());
         List<Map<String, Object>> forumPosts = party.getForumPost().stream()
-                .map(this::toForumPostView)
+                .map(post -> toForumPostView(post, user))
                 .toList();
         List<Map<String, Object>> announcements = party.getAnn().stream()
                 .map(this::toAnnouncementView)
@@ -350,11 +381,12 @@ public String joinParty(@PathVariable("id") Long id, Authentication authenticati
         return announcement;
     }
 
-    private Map<String, Object> toForumPostView(ForumPost forumPost) {
+    private Map<String, Object> toForumPostView(ForumPost forumPost, User owner) {
         Map<String, Object> post = new LinkedHashMap<>();
         post.put("id", forumPost.getFormPostId());
         post.put("title", forumPost.getTitle());
         post.put("author", forumPost.getUser().getUserName());
+        post.put("canEdit", owner.getUserId().equals(forumPost.getUser().getUserId()));
         post.put("createdAt", formatDate(forumPost.getCreatedTime()));
         post.put("visible", forumPost.getVisiblity());
         post.put("visibility", Boolean.TRUE.equals(forumPost.getVisiblity()) ? "visible" : "hidden");
@@ -368,6 +400,15 @@ public String joinParty(@PathVariable("id") Long id, Authentication authenticati
         announcementView.put("description", announcement.getDescription());
         announcementView.put("createdAt", formatDate(announcement.getCreatedDate()));
         return announcementView;
+    }
+
+    private Map<String, Object> toPartyForumPostView(ForumPost forumPost) {
+        Map<String, Object> postView = new LinkedHashMap<>();
+        postView.put("id", forumPost.getFormPostId());
+        postView.put("title", forumPost.getTitle());
+        postView.put("author", forumPost.getUser().getUserName());
+        postView.put("createdAt", formatDate(forumPost.getCreatedTime()));
+        return postView;
     }
 
     private String formatDate(LocalDateTime dateTime) {

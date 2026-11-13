@@ -10,7 +10,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 // import ch.qos.logback.core.model.Model;
 
@@ -41,7 +43,30 @@ public class AppController {
         String name = authentication.getName();
         addNavigationRoleAttributes(model, authentication);
         model.addAttribute("name", name);
+        boolean isProfileUser = authentication.getAuthorities().stream()
+                .anyMatch(authority -> "owner".equals(authority.getAuthority())
+                        || "user".equals(authority.getAuthority()));
+        if (isProfileUser) {
+            User user = userService.getUserByUserName(name);
+            model.addAttribute("profileFirstName", user.getFirstName());
+            model.addAttribute("profileLastName", user.getLastName());
+            model.addAttribute("profileUserName", user.getUserName());
+            model.addAttribute("profileEmail", user.getEmail());
+        }
         return "account";
+    }
+
+    @PostMapping("/account/profile")
+    public String updateAccountProfile(
+            Authentication authentication,
+            @RequestParam String firstName,
+            @RequestParam String lastName,
+            @RequestParam(required = false) String email,
+            RedirectAttributes redirectAttributes) {
+        User user = userService.getUserByUserName(authentication.getName());
+        userService.updateProfile(user.getUserId(), firstName, lastName, email);
+        redirectAttributes.addFlashAttribute("profileUpdated", true);
+        return "redirect:/account";
     }
 
     @GetMapping("/admin")

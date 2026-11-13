@@ -84,7 +84,9 @@
                     <!-- Counts -->
                     <div class="stats-bar">
                         <span>Members: <strong>34</strong></span>
-                        <span>Forum posts: <strong>9</strong></span>
+                        <span>Forum posts:
+                            <strong><#if canViewForumPosts!false>${forumPostCount!0}<#else>Members only</#if></strong>
+                        </span>
                         <span>Announcements: <strong>${announcementCount!0}</strong></span>
                     </div>
 
@@ -108,12 +110,14 @@
 
 
                         <div class="action-bar">
-                            <form action="/joinParty/${party.partyId?c}" method="post">
-                           
-                                <button type="submit" class="red-button">Join This Party</button>
-                            </form> 
-                          
-                            <span class="action-note"> Feel free to be part of our movement!!!</span>
+                            <#if canJoinParty!false>
+                                <form action="/joinParty/${party.partyId?c}" method="post">
+                                    <button type="submit" class="red-button">Join This Party</button>
+                                </form>
+                                <span class="action-note">Feel free to be part of our movement!</span>
+                            <#elseif isMember!false>
+                                <span class="member-note">You are already a member of this party.</span>
+                            </#if>
                             <a href="/search" class="back-link">« Back to Find Parties</a>
                         </div>
 
@@ -151,26 +155,35 @@
                                 <p class="summary-text">${announcement.description!""}</p>
                             </div>
                         <#else>
-                            <p class="summary-text">No announcements have been published yet.</p>
+                            <p class="party-empty-state">No announcements have been published yet.</p>
                         </#list>
                     </section>
 
                     <!-- Recent forum posts -->
                     <section class="box">
                         <h2 class="box-header">Recent Forum Posts</h2>
-                        <ul class="box-list">
-                            <li><a href="#">Who can bring a truck to the park cleanup?</a> — k.osei, Nov 9, 2026</li>
-                            <li><a href="#">Ideas for next spring's community garden plots</a> — m.tanaka, Nov 6, 2026
-                            </li>
-                            <li><a href="#">Sample letter for the tree ordinance comment period</a> — h_alvarez, Nov 3,
-                                2026</li>
-                            <li><a href="#">Notes from the October transit committee meeting</a> — d_fontaine, Oct 29,
-                                2026</li>
-                        </ul>
-                        <div class="box-footer">
-                            <span class="muted">Showing 4 of 9</span>
-                            <a href="#">View all forum posts »</a>
-                        </div>
+                        <#if canViewForumPosts!false>
+                            <#if forumPosts?has_content>
+                                <ul class="box-list">
+                                    <#list forumPosts as post>
+                                        <li>
+                                            <a href="/forum/post/${post.id?c}">${post.title}</a>
+                                            — ${post.author}, ${post.createdAt}
+                                        </li>
+                                    </#list>
+                                </ul>
+                                <#if forumPostCount gt forumPosts?size>
+                                    <div class="box-footer">
+                                        <span class="muted">Showing ${forumPosts?size} of ${forumPostCount}</span>
+                                        <a href="/forum">View all forum posts »</a>
+                                    </div>
+                                </#if>
+                            <#else>
+                                <p class="party-empty-state">This party has not made any forum posts yet.</p>
+                            </#if>
+                        <#else>
+                            <p class="party-empty-state">Join this party to view its forum posts.</p>
+                        </#if>
                     </section>
                 </main>
             </div>

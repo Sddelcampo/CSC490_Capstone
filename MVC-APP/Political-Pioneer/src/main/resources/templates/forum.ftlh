@@ -1,33 +1,36 @@
+<#ftl output_format="HTML" auto_esc=true>
 <!--
  CSC 490: The Political Pioneer
  forum.ftlh
  Last updated: November 9, 2026
 
- Description: Party forum. Shows the parties the logged-in user belongs to as tabs, and the posts for
- the selected party. Users can start a new post from here and open a post to read/add comments
- (forumpost.ftlh).
+  Description: Lists visible forum posts from parties the signed-in user belongs to or owns.
+  Owners can create posts and edit their own.
 
- MODEL EXPECTED FROM THE CONTROLLER (GET /forum?party=ID):
-   parties       : list of { id: long, name: string }        (only parties the user is a member of; may be empty)
-   selectedParty : { id: long, name: string }                (ABSENT when the user has no parties)
-   posts         : list of {                                  (newest first; ABSENT when no parties)
+  MODEL EXPECTED FROM THE CONTROLLER (GET /forum):
+    isOwner       : boolean
+    canCreatePost  : boolean (only when the owner has a party)
+    ownerPartyName : string (when canCreatePost is true)
+    postCount      : int
+    posts          : list of {                                 (visible associated-party posts, newest first)
                      id           : long
+                      partyId      : long
+                      partyName    : string
                      title        : string
                      excerpt      : string                    (first ~200 characters of the post body)
                      authorName   : string
                      createdAt    : string                    (already formatted for display, e.g. "Nov 9, 2026 3:15 PM")
                      commentCount : int
+                      canEdit      : boolean (owner-authors only)
                    }
    error         : string  (OPTIONAL flash message, e.g. validation failure after a new-post submit)
    _csrf         : (OPTIONAL) Spring Security CsrfToken, only if CSRF protection is enabled
 
  FORM THIS PAGE SUBMITS:
-   POST /forum/post   fields: partyId, title, body   (+ CSRF token field if enabled)
+    POST /forum/post   fields: title, content   (+ CSRF token field if enabled)
 
  WHERE THE DATA COMES FROM (Neon tables):
-   parties        <- party_member (party, user, status) joined to the party table for the name
-   posts          <- forum_post (column_id -> id, title, content -> excerpt, user -> authorName,
-                     created_time -> createdAt) + a count of comment rows per post
+    posts          <- visible forum_post rows for associated parties, with party name, author, and comment count
 
  NOTE: FreeMarker comment (not HTML comment) on purpose, so nothing in here gets evaluated.
 -->
@@ -38,7 +41,6 @@
 <meta charset="UTF-8">
 <title>The Political Pioneer — Party Forum</title>
   <link rel="stylesheet" type="text/css" href="/css/styles.css">
-  <script src="/js/forum.js" defer></script>
 </head>
 <body class="page-dashboard page-portal">
 
@@ -106,81 +108,79 @@
           </div>
         </div>
 
-        <div class="breadcrumb">Forum<#if selectedParty??> &gt; ${selectedParty.name}</#if></div>
+        <div class="breadcrumb">Forum &gt; Your party posts</div>
 
         <div class="admin-content">
-
-          <#if !(parties?has_content)>
-
-            <!-- The user is not in any party yet -->
-            <div class="module red">
-              <h2>Party Forum</h2>
-              <div class="module-body forum-empty">
-                <p style="margin-top:0;">You are not a member of any party yet. Join a party to read and
-                  post in its forum.</p>
-                <a class="btn primary" href="/search">Find Parties</a>
-              </div>
-            </div>
-
-          <#else>
-
-            <!-- One tab per party the user belongs to -->
-            <ul class="forum-tabs">
-              <#list parties as p>
-                <li<#if p.id == selectedParty.id> class="current"</#if>>
-                  <a href="/forum?party=${p.id?c}">${p.name}</a>
-                </li>
-              </#list>
-            </ul>
-
-            <div class="module red">
-              <h2>${selectedParty.name} Forum</h2>
-              <div class="module-body">
-
-                <#if error??>
-                  <p class="flash-error" role="alert">${error}</p>
-                </#if>
-
-                <!-- <details> gives us open/close with no JavaScript -->
-                <details class="new-post"<#if error??> open</#if>>
-                  <summary class="btn primary">+ New Post</summary>
-                  <form action="/forum/post" method="post" class="forum-form">
-                    <input type="hidden" name="${(_csrf.parameterName)!'_csrf'}" value="${(_csrf.token)!''}">
-                    <input type="hidden" name="partyId" value="${selectedParty.id?c}">
-
-                    <div class="field">
-                      <label for="post-title">Title</label>
-                      <input type="text" id="post-title" name="title" maxlength="150" required>
-                    </div>
-
-                    <div class="field">
-                      <label for="post-body">Message</label>
-                      <textarea id="post-body" name="body" rows="6" maxlength="5000"
-                                data-maxlength="5000" required></textarea>
-                      <span class="char-count"></span>
-                    </div>
-
-                    <button type="submit" class="btn primary">Post</button>
-                  </form>
-                </details>
-
-                <#list posts as post>
-                  <div class="forum-post">
-                    <h3><a href="/forum/post/${post.id?c}">${post.title}</a></h3>
-                    <div class="forum-meta">
-                      by <strong>${post.authorName}</strong> &middot; ${post.createdAt} &middot;
-                      ${post.commentCount} comment<#if post.commentCount != 1>s</#if>
-                    </div>
-                    <p class="forum-excerpt">${post.excerpt}</p>
-                  </div>
+          <div class="module red">
+            <h2>Your Party Forum Posts</h2>
+            <div class="module-body">
+              <p class="forum-intro">
+                <#if isOwner!false>
+                  Browse visible conversations from your owned party.
                 <#else>
-                  <p class="forum-empty">No posts yet. Be the first to start a conversation.</p>
-                </#list>
+                  Browse visible conversations from parties you belong to.
+                </#if>
+                Open a post to read the full message and comments.
+              </p>
 
-              </div>
+              <#if error??>
+                <p class="flash-error" role="alert">${error}</p>
+              </#if>
+
+              <#if isOwner!false>
+                <#if canCreatePost!false>
+                  <details class="new-post"<#if error??> open</#if>>
+                    <summary class="btn primary">+ New Post for ${ownerPartyName}</summary>
+                    <form action="/forum/post" method="post" class="forum-form">
+                      <input type="hidden" name="${(_csrf.parameterName)!'_csrf'}" value="${(_csrf.token)!''}">
+
+                      <div class="field">
+                        <label for="post-title">Title</label>
+                        <input type="text" id="post-title" name="title" maxlength="150" required>
+                      </div>
+
+                      <div class="field">
+                        <label for="post-body">Message</label>
+                        <textarea id="post-body" name="content" rows="6" maxlength="5000" required></textarea>
+                      </div>
+
+                      <button type="submit" class="btn primary">Post</button>
+                    </form>
+                  </details>
+                <#else>
+                  <p class="forum-empty">
+                    Create a party before posting to its forum.
+                    <a href="/createParty">Create a party</a>
+                  </p>
+                </#if>
+              </#if>
+
+              <p class="forum-meta">${postCount} visible post<#if postCount != 1>s</#if></p>
+              <#list partyGroups as partyGroup>
+                <section class="forum-party-group">
+                  <h3 class="forum-party-heading">
+                    <a href="/partyDetail/${partyGroup.partyId?c}">${partyGroup.partyName}</a>
+                  </h3>
+                  <#list partyGroup.posts as post>
+                    <article class="forum-post">
+                      <h3><a href="/forum/post/${post.id?c}">${post.title}</a></h3>
+                      <div class="forum-meta">
+                        by <strong>${post.authorName}</strong>
+                        &middot; ${post.createdAt} &middot;
+                        ${post.commentCount} comment<#if post.commentCount != 1>s</#if>
+                      </div>
+                      <p class="forum-excerpt">${post.excerpt}</p>
+                      <#if post.canEdit!false>
+                        <a class="btn" href="/forum/post/${post.id?c}?edit=true#edit-post">Edit Post</a>
+                      </#if>
+                    </article>
+                  </#list>
+                </section>
+              <#else>
+                <p class="forum-empty">No visible forum posts are available from your associated parties.</p>
+              </#list>
             </div>
-
-          </#if>
+          </div>
 
         </div>
 

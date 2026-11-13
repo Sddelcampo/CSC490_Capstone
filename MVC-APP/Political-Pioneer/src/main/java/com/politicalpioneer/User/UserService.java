@@ -94,6 +94,19 @@ public class UserService {
         return userRepo.save(existingUser);
     }
 
+    public User updateProfile(Long userId, String firstName, String lastName, String email) {
+        if (firstName == null || firstName.isBlank() || lastName == null || lastName.isBlank()) {
+            throw new BadRequestException("First name and last name are required");
+        }
+
+        User existingUser = userRepo.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User with ID " + userId + " not found"));
+        existingUser.setFirstName(firstName.trim());
+        existingUser.setLastName(lastName.trim());
+        existingUser.setEmail(email == null || email.isBlank() ? null : email.trim());
+        return userRepo.save(existingUser);
+    }
+
 
     
     public void deleteUserById(Long userId) {
