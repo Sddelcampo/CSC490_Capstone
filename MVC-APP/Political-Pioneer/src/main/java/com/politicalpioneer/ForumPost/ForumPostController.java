@@ -141,12 +141,9 @@ public class ForumPostController {
     public String showForumPost(
             @PathVariable("id") Long id,
             Model model,
-<<<<<<< Updated upstream
+
             Authentication authentication,
             @RequestParam(defaultValue = "false") boolean edit) {
-=======
-            Authentication authentication) {
->>>>>>> Stashed changes
         ForumPost forumPost = forumService.getForumPostById(id);
         ensureCanViewPost(forumPost, authentication);
         boolean isOwner = isOwner(authentication);

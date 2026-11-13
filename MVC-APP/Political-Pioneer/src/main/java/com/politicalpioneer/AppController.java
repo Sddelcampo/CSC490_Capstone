@@ -42,7 +42,7 @@ public class AppController {
     @GetMapping("/account")
     public Object showAccountPage(Model model, Authentication authentication) {
         addNavigationRoleAttributes(model, authentication);
-<<<<<<< Updated upstream
+        String name = authentication.getName();
         model.addAttribute("name", name);
         boolean isProfileUser = authentication.getAuthorities().stream()
                 .anyMatch(authority -> "owner".equals(authority.getAuthority())
@@ -54,9 +54,7 @@ public class AppController {
             model.addAttribute("profileUserName", user.getUserName());
             model.addAttribute("profileEmail", user.getEmail());
         }
-=======
         AuthenticatedNameModel.addNameIfAuthenticated(model, authentication);
->>>>>>> Stashed changes
         return "account";
     }
 
