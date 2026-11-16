@@ -71,7 +71,7 @@ public class ForumPostController {
                         Comparator.nullsLast(Comparator.reverseOrder())))
                 .map(post -> toForumListView(post, authentication))
                 .toList();
-
+        addNavigationRoleAttributes(model, authentication);
         model.addAttribute("isOwner", isOwner);
         model.addAttribute("posts", posts);
         model.addAttribute("partyGroups", groupPostsByParty(posts));
@@ -111,7 +111,7 @@ public class ForumPostController {
         if (party.isEmpty()) {
             return "redirect:/createParty";
         }
-
+        addNavigationRoleAttributes(model, authentication);
         model.addAttribute("partyName", party.get().getPartyName());
         model.addAttribute("authorName", user.getFirstName() + " " + user.getLastName());
         model.addAttribute("recentPosts", forumService.getRecentForumPostsByPartyIdAndOwnerId(
@@ -148,6 +148,7 @@ public class ForumPostController {
         ensureCanViewPost(forumPost, authentication);
         boolean isOwner = isOwner(authentication);
         boolean canEditPost = canEditPost(forumPost, authentication);
+        addNavigationRoleAttributes(model, authentication);
         model.addAttribute("post", toPostView(forumPost));
         model.addAttribute("isOwner", isOwner);
         model.addAttribute("canEditPost", canEditPost);
@@ -410,5 +411,24 @@ public class ForumPostController {
             return "Forum posts must be 10,000 characters or fewer.";
         }
         return null;
+    }
+
+    private void addNavigationRoleAttributes(Model model, Authentication authentication) {
+        boolean isAdmin = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("admin"));
+        boolean isOwner = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("owner"));
+        boolean isUser = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("user"));
+        boolean canCreateParty = false;
+        if (isOwner) {
+            User owner = userService.getUserByUserName(authentication.getName());
+            canCreateParty = !partyService.hasPartyByUserId(owner.getUserId());
+        }
+
+        model.addAttribute("isAdmin", isAdmin);
+        model.addAttribute("isOwner", isOwner);
+        model.addAttribute("isUser", isUser);
+        model.addAttribute("canCreateParty", canCreateParty);
     }
 }

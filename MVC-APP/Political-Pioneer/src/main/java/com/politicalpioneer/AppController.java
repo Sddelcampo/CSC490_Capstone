@@ -173,7 +173,7 @@ public class AppController {
         boolean isAdmin = authentication != null && authentication.getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("admin"));
         User user = userService.getUserByUserName(authentication.getName());
-        
+        addNavigationRoleAttributes(model, authentication);
 
         List<Party> parties = List.of();
         String searchError = null;

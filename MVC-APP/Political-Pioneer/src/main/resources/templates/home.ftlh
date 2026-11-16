@@ -94,9 +94,8 @@
             <#if isUser!false>
               <a href="/search">Find Parties</a>
             </#if>
-
+            <a href="/forum">Forum</a>
             <a href="/resources">Resources</a>
-            <a href="/events">Events</a>
 
             <#if isOwner!false>
               <a href="/createFP">Create Forum Post</a>

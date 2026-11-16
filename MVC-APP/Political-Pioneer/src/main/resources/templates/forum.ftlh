@@ -98,18 +98,31 @@
           <div class="logo">TP2 <span>Portal</span></div>
           <nav class="tabs">
             <a href="/home">Home</a>
-            <a href="/account">My Account</a>
-            <a href="/platform">Platforms</a>
-            <a href="/search">Find Parties</a>
-            <a href="/forum">Forum</a>
+
+            <#if Session.SPRING_SECURITY_CONTEXT??>
+              <a href="/account">My Account</a>
+            </#if>
+
+            <#if isUser!false>
+              <a href="/search">Find Parties</a>
+            </#if>
+            <a href="/forum" class="active">Forum</a>
             <a href="/resources">Resources</a>
-            <a href="/events">Events</a>
-            <#if isOwner!false><a href="/createFP">Create Forum Post</a></#if>
-         </nav>
-          <div class="search">
-            <input type="text" placeholder="Search parties, platforms, issues...">
-            <button>Search</button>
-          </div>
+
+            <#if isOwner!false>
+              <a href="/createFP">Create Forum Post</a>
+              <a href="/partyManage">Manage Party</a>
+            </#if>
+
+            <#if isAdmin!false>
+              <a href="/admin">Admin Dashboard</a>
+              <a href="/createAdmin">Create Admin</a>
+            </#if>
+
+            <#if canCreateParty!false>
+              <a href="/createParty">Create Party</a>
+            </#if>
+          </nav>
         </div>
 
         <div class="breadcrumb">Forum &gt; Your party posts</div>
