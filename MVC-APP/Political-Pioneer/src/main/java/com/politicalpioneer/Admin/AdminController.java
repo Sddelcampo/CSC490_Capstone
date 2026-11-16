@@ -13,9 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.politicalpioneer.User.User;
-import com.politicalpioneer.User.UserService;
-
 
 @Controller
 public class AdminController {

@@ -3,7 +3,6 @@ package com.politicalpioneer.User;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.politicalpioneer.Comment.Comment;
 import com.politicalpioneer.ForumPost.ForumPost;
@@ -12,7 +11,16 @@ import com.politicalpioneer.PartyMember.PartyMember;
 import com.politicalpioneer.User.UserAlignment.UserAlignment;
 
 // import org.hibernate.annotations.CascadeType;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
 
 //Still need to implement
 //DTO, Security, Annotations for constraints, Exception Handling, Lomok

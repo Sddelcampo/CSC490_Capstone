@@ -8,7 +8,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.locationtech.jts.geom.Point;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.politicalpioneer.AuthenticatedNameModel;
 import com.politicalpioneer.BadRequestException;
@@ -16,31 +30,11 @@ import com.politicalpioneer.Announcement.Announcement;
 import com.politicalpioneer.Announcement.AnnouncementService;
 import com.politicalpioneer.ForumPost.ForumPost;
 import com.politicalpioneer.ForumPost.ForumPostService;
-import com.politicalpioneer.Party.PartyController.GeoJsonPoint;
 import com.politicalpioneer.Party.PartyAlignment.PartyAlignment;
 import com.politicalpioneer.PartyMember.PartyMember;
 import com.politicalpioneer.PartyMember.PartyMemberService;
 import com.politicalpioneer.User.User;
 import com.politicalpioneer.User.UserService;
-import org.springframework.ui.Model;
-
-// import ch.qos.logback.core.model.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.security.web.csrf.CsrfToken;
-import jakarta.servlet.http.HttpServletRequest;
-
-import org.locationtech.jts.geom.Point;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller 
@@ -48,8 +42,6 @@ public class PartyController {
 
 
     public record GeoJsonPoint(String type, List<Double> coordinates) {}
-    private User user;
-    private PartyMember pm;
     
 
     public record PartyResponse(
@@ -530,7 +522,7 @@ public String joinParty(@PathVariable("id") Long id, Authentication authenticati
         );
     }
 
-    private PartyDistanceResponse toDistanceResponse(PartyDistance partyDistance) {
+    /*private PartyDistanceResponse toDistanceResponse(PartyDistance partyDistance) {
         Party party = partyService.getPartyById(partyDistance.getPartyId());
         Point point = party.getLocation();
         GeoJsonPoint location = point == null
@@ -549,7 +541,7 @@ public String joinParty(@PathVariable("id") Long id, Authentication authenticati
             party.getForumPost(),
             partyDistance.getDistanceMeters()
         );
-    }
+    }*/
 
 
 
