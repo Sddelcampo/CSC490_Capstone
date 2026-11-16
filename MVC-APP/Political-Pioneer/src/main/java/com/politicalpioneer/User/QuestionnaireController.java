@@ -55,6 +55,8 @@ public class QuestionnaireController {
             section = questionnaireService.getSectionView(page, answers, alignment);
         }
 
+        
+        addNavigationRoleAttributes(model, authentication);
         model.addAttribute("pageNumber", page);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("sectionTitles", sectionTitles);
@@ -67,6 +69,7 @@ public class QuestionnaireController {
     public String showResults(Authentication authentication, Model model) {
         User user = userService.getUserByUserName(authentication.getName());
         model.addAllAttributes(questionnaireService.getResults(user.getUserId()));
+        addNavigationRoleAttributes(model, authentication);
         AuthenticatedNameModel.addNameIfAuthenticated(model, authentication);
         return "results";
     }
@@ -102,5 +105,24 @@ public class QuestionnaireController {
     }
 
     public record AnswerRequest(Integer questionId, Integer value) {
+    }
+
+    private void addNavigationRoleAttributes(Model model, Authentication authentication) {
+        boolean isAdmin = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("admin"));
+        boolean isOwner = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("owner"));
+        boolean isUser = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("user"));
+        boolean canCreateParty = false;
+        if (isOwner) {
+            User owner = userService.getUserByUserName(authentication.getName());
+            canCreateParty = !partyService.hasPartyByUserId(owner.getUserId());
+        }
+
+        model.addAttribute("isAdmin", isAdmin);
+        model.addAttribute("isOwner", isOwner);
+        model.addAttribute("isUser", isUser);
+        model.addAttribute("canCreateParty", canCreateParty);
     }
 }
