@@ -12,7 +12,6 @@ import com.politicalpioneer.User.User;
 @Service
 public class PartyMemberService {
     private final PartyMemberRepository memberRepo;
-    private PartyMember partyMember;
 
     public PartyMember savePM(PartyMember partyMember) {
         return memberRepo.save(partyMember);
