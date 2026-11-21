@@ -5,8 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.politicalpioneer.BadRequestException;
-import com.politicalpioneer.ResourceNotFoundException;
+import com.politicalpioneer.*;
 import com.politicalpioneer.User.*;
 
 import org.locationtech.jts.geom.*;

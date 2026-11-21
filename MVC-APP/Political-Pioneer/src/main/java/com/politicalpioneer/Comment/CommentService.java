@@ -4,8 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.politicalpioneer.BadRequestException;
-import com.politicalpioneer.ResourceNotFoundException;
+import com.politicalpioneer.*;
 
 @Service
 public class CommentService {

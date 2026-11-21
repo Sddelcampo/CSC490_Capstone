@@ -4,8 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.politicalpioneer.BadRequestException;
-import com.politicalpioneer.ResourceNotFoundException;
+import com.politicalpioneer.*;
 import com.politicalpioneer.Party.Party;
 import com.politicalpioneer.User.User;
 
@@ -26,7 +25,6 @@ public class PartyMemberService {
     }
 
     public List<PartyMember> getPMByPartyId(Long partyId) {
-        // memberRepo.findByIdPartyId(partyId);
         if (memberRepo.findByIdPartyId(partyId) == null) {
             throw new ResourceNotFoundException("Party member does not exist");
         }
@@ -46,7 +44,6 @@ public class PartyMemberService {
 
     }
 
-   
 
     public PartyMember addPartyMember(User user, Party party) {
         PartyMemberId id = new PartyMemberId(user.getUserId(), party.getPartyId());
