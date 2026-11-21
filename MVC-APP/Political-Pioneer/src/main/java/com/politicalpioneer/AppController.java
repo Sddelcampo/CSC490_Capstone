@@ -2,19 +2,14 @@ package com.politicalpioneer;
 
 import java.util.List;
 
-import com.politicalpioneer.Party.Party;
-import com.politicalpioneer.Party.PartyService;
-import com.politicalpioneer.User.User;
-import com.politicalpioneer.User.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-// import ch.qos.logback.core.model.Model;
+import com.politicalpioneer.Party.*;
+import com.politicalpioneer.User.*;
 
 @Controller
 public class AppController {
@@ -29,9 +24,6 @@ public class AppController {
         this.userService = userService;
     }
 
-    // When a user enters the page the first place
-    // we want to send them is not to login but rather
-    // the dashboard
     @GetMapping("/")
     public Object showStartPage(Model model, Authentication authentication) {
         addNavigationRoleAttributes(model, authentication);
@@ -83,11 +75,6 @@ public class AppController {
         return "createAdmin";
     }
 
-    // @GetMapping("/home")
-    // public Object showHomePage(Model model) {
-    // return "home";
-    // }
-
     @GetMapping("/home")
     public String home(Model model, Authentication authentication) {
         addNavigationRoleAttributes(model, authentication);
@@ -115,11 +102,6 @@ public class AppController {
         AuthenticatedNameModel.addNameIfAuthenticated(model, authentication);
         return "platform";
     }
-
-    /*@GetMapping("/resources")
-    public Object showResourcesPage(Model model) {
-        return "resources";
-    }*/
 
     @GetMapping("/events")
     public Object showEventsPage(Model model, Authentication authentication) {
@@ -157,10 +139,7 @@ public class AppController {
     public Object returnHomeAfterLogout(Model model) {
         return "/";
     }
-    // @GetMapping("/login")
-    // public Object loginToAccount(Model model) {
-    // return "home";
-    // }
+
 
     @GetMapping("/search")
     public String search(

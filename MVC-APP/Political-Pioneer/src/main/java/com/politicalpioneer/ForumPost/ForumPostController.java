@@ -2,36 +2,22 @@ package com.politicalpioneer.ForumPost;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import com.politicalpioneer.AuthenticatedNameModel;
-import com.politicalpioneer.Comment.Comment;
-import com.politicalpioneer.Comment.CommentService;
-import com.politicalpioneer.Party.Party;
-import com.politicalpioneer.Party.PartyService;
-import com.politicalpioneer.PartyMember.PartyMemberService;
-import com.politicalpioneer.ResourceNotFoundException;
-import com.politicalpioneer.User.User;
-import com.politicalpioneer.User.UserService;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+
+import com.politicalpioneer.*;
+import com.politicalpioneer.Comment.*;
+import com.politicalpioneer.Party.*;
+import com.politicalpioneer.PartyMember.PartyMemberService;
+import com.politicalpioneer.User.*;
 
 @Controller
 public class ForumPostController {

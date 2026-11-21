@@ -10,21 +10,9 @@ import com.politicalpioneer.Party.Party;
 import com.politicalpioneer.PartyMember.PartyMember;
 import com.politicalpioneer.User.UserAlignment.UserAlignment;
 
-// import org.hibernate.annotations.CascadeType;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
-//Still need to implement
-//DTO, Security, Annotations for constraints, Exception Handling, Lomok
-//user can not be used as a table name without ""
+
 @Entity
 @Table(name = "\"user\"")
 public class User {
@@ -65,9 +53,7 @@ public class User {
     @Column(name = "role", nullable = false)
     private String role;
 
-    // Temporary Cascade effect
-    // Will delete the user party announcement etc
-    // Has no db representation
+
     @JsonManagedReference("user-parties")
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Party> parties = new ArrayList<>();
@@ -80,11 +66,6 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Comment> comment = new ArrayList<>();
 
-    // @JsonBackReference("user-member")
-    // @ManyToOne
-    // @MapsId("userId")
-    // @JoinColumn(name = "user")
-    // private User user;
     @JsonManagedReference("user-member")
     @OneToMany(mappedBy = "user")
     private List<PartyMember> partyMembers = new ArrayList<>();

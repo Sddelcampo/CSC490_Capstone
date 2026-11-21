@@ -5,13 +5,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller 
 public class UserController {
@@ -20,12 +14,6 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
-
-    // @GetMapping("/home")
-    // public Object showHome(Model model) {
-    //     return "redirect:static-home";
-    // }
-
     
     @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUsers() {
@@ -50,8 +38,6 @@ public class UserController {
         User users = userService.getUserByUserName(userName);
         return ResponseEntity.ok(users);
     }
-
-
    
     @PostMapping("/user")
     public ResponseEntity<User> addUser(@RequestBody User users) {
@@ -68,12 +54,9 @@ public class UserController {
 
 @DeleteMapping("/user/{userId}")
 public ResponseEntity<Void> deleteUserById(@PathVariable("userId") Long userId) {
-    // User user = userService.getUserById(userId);
     userService.deleteUserById(userId);
     return ResponseEntity.noContent().build();
 }
-
-
 
 
 @PostMapping("/userSignup")

@@ -3,8 +3,7 @@ package com.politicalpioneer.Party;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import com.politicalpioneer.Announcement.Announcement;
 import com.politicalpioneer.ForumPost.ForumPost;
 import com.politicalpioneer.PartyMember.PartyMember;
@@ -16,7 +15,6 @@ import org.hibernate.type.SqlTypes;
 import org.locationtech.jts.geom.Point;
 
 import jakarta.persistence.*;
-
 @Entity
 public class Party {
     @Id
@@ -54,7 +52,6 @@ public class Party {
     @OneToMany(mappedBy="party", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Announcement> ann = new ArrayList<>();
 
-    //Forum post are made by the owner but through the party
    
     @JsonManagedReference("party-forum")
     @OneToMany(mappedBy="party", cascade = CascadeType.ALL, orphanRemoval = true)
