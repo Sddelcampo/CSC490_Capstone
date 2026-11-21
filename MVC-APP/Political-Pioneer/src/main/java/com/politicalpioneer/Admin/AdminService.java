@@ -25,9 +25,12 @@ public class AdminService {
 
 
     public List<User> getAllNonAdminUsers() {
-        return userRepo.findByRole(nonAdmin);
+        List<User> user = userRepo.findAll();
+        
+        return userRepo.findAll();
     }
 
+  
 
 
     
