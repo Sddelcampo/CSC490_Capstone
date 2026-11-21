@@ -1,190 +1,237 @@
-<!-- 
- CSC 490: The Political Pioneer
- admin.html 
- Last updated: October 5, 2026
-
- Description: This is the main HTML file for The Political Pioneer for an admin, this
- layout will contain database information which can then be added, edited, and deleted
--->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>The Political Pioneer — Admin Panel</title>
-<!-- <link rel="stylesheet" href="./styles.css"> -->
-  <link rel="stylesheet" type="text/css" href="/css/styles.css">
-
-<!-- <script src="script.js" defer></script> -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin – Users &amp; Owners – TP2 Portal</title>
+    <link rel="stylesheet" href="/css/stylesll.css">
+  
 </head>
-<body class="page-dashboard page-admin">
+<body>
+<div class="page">
 
-  <!-- Creates grid following index.html style -->
-  <div class="grid">
-
-    <!-- Top Left Quadrant: Logo Implementation -->
-    <div class="quadrant q-logo">
-      <a href="/">
-        <img src="/images/deSebastian_TPP_Logo.png" alt="The Political Pioneer Logo">
-        
-      </a>
+ 
+  <aside class="sidebar">
+    <div class="logo-box">
+      <img src="images/deSebastian_TPP_Logo.png" alt="The Political Pioneer">
     </div>
 
-    <!-- Bottom Left Quadrant: Account, general info, & site navigation links -->
-    <div class="quadrant q-side">
-      <h2>Account &amp; Site Info</h2>
-      <div class="body">
-        <div class="account-block">
-          <div class="avatar-circle">&#128100;</div>
-          <div>
-            <#if Session.SPRING_SECURITY_CONTEXT??>
-              <p class="welcome-text">Welcome, ${name !"Guest!"}</p>
-            <#else>
-              <p class="welcome-text">Welcome, Guest!</p>
-            </#if>
-            <div class="account-links">
+    <div class="account-box">
+      <h2 class="box-header">Account &amp; Site Info</h2>
+      <div class="user-row">
+        <svg class="user-avatar" viewBox="0 0 46 46" aria-hidden="true">
+          <circle cx="23" cy="23" r="21.5" fill="#ffffff" stroke="#4a7cc0" stroke-width="2"></circle>
+          <circle cx="23" cy="18" r="6.5" fill="#5f7d9e"></circle>
+          <path d="M11 35c1.5-6.5 6.5-10 12-10s10.5 3.5 12 10z" fill="#5f7d9e"></path>
+        </svg>
+        <div>
+          <p class="welcome-text">Welcome, Admin!</p>
+          <div class="user-links">
+            <a href="/logout">Log Out</a>
+            <a href="/account">My Account</a>
+          </div>
+        </div>
+      </div>
+      <nav class="side-nav" aria-label="Site">
+        <a href="/">Home</a>
+        <a href="/about">About Us</a>
+        <a href="/guide">Guide</a>
+        <a href="/report">Report a Concern</a>
+      </nav>
+      <div class="side-about">
+        <p>The Political Pioneer is an independent, nonpartisan platform for third-party organizing and voter engagement.</p>
+       
+      </div>
+    </div>
+  </aside>
+
+
+  <div class="main">
+
+    <header class="navbar">
+      <div class="brand">TP2 <span>Portal</span></div>
+      <nav class="nav-links" aria-label="Main">
+        <a href="/">Home</a>
+        <a href="/account">My Account</a>
+        <a href="/platforms">Platforms</a>
+        <a href="/parties">Find Parties</a>
+        <a href="/resources">Resources</a>
+        <a href="/events">Events</a>
+        <a href="/admin" class="active" aria-current="page">Admin</a>
+      </nav>
+      <form class="search-form" action="/search" method="get" role="search">
+        <input type="search" name="q" placeholder="Search parties, platforms, events" aria-label="Search parties, platforms, events">
+        <button type="submit">Search</button>
+      </form>
+    </header>
+
+    <div class="breadcrumb"><a href="/">Home</a> &gt; <a href="/admin">Admin</a> &gt; Users &amp; Owners</div>
+
+    <main class="content">
+
+    
+
+      <!-- Center column -->
+      <div class="center-column">
+
+        <div class="stats-bar">
+          <span>Total accounts: <strong>10</strong></span>
+          <span>Owners: <strong>4</strong></span>
+          <span>Users: <strong>6</strong></span>
+          <span>Flagged: <strong>2</strong></span>
+        </div>
+
+    
+        <section class="box" id="owners">
+          <h2 class="box-header box-header-split">
+            <span>Party Owners</span>
+            <span class="box-header-count">4 accounts</span>
+          </h2>
+          <form class="toolbar" action="/admin/accounts" method="get">
+            <input type="hidden" name="type" value="owner">
+            <label for="owner-search">Search:</label>
+            <input type="search" id="owner-search" name="q" placeholder="Username, email or party">
+            <label for="owner-sort">Sort by:</label>
+            <select id="owner-sort" name="sort">
             
-              <#if Session.SPRING_SECURITY_CONTEXT??>
-              <a href="/logout">Log Out</a>
-              <a href="/account">My Account</a>
-              <#else>
-              <a href="/acctlogin">Log In</a>
-              <a href="/signup">Sign Up</a>
-              </#if>
-               
-            </div>
-          </div>
-        </div>
-        <nav>
-          <a href="/home">Home</a>
-          <a href="/aboutus">About Us</a>
-          <a href="/guide">Guide</a>
-          <!-- <a href="#">Settings</a> Unsure if settings may be necessary for the project-->
-          <a href="#">Review a Concern</a>
-        </nav>
-        <div class="info-text">
-          <p style="margin-top:0;">Admin Panel &mdash; internal tools for moderating reports, managing parties, and reviewing platform activity.</p>
-          <ul>
-            <li><a href="#">Escalate to lead admin</a></li>
-            <li><a href="/contactdevteam">Contact the Dev Team</a> — feedback &amp; feature requests</li>
-          </ul>
-        </div>
-      </div>
-    </div>
+              <option>Username (A–Z)</option>
+            </select>
+            <button type="submit" class="gray-button">Filter</button>
+            <span class="toolbar-count">Showing 4 of 4 owners</span>
+          </form>
+          <div class="table-scroll">
+            <table class="data-table admin-table">
+              <caption class="visually-hidden">Party owner accounts</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Username</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Party Owned</th>
+                  <th scope="col">Members</th>
+                 
+                  <th scope="col">Status</th>
+                  <th scope="col" class="actions-cell">Action</th>
+                </tr>
+              </thead>
+              <tbody>
 
-    <!-- Bottom Right Quadrant: Admin main area -->
-    <div class="quadrant q-portal">
-      <div class="body">
+                 <#list owner as o>
+                                        
+                      
 
-        <!--Provides information for navigation within the portal along with a search bar and button-->
-        <div class="mastbar">
-          <div class="logo">TP2 <span>Admin</span></div>
-          <nav class="tabs">
-            <a href="#" class="active">Dashboard</a>
-            <a href="#">Users</a>
-            <a href="#">Parties</a>
-            <a href="#">Reports</a>
-            <a href="#">Inbox</a>
-            <#if isOwner!false><a href="/createFP">Create Forum Post</a></#if>
-          </nav>
-          <div class="search">
-            <input type="text" placeholder="Search users, parties, reports...">
-            <button>Search</button>
-          </div>
-        </div>
 
-        <!-- Provies a way to navigate within the portal -->
-        <div class="breadcrumb">Admin &gt; Dashboard &gt; Reported Concerns</div>
-
-        <!-- Ensure that admin layout is formatted -->
-        <div class="admin-content">
-
-          <!-- Provides information of concerns to view and approve along with party
-           creation verification -->
-          <div class="stat-strip">
-            <span>Open concerns: <b>7</b></span>
-            <span>Resolved today: <b>3</b></span>
-            <span>Pending party approvals: <b>2</b></span>
-          </div>
-
-          <!-- Establishes a table to track information from the database-->
-          <div class="module red">
-            <h2>Reported Concerns</h2>
-            <div class="module-body" style="padding:0;">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Username</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Email</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-               
-                <tbody>
-                   <#list users as user>
-                  <tr>
-                    <td>${user.userId!"N/A"}</td>
-                    <td>${user.userName!"N/A"}</td>
-                    <td>${user.firstName!"N/A"}</td>
-                    <td>${user.lastName!"N/A"}</td>
-                    <td>${user.email!"N/A"}</td>
-                    <td>${user.status!"N/A"}</td>
-                  
-                    <td class="action-cell"><a href="#">Review</a><a href="#">Dismiss</a></td>
-                  </tr>
+                <tr>
+                  <td><a href="/admin/accounts/o101">${o.userName!"N/A"}</a></td>
+                  <td>${o.email!"N/A"}</td>
+                  <td><a href="/parties/new-horizon-coalition">New Horizon Coalition</a></td>
+                  <td>1,486</td>
+                 
+                  <td class="status-green">${o.status!"N/A"}</td>
+                  <td class="actions-cell">
+                    <form class="inline-form" action="/admin/accounts/delete" method="post" onsubmit="return confirm('Permanently delete the owner account dwhitfield (owner of New Horizon Coalition)? This cannot be undone.');">
+                      <input type="hidden" name="csrf_token" value="">
+                      <input type="hidden" name="account_id" value="o101">
+                      <input type="hidden" name="account_type" value="owner">
+                      <button type="submit" class="red-button small-delete-button" aria-label="Delete owner dwhitfield">Delete Owner</button>
+                    </form>
+                  </td>
+                </tr>
+                
                    </#list>
-                  <!-- <tr>
-                    <td>0002</td>
-                    <td>voter_kelly</td>
-                    <td>coastal_futures</td>
-                    <td>Duplicate party listing</td>
-                    <td class="action-cell"><a href="#">Review</a><a href="#">Dismiss</a></td>
-                  </tr>
-                  <tr>
-                    <td>0003</td>
-                    <td>m.reyes</td>
-                    <td>openledgerparty</td>
-                    <td>Spam links in resource section</td>
-                    <td class="action-cell"><a href="#">Review</a><a href="#">Dismiss</a></td>
-                  </tr>
-                  <tr>
-                    <td>0004</td>
-                    <td>t_nguyen</td>
-                    <td>ruralrenewal</td>
-                    <td>Misleading ballot access claim</td>
-                    <td class="action-cell"><a href="#">Review</a><a href="#">Dismiss</a></td>
-                  </tr>
-                  <tr>
-                    <td>0005</td>
-                    <td>anon_user_88</td>
-                    <td>civictrustparty</td>
-                    <td>Harassment in collaboration board comments</td>
-                    <td class="action-cell"><a href="#">Review</a><a href="#">Dismiss</a></td>
-                  </tr>
-                    -->
-                </tbody>
-              
-              </table>
-            </div>
+                
+              </tbody>
+            </table>
           </div>
+          <div class="box-footer">
+           
+            <span><a href="#"></span>
+          </div>
+        </section>
 
-          <!-- Logs all admin activities to ensure that operations run smoothly-->
-          <div class="module">
-            <h2>Recent Admin Activity</h2>
-            <div class="module-body">
-              <ul>
-                <li>Admin <b>d.torres</b> approved a new party listing — 1 hour ago</li>
-                <li>Admin <b>k.patel</b> resolved concern #0098 — 3 hours ago</li>
-                <li>Admin <b>j.lee</b> dismissed concern #0095 — yesterday</li>
-              </ul>
-            </div>
+        <!-- Users -->
+        <section class="box" id="users">
+          <h2 class="box-header box-header-split">
+            <span>Users</span>
+            <span class="box-header-count">6 accounts</span>
+          </h2>
+          <form class="toolbar" action="/admin/accounts" method="get">
+            <input type="hidden" name="type" value="user">
+            <label for="user-search">Search:</label>
+            <input type="search" id="user-search" name="q" placeholder="Username or email">
+            <label for="user-sort">Sort by:</label>
+            <select id="user-sort" name="sort">
+              <option>Username (A–Z)</option>
+            </select>
+            <button type="submit" class="gray-button">Filter</button>
+            <span class="toolbar-count">Showing 6 of 6 users</span>
+          </form>
+          <div class="table-scroll">
+            <table class="data-table admin-table">
+              <caption class="visually-hidden">User accounts</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Username</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Parties Joined</th>
+                
+                  <th scope="col">Status</th>
+                  <th scope="col" class="actions-cell">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                   <#list user as u>
+
+                <tr>
+                  <td><a href="/admin/accounts/u201">${u.userName!"N/A"}</a></td>
+                  <td>${u.email!"N/A"}</td>
+                  <td>2</td>
+                 
+                 
+                  <td class="status-green">${u.status!"N/A"}</td>
+                  <td class="actions-cell">
+                    <form class="inline-form" action="/admin/accounts/delete" method="post" onsubmit="return confirm('Permanently delete the user account jrivera? This cannot be undone.');">
+                      <input type="hidden" name="csrf_token" value="">
+                      <input type="hidden" name="account_id" value="u201">
+                      <input type="hidden" name="account_type" value="user">
+                      <button type="submit" class="red-button small-delete-button" aria-label="Delete user jrivera">Delete User</button>
+                    </form>
+                  </td>
+                </tr>
+                 </#list>
+                
+              </tbody>
+            </table>
           </div>
-        </div>
+          <div class="box-footer">
+          
+            <span><a href="#"></span>
+          </div>
+        </section>
       </div>
-    </div>
+
+   
+      <div class="right-column">
+        <section class="box">
+          <h2 class="box-header">Before You Delete</h2>
+          <p class="admin-warning">Deleting an account is permanent and cannot be undone.</p>
+          <ul class="box-list">
+            <li>For owners, decide first whether their party should be handed to another member.</li>
+           
+          </ul>
+        </section>
+
+       
+      </div>
+
+    </main>
+
+    <footer class="footer">
+      The Political Pioneer — a home for independent political organizing ·
+      <a href="/about">About Us</a> · <a href="/terms">Terms</a> · <a href="/contact">Contact</a>
+    </footer>
   </div>
+
+</div>
 </body>
 </html>

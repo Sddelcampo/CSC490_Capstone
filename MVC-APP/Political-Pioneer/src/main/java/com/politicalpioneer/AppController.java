@@ -63,12 +63,12 @@ public class AppController {
         return "redirect:/account";
     }
 
-    @GetMapping("/admin")
-    public String adminHome(Model model, Authentication authentication) {
-        addNavigationRoleAttributes(model, authentication);
-        AuthenticatedNameModel.addNameIfAuthenticated(model, authentication);
-        return "home";
-    }
+    // @GetMapping("/admin")
+    // public String adminHome(Model model, Authentication authentication) {
+    //     addNavigationRoleAttributes(model, authentication);
+    //     AuthenticatedNameModel.addNameIfAuthenticated(model, authentication);
+    //     return "admin";
+    // }
 
     @GetMapping("/createAdmin")
     public Object adminSignUpPage(Model model) {

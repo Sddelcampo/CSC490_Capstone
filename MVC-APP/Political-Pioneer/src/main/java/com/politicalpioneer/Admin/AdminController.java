@@ -13,25 +13,35 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.politicalpioneer.AuthenticatedNameModel;
+import com.politicalpioneer.User.User;
+import com.politicalpioneer.User.UserService;
+
 
 @Controller
 public class AdminController {
     private final AdminService adminService;
 
 
-
-    public AdminController(AdminService adminService) {
+    private final UserService userService;
+    public AdminController(AdminService adminService, UserService userService) {
         this.adminService = adminService;
+        this.userService = userService;
+        
     }
 
-    // @GetMapping("/admin")
-    // public String getAllUsers(Model model) {
-    //     List<User> user = adminService.getAllNonAdminUsers();
-    //     model.addAttribute("users", user);
-    //     return "admin";
-    // }
+    @GetMapping("/admin")
+    public String adminHome(Model model) {
+        String ownerRole = "owner";
+        String userRole = "user";
+        List<User> user = userService.getUserByRole(userRole);
+        List<User> owner = userService.getUserByRole(ownerRole);
+        
+        model.addAttribute("user", user);
+        model.addAttribute("owner", owner);
+        return "admin";
+    }
 
-    
 
 
 
@@ -61,12 +71,6 @@ public class AdminController {
         Admin admin = adminService.getAdminById(id);
         return ResponseEntity.ok(admin);
     }
-
-    // @PostMapping("/createAdmin")
-    // public ResponseEntity<Admin> addAdmin(@RequestBody Admin admin) {
-    //     adminService.addAdmin(admin);
-    //     return ResponseEntity.ok(admin);
-    // }
 
     @PostMapping("/createAdmin")
     public Object adminSignUp(@ModelAttribute Admin admin, Model model) {

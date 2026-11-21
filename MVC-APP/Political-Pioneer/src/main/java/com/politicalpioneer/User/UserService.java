@@ -34,6 +34,15 @@ public class UserService {
         return userRepo.findByRole(status);
     }
 
+    public List<User> getUserByRole(String role) {
+        if(userRepo.findByRole(role) == null) { 
+            throw new ResourceNotFoundException("User not found with");
+        }
+        return userRepo.findByRole(role);
+    }
+
+
+
     public User getUserById(Long userId) {
         if(!userRepo.existsById(userId)) {
             throw new ResourceNotFoundException("User not found with id: " + userId);
