@@ -94,8 +94,18 @@
             <#if isUser!false>
               <a href="/search">Find Parties</a>
             </#if>
-            <a href="/forum">Forum</a>
-            <a href="/resources">Resources</a>
+          
+
+             <#if !(isAdmin!false)>
+                <a href="/forum">Forum</a>
+            </#if>
+
+            <#if !(isAdmin!false)>
+  <a href="/resources" >Resources</a>
+</#if>
+           
+
+          
 
             <#if isOwner!false>
               <a href="/createFP">Create Forum Post</a>
@@ -195,12 +205,18 @@
 
             <#else>
               <!-- ---- User does NOT belong to a party yet ---- -->
+               <#if !(isAdmin!false)>
               <div class="module gold">
                 <h2>You're not part of a party yet</h2>
                 <div class="module-body">
                   <p style="margin-top:0;">Not sure where you fit? Here are two ways to get started:</p>
                   <ul>
                     <li>
+                      
+                           
+ 
+    
+
                       <a href="/questionnaire"><b>Take the Political Questionnaire</b></a>
                       — answer a few statements and find your alignment.
                     </li>
@@ -216,11 +232,18 @@
                     </#if>
                   </ul>
                   <div style="text-align:center; margin: 10px 0;">
-                    <a href="/questionnaire" class="btn primary">Take the Questionnaire</a>
+
+                    <#if !(isAdmin!false)>
+         <a href="/questionnaire" class="btn primary">Take the Questionnaire</a>
+
                     <a href="/search" class="btn">Find a Party &raquo;</a>
-                  </div>
+                 
+      </#if>
+
+               </div>
                 </div>
               </div>
+                </#if>
             </#if>
 
             <div class="module">
@@ -240,7 +263,7 @@
 
         <div class="footer">
           The Political Pioneer &mdash; a home for independent political organizing &middot;
-          <a href="/aboutus">About Us</a> &middot; <a href="#">Terms</a> &middot; <a href="/contactdevteam">Contact</a>
+          <a href="/aboutus">About Us</a> &middot; <a href="#">Terms</a> &middot; <a href="/contactdevteam">Contact </a> &middot;<a href="/adminLogin"> Admin Login</a>
         </div>
 
       </div>
