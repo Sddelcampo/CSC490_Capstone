@@ -10,7 +10,6 @@
 <body>
 <div class="page">
 
- 
   <aside class="sidebar">
     <div class="logo-box">
       <img src="images/deSebastian_TPP_Logo.png" alt="The Political Pioneer">
@@ -53,11 +52,19 @@
       <nav class="nav-links" aria-label="Main">
         <a href="/">Home</a>
         <a href="/account">My Account</a>
-        <a href="/platforms">Platforms</a>
-        <a href="/parties">Find Parties</a>
-        <a href="/resources">Resources</a>
+      
+
+      <#if !(isAdmin!false)>
+      <a href="/resources" class="active">Resources</a>
+      </#if>
+                
+       
+   
         <a href="/events">Events</a>
-        <a href="/admin" class="active" aria-current="page">Admin</a>
+        <a href="/admin" class="active" aria-current="page">Admin Dashboard</a>
+        <a href="/createAdmin" aria-current="page">Create Admin</a>
+
+
       </nav>
       <form class="search-form" action="/search" method="get" role="search">
         <input type="search" name="q" placeholder="Search parties, platforms, events" aria-label="Search parties, platforms, events">
@@ -74,12 +81,6 @@
       <!-- Center column -->
       <div class="center-column">
 
-        <div class="stats-bar">
-          <span>Total accounts: <strong>10</strong></span>
-          <span>Owners: <strong>4</strong></span>
-          <span>Users: <strong>6</strong></span>
-          <span>Flagged: <strong>2</strong></span>
-        </div>
 
     
         <section class="box" id="owners">
@@ -107,7 +108,7 @@
                   <th scope="col">Username</th>
                   <th scope="col">Email</th>
                   <th scope="col">Party Owned</th>
-                  <th scope="col">Members</th>
+                 
                  
                   <th scope="col">Status</th>
                   <th scope="col" class="actions-cell">Action</th>
@@ -123,8 +124,11 @@
                 <tr>
                   <td><a href="/admin/accounts/o101">${o.userName!"N/A"}</a></td>
                   <td>${o.email!"N/A"}</td>
-                  <td><a href="/parties/new-horizon-coalition">New Horizon Coalition</a></td>
-                  <td>1,486</td>
+
+                 
+                  <td><a href="/parties/new-horizon-coalition">${partyNameByOwnerId[o.userId?c]!"N/A"}</a></td>
+             
+               
                  
                   <td class="status-green">${o.status!"N/A"}</td>
                   <td class="actions-cell">
@@ -172,7 +176,7 @@
                 <tr>
                   <th scope="col">Username</th>
                   <th scope="col">Email</th>
-                  <th scope="col">Parties Joined</th>
+              
                 
                   <th scope="col">Status</th>
                   <th scope="col" class="actions-cell">Action</th>
@@ -185,7 +189,7 @@
                 <tr>
                   <td><a href="/admin/accounts/u201">${u.userName!"N/A"}</a></td>
                   <td>${u.email!"N/A"}</td>
-                  <td>2</td>
+               
                  
                  
                   <td class="status-green">${u.status!"N/A"}</td>

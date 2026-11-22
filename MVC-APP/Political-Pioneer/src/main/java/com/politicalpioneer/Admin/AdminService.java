@@ -6,34 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.politicalpioneer.ResourceNotFoundException;
-import com.politicalpioneer.User.User;
-import com.politicalpioneer.User.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 public class AdminService {
 
-    @Autowired
-    private UserRepository userRepo;
-
-    private String nonAdmin = "user";
     private final AdminRepository adminRepo;
 
 
     @Autowired 
     private  PasswordEncoder passwordEncoder;
-
-
-    public List<User> getAllNonAdminUsers() {
-        List<User> user = userRepo.findAll();
-        
-        return userRepo.findAll();
-    }
-
-  
-
-
-    
 
     public Admin saveAdmin(Admin admin) {
         return adminRepo.save(admin);
@@ -62,8 +44,6 @@ public class AdminService {
         return adminRepo.findById(id).orElse(null);
     }
 
-    
-
     public Admin addAdmin(Admin admin) {
   
         if(admin == null) {
@@ -76,10 +56,6 @@ public class AdminService {
       
         return adminRepo.save(newAdmin);
     }
-
-    //   User newUser = userRepo.save(user);
-    //     newUser.setPassword(passwordEncoder.encode(user.getPassword()));
-    //     return userRepo.save(newUser);
 
     public void deleteAdminById(Long id) {
         Admin admin = adminRepo.findById(id).orElse(null);
@@ -108,7 +84,5 @@ public class AdminService {
         }
         adminRepo.deleteById(id);
     }
-
-
 
 }

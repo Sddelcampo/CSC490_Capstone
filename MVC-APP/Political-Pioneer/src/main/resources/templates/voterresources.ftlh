@@ -94,8 +94,16 @@
             <#if isUser!false>
               <a href="/search">Find Parties</a>
             </#if>
-            <a href="/forum">Forum</a>
-            <a href="/resources" class="active">Resources</a>
+
+              <#if !(isAdmin!false)>
+                 <a href="/forum">Forum</a>
+            </#if>
+
+            <#if !(isAdmin!false)>
+  <a href="/resources" class="active">Resources</a>
+</#if>
+           
+          
 
             <#if isOwner!false>
               <a href="/createFP">Create Forum Post</a>

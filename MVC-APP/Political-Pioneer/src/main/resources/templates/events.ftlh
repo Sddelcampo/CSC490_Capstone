@@ -80,7 +80,12 @@
             <#if isUser!false>
               <a href="/search">Find Parties</a>
             </#if>
-            <a href="/resources">Resources</a>
+
+            <#if !(isAdmin!false)>
+  <a href="/resources" >Resources</a>
+</#if>
+           
+            
             <a href="/events" class="active">Events</a>
             <#if isOwner!false><a href="/createFP">Create Forum Post</a></#if>
             <#if isOwner!false>

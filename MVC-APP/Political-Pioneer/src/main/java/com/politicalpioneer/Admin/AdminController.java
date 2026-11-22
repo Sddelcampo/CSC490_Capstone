@@ -1,19 +1,19 @@
 package com.politicalpioneer.Admin;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import com.politicalpioneer.AuthenticatedNameModel;
+import com.politicalpioneer.Party.Party;
+import com.politicalpioneer.Party.PartyService;
 import com.politicalpioneer.User.User;
 import com.politicalpioneer.User.UserService;
 
@@ -21,56 +21,49 @@ import com.politicalpioneer.User.UserService;
 @Controller
 public class AdminController {
     private final AdminService adminService;
-
-
+    private final PartyService partyService;
     private final UserService userService;
-    public AdminController(AdminService adminService, UserService userService) {
+ 
+    public AdminController(AdminService adminService, UserService userService, PartyService partyService) {
         this.adminService = adminService;
         this.userService = userService;
+        this.partyService = partyService;
+        
         
     }
 
     @GetMapping("/admin")
-    public String adminHome(Model model) {
-        String ownerRole = "owner";
-        String userRole = "user";
-        List<User> user = userService.getUserByRole(userRole);
-        List<User> owner = userService.getUserByRole(ownerRole);
-        
-        model.addAttribute("user", user);
-        model.addAttribute("owner", owner);
-        return "admin";
+    public String adminHome(Model model, Authentication authentication) {
+    String ownerRole = "owner";
+    String userRole = "user";
+
+    List<User> owner = userService.getUserByRole(ownerRole);
+    List<User> user = userService.getUserByRole(userRole);
+    List<Party> parties = partyService.getAllParties();
+   Map<String, String> partyNameByOwnerId = new HashMap<>();
+
+    for (User ownerUser : owner) {
+        String partyName = ownerUser.getParty().stream()
+            .findFirst()
+            .map(Party::getPartyName)
+            .orElse("N/A");
+
+       partyNameByOwnerId.put(String.valueOf(ownerUser.getUserId()), partyName);
     }
 
+    addNavigationRoleAttributes(model, authentication);
+    AuthenticatedNameModel.addNameIfAuthenticated(model, authentication);
+    model.addAttribute("user", user);
+    model.addAttribute("partyNameByOwnerId", partyNameByOwnerId);
+    model.addAttribute("party", parties);
+    model.addAttribute("owner", owner);
+    return "admin";
+}
 
-
-
-    // @GetMapping("/admin")
-    // public ResponseEntity<List<Admin>> getAllUsers() {
-    //     List<Admin> admin = adminService.getAllAdmin();
-    //    return ResponseEntity.ok(admin);
-    // }
 
 
     
 
-    @GetMapping("/getAllAdmin")
-    public ResponseEntity<List<Admin>> getAllAdmin(){
-        List<Admin> admins = adminService.getAllAdmin();
-        return ResponseEntity.ok(admins);
-    }
-
-    @GetMapping("/adminUsername/{userName}")
-    public ResponseEntity<Admin> getAdminByUserName(@PathVariable("userName") String userName) {
-        Admin admin = adminService.getByUserName(userName);
-        return ResponseEntity.ok(admin);
-    }
-
-    @GetMapping("/admin/{id}")
-    public ResponseEntity<Admin> getAdminById(@PathVariable("id") Long id) {
-        Admin admin = adminService.getAdminById(id);
-        return ResponseEntity.ok(admin);
-    }
 
     @PostMapping("/createAdmin")
     public Object adminSignUp(@ModelAttribute Admin admin, Model model) {
@@ -79,19 +72,14 @@ public class AdminController {
         
     }
 
-   
 
-    @PutMapping("/updateAdmin/{id}")
-    public ResponseEntity<Admin> updateAdmin(@PathVariable("id") Long id, @RequestBody Admin updatedAdmin) {
-        Admin admin = adminService.updateAdminById(id, updatedAdmin);
-        return ResponseEntity.ok(admin);
+     private void addNavigationRoleAttributes(Model model, Authentication authentication) {
+        boolean isAdmin = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("admin"));
+
+        model.addAttribute("isAdmin", isAdmin);
     }
 
-    @DeleteMapping("/deleteAdmin/{id}")
-    public ResponseEntity<Void> deleteAdminById(@PathVariable("id") Long id) {
-        adminService.deleteAdminById(id);
-        return ResponseEntity.noContent().build();
-    }
     
   
 }

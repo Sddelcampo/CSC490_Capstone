@@ -30,6 +30,7 @@ public class UserAlignmentService {
         if(!userAlignmentRepo.existsById(userId)) {
             throw new ResourceNotFoundException("User not found with id: " + userId);
         }
+        
         return userAlignmentRepo.findById(userId).orElse(null);
     }
 

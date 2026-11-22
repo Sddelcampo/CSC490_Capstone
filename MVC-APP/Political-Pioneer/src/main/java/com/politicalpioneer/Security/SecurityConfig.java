@@ -39,6 +39,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
                 .requestMatchers("/adminLogin").permitAll()
+            .requestMatchers("/admin", "/admin/**").hasAuthority("admin")
                 .anyRequest().hasAuthority("admin"))
             .formLogin(form -> form
                 .loginPage("/adminLogin")
@@ -80,7 +81,7 @@ public class SecurityConfig {
                 .requestMatchers("/", "/home", "/user", "/users", "/user/userName/**", "/parties/**",
                     "/party/**", "/users/role/user", "/signup", "/platform",
                     "/resources", "/resources/**", "/events", "/aboutus", "/bugreport", "/contactdevteam", "/guide",
-                    "/userSignup", "/getAllAdmin", "/adminUsername/**", "/createAdmin", "/addAdmin", "/createParty", "/partyPage", "/joinParty/**", "/admin").permitAll()
+                    "/userSignup", "/getAllAdmin", "/adminUsername/**", "/addAdmin", "/createParty", "/partyPage", "/joinParty/**", "/admin").permitAll()
                 .requestMatchers("/css/**","/js/**", "/images/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/user").permitAll()
                 .requestMatchers(HttpMethod.POST, "/account/profile").hasAnyAuthority("owner", "user", "admin")
