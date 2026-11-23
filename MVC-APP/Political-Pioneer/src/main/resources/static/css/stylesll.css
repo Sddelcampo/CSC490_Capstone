@@ -828,3 +828,78 @@ a:visited {
     width: 100%;
   }
 }
+
+
+/* =========================================================
+   ADMIN PAGE (admin.html) — added styles
+   ========================================================= */
+
+.box-header-split {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 4px 12px;
+}
+
+.box-header-count {
+  font-size: 12px;
+  font-weight: normal;
+  color: #cce0ff;
+}
+
+.toolbar input[type="search"] {
+  width: 190px;
+  height: 27px;
+  padding: 0 6px;
+  border: 1px solid #999999;
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.admin-table {
+  min-width: 680px;
+}
+
+.data-table tbody tr:hover td {
+  background-color: #f5f7fa;
+}
+
+.actions-cell {
+  text-align: right !important;
+  white-space: nowrap;
+}
+
+.status-green {
+  color: #1e6b22;
+  font-weight: bold;
+}
+
+.admin-warning {
+  margin: 8px 8px 0 8px;
+  padding: 6px 8px;
+  background-color: #fff0f0;
+  border: 1px solid #e0a0a0;
+  color: #990000;
+  font-size: 12px;
+  line-height: 15px;
+  font-weight: bold;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media screen and (max-width: 480px) {
+  .toolbar input[type="search"] {
+    width: 100%;
+  }
+}

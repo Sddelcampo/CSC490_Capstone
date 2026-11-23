@@ -23,9 +23,13 @@
                 <h2 class="box-header">Account &amp; Site Info</h2>
 
                 <div class="user-row">
-                    <img class="user-avatar" src="/images/user-avatar.png" alt="" />
+                    <div class="avatar-circle">&#128100;</div>
                     <div>
-                        <p class="welcome-text">Welcome, User!</p>
+                        <#if Session.SPRING_SECURITY_CONTEXT??>
+                          <p class="welcome-text">Welcome, ${name !"Guest!"}</p>
+                        <#else>
+                          <p class="welcome-text">Welcome, Guest!</p>
+                        </#if>
                         <div class="user-links">
                             <a href="/logout">Log Out</a>
                             <a href="/account">My Account</a>

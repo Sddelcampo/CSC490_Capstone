@@ -41,7 +41,11 @@
         <div class="account-block">
           <div class="avatar-circle">&#128100;</div>
           <div>
-            <p class="welcome-text">Welcome, User!</p>
+            <#if Session.SPRING_SECURITY_CONTEXT??>
+              <p class="welcome-text">Welcome, ${name !"Guest!"}</p>
+            <#else>
+              <p class="welcome-text">Welcome, Guest!</p>
+            </#if>
             <div class="account-links">
               <!-- <a href="/acctlogin">Log In</a> Might be useless if we start at the login page-->
                <#if Session.SPRING_SECURITY_CONTEXT??>
@@ -82,31 +86,35 @@
           <div class="logo">TP2 <span>Portal</span></div>
           <nav class="tabs">
             <a href="/home">Home</a>
-            <a href="/account">My Account</a>
-            <a href="/platform">Platforms</a>
-            <a href="/search" class="active">Find Parties</a>
-            <a href="/resources">Resources</a>
-            <!--<a href="#">Collaborate</a> might remove as it could be merged with /account or /events-->
-            <a href="/events">Events</a>
-            <#if isOwner!false><a href="/createFP">Create Forum Post</a></#if>
-            <!--<a href="#">Voter Tools</a> may remove as it can be merged with resources-->
 
+            <#if Session.SPRING_SECURITY_CONTEXT??>
+              <a href="/account">My Account</a>
+            </#if>
+
+            <#if isUser!false>
+              <a href="/search" class="active">Find Parties</a>
+            </#if>
+            <a href="/forum">Forum</a>
+            <a href="/resources">Resources</a>
+
+            <#if isOwner!false>
+              <a href="/createFP">Create Forum Post</a>
+              <a href="/partyManage">Manage Party</a>
+            </#if>
 
             <#if isAdmin!false>
               <a href="/admin">Admin Dashboard</a>
               <a href="/createAdmin">Create Admin</a>
             </#if>
 
-
+            <#if canCreateParty!false>
+              <a href="/createParty">Create Party</a>
+            </#if>
           </nav>
-          <div class="search">
-            <input type="text" placeholder="Search parties, platforms, issues...">
-            <button>Search</button>
-          </div>
         </div>
 
         <!-- Provies a way to navigate within the portal -->
-        <div class="breadcrumb">Home &gt; Directory</div>
+        <div class="breadcrumb">Search &gt; Directory</div>
 
         <!-- Ensures that the portal is formatted in a layout where you can read within 3 column blocks -->
         <div class="layout">

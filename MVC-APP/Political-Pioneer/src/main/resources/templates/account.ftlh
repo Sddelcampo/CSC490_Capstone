@@ -36,11 +36,10 @@
           <div class="avatar-circle">&#128100;</div>
           <div>
               <#if Session.SPRING_SECURITY_CONTEXT??>
-                <p class="welcome-text">Welcome, ${name}</p>
-
-              </#if>
-
-            
+                <p class="welcome-text">Welcome, ${name !"Guest!"}</p>
+              <#else>
+                <p class="welcome-text">Welcome, Guest!</p>
+              </#if>            
             <div class="account-links">
               <!-- <a href="/acctlogin">Log In</a> Might be useless if we start at the login page-->
               <#if Session.SPRING_SECURITY_CONTEXT??>
@@ -87,7 +86,11 @@
               <a href="/account" class="active">My Account</a>
             </#if>
 
-            <a href="/platform">Platforms</a>
+
+            <#if !(isAdmin!false)>
+                <a href="/forum">Forum</a></a>
+            </#if>
+                      
              <#if isOwner!false>
                <a href="/partyManage">Manage Party</a>
             </#if>
@@ -97,9 +100,13 @@
                <a href="/search">Find Parties</a>
             </#if>
            
+            <#if !(isAdmin!false)>
+  <a href="/resources" >Resources</a>
+</#if>
            
            
-            <a href="/resources">Resources</a>
+           
+          
             <!--<a href="#">Collaborate</a> might remove as it could be merged with /account or /events-->
             <a href="/events">Events</a>
             <#if isOwner!false><a href="/createFP">Create Forum Post</a></#if>
@@ -107,6 +114,11 @@
               <a href="/createParty">Create Party</a>
               
             </#if>
+              <#if isAdmin!false>
+              <a href="/admin">Admin Dashboard</a>
+              <a href="/createAdmin">Create Admin</a>
+            </#if>
+       
             <!--<a href="#">Voter Tools</a> may remove as it can be merged with resources-->
          </nav>
           <div class="search">

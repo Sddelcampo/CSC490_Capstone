@@ -2,55 +2,29 @@ package com.politicalpioneer.Party;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
-import org.springframework.web.bind.annotation.ModelAttribute;
-
-import com.politicalpioneer.BadRequestException;
-import com.politicalpioneer.Announcement.Announcement;
-import com.politicalpioneer.Announcement.AnnouncementService;
-import com.politicalpioneer.ForumPost.ForumPost;
-import com.politicalpioneer.ForumPost.ForumPostService;
-import com.politicalpioneer.Party.PartyController.GeoJsonPoint;
-import com.politicalpioneer.Party.PartyAlignment.PartyAlignment;
-import com.politicalpioneer.PartyMember.PartyMember;
-import com.politicalpioneer.PartyMember.PartyMemberService;
-import com.politicalpioneer.User.User;
-import com.politicalpioneer.User.UserService;
-import org.springframework.ui.Model;
-
-// import ch.qos.logback.core.model.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.security.web.csrf.CsrfToken;
-import jakarta.servlet.http.HttpServletRequest;
 
 import org.locationtech.jts.geom.Point;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
+import com.politicalpioneer.*;
+import com.politicalpioneer.Announcement.*;
+import com.politicalpioneer.ForumPost.*;
+import com.politicalpioneer.Party.PartyAlignment.PartyAlignment;
+import com.politicalpioneer.PartyMember.*;
+import com.politicalpioneer.User.*;
 
 @Controller 
 public class PartyController {
 
-
     public record GeoJsonPoint(String type, List<Double> coordinates) {}
-    private User user;
-    private PartyMember pm;
     
-
     public record PartyResponse(
         Long partyId,
         String partyName,
@@ -131,6 +105,7 @@ public class PartyController {
         model.addAttribute("isAdmin", isAdmin);
         model.addAttribute("isOwner", isOwner);
         model.addAttribute("isUser", isUser);
+        AuthenticatedNameModel.addNameIfAuthenticated(model, authentication);
         return "createParty";
     }
 
@@ -187,9 +162,9 @@ public class PartyController {
         model.addAttribute("canViewForumPosts", canViewForumPosts);
         model.addAttribute("forumPosts", recentForumPosts);
         model.addAttribute("forumPostCount", visibleForumPosts.size());
-        // model.addAttribute("owner", partyOwner);
       
         model.addAttribute("party", party);
+        AuthenticatedNameModel.addNameIfAuthenticated(model, authentication);
         return "partyPage";
     }
 
@@ -207,7 +182,7 @@ public String joinParty(@PathVariable("id") Long id, Authentication authenticati
     return "redirect:/partyDetail/" + party.getPartyId();
 }
 
-//I will pull just the first party for now
+
  @GetMapping("/partyManage") 
     public Object manageParty(Model model, Authentication authentication) {
         User user = userService.getUserByUserName(authentication.getName());
@@ -255,9 +230,8 @@ public String joinParty(@PathVariable("id") Long id, Authentication authenticati
                 .count());
         model.addAttribute("announcements", announcements);
         model.addAttribute("announcementCount", announcements.size());
+        AuthenticatedNameModel.addNameIfAuthenticated(model, authentication);
 
-        
-        // System.out.println(party.getPartyName());
         return "partyManage";
     }
 
@@ -369,6 +343,7 @@ public String joinParty(@PathVariable("id") Long id, Authentication authenticati
         model.addAttribute("isOwner", isOwner);
         model.addAttribute("isUser", isUser);
         model.addAttribute("isAdmin", isAdmin);
+        AuthenticatedNameModel.addNameIfAuthenticated(model, authentication);
         model.addAttribute("partyName", party.getPartyName());
         model.addAttribute("memberCount", memService.getPMByPartyId(party.getPartyId()).size());
     }
@@ -524,28 +499,6 @@ public String joinParty(@PathVariable("id") Long id, Authentication authenticati
             party.getForumPost()
         );
     }
-
-    private PartyDistanceResponse toDistanceResponse(PartyDistance partyDistance) {
-        Party party = partyService.getPartyById(partyDistance.getPartyId());
-        Point point = party.getLocation();
-        GeoJsonPoint location = point == null
-            ? null
-            : new GeoJsonPoint("Point", List.of(point.getY(), point.getX()));
-
-        return new PartyDistanceResponse(
-            party.getPartyId(),
-            party.getPartyName(),
-            party.getDescription(),
-            party.getPartyAlignment(),
-            party.getStatus(),
-            location,
-            party.getPartyMembers(),
-            party.getAnn(),
-            party.getForumPost(),
-            partyDistance.getDistanceMeters()
-        );
-    }
-
 
 
 }

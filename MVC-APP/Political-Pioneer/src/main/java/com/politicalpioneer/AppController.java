@@ -2,19 +2,14 @@ package com.politicalpioneer;
 
 import java.util.List;
 
-import com.politicalpioneer.Party.Party;
-import com.politicalpioneer.Party.PartyService;
-import com.politicalpioneer.User.User;
-import com.politicalpioneer.User.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-// import ch.qos.logback.core.model.Model;
+import com.politicalpioneer.Party.*;
+import com.politicalpioneer.User.*;
 
 @Controller
 public class AppController {
@@ -29,19 +24,17 @@ public class AppController {
         this.userService = userService;
     }
 
-    // When a user enters the page the first place
-    // we want to send them is not to login but rather
-    // the dashboard
     @GetMapping("/")
     public Object showStartPage(Model model, Authentication authentication) {
         addNavigationRoleAttributes(model, authentication);
+        AuthenticatedNameModel.addNameIfAuthenticated(model, authentication);
         return "home";
     }
 
     @GetMapping("/account")
     public Object showAccountPage(Model model, Authentication authentication) {
-        String name = authentication.getName();
         addNavigationRoleAttributes(model, authentication);
+        String name = authentication.getName();
         model.addAttribute("name", name);
         boolean isProfileUser = authentication.getAuthorities().stream()
                 .anyMatch(authority -> "owner".equals(authority.getAuthority())
@@ -53,6 +46,7 @@ public class AppController {
             model.addAttribute("profileUserName", user.getUserName());
             model.addAttribute("profileEmail", user.getEmail());
         }
+        AuthenticatedNameModel.addNameIfAuthenticated(model, authentication);
         return "account";
     }
 
@@ -69,24 +63,22 @@ public class AppController {
         return "redirect:/account";
     }
 
-    @GetMapping("/admin")
-    public String adminHome() {
-        return "home";
-    }
+    // @GetMapping("/admin")
+    // public String adminHome(Model model, Authentication authentication) {
+    //     addNavigationRoleAttributes(model, authentication);
+    //     AuthenticatedNameModel.addNameIfAuthenticated(model, authentication);
+    //     return "admin";
+    // }
 
     @GetMapping("/createAdmin")
     public Object adminSignUpPage(Model model) {
         return "createAdmin";
     }
 
-    // @GetMapping("/home")
-    // public Object showHomePage(Model model) {
-    // return "home";
-    // }
-
     @GetMapping("/home")
     public String home(Model model, Authentication authentication) {
         addNavigationRoleAttributes(model, authentication);
+        AuthenticatedNameModel.addNameIfAuthenticated(model, authentication);
         return "home";
     }
 
@@ -106,42 +98,40 @@ public class AppController {
     }
 
     @GetMapping("/platform")
-    public Object showPlatformPage(Model model) {
+    public Object showPlatformPage(Model model, Authentication authentication) {
+        AuthenticatedNameModel.addNameIfAuthenticated(model, authentication);
         return "platform";
     }
-
-    /*@GetMapping("/resources")
-    public Object showResourcesPage(Model model) {
-        return "resources";
-    }*/
 
     @GetMapping("/events")
     public Object showEventsPage(Model model, Authentication authentication) {
         addNavigationRoleAttributes(model, authentication);
+        AuthenticatedNameModel.addNameIfAuthenticated(model, authentication);
         return "events";
     }
 
     @GetMapping("/aboutus")
     public Object showAboutusPage(Model model, Authentication authentication) {
-        String name = authentication.getName();
-
         addNavigationRoleAttributes(model, authentication);
-        model.addAttribute("name", name);
+        AuthenticatedNameModel.addNameIfAuthenticated(model, authentication);
         return "aboutus";
     }
 
     @GetMapping("/bugreport")
-    public Object showBugreportPage(Model model) {
+    public Object showBugreportPage(Model model, Authentication authentication) {
+        AuthenticatedNameModel.addNameIfAuthenticated(model, authentication);
         return "bugreport";
     }
 
     @GetMapping("/contactdevteam")
-    public Object showContactdevteamPage(Model model) {
+    public Object showContactdevteamPage(Model model, Authentication authentication) {
+        AuthenticatedNameModel.addNameIfAuthenticated(model, authentication);
         return "contactdevteam";
     }
 
     @GetMapping("/guide")
-    public Object showGuidePage(Model model) {
+    public Object showGuidePage(Model model, Authentication authentication) {
+        AuthenticatedNameModel.addNameIfAuthenticated(model, authentication);
         return "guide";
     }
 
@@ -149,10 +139,7 @@ public class AppController {
     public Object returnHomeAfterLogout(Model model) {
         return "/";
     }
-    // @GetMapping("/login")
-    // public Object loginToAccount(Model model) {
-    // return "home";
-    // }
+
 
     @GetMapping("/search")
     public String search(
@@ -165,7 +152,7 @@ public class AppController {
         boolean isAdmin = authentication != null && authentication.getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("admin"));
         User user = userService.getUserByUserName(authentication.getName());
-        
+        addNavigationRoleAttributes(model, authentication);
 
         List<Party> parties = List.of();
         String searchError = null;
@@ -198,6 +185,7 @@ public class AppController {
         model.addAttribute("lng", lng);
         model.addAttribute("lat", lat);
         model.addAttribute("isAdmin", isAdmin);
+        AuthenticatedNameModel.addNameIfAuthenticated(model, authentication);
         return "partysearch";
     }
 
@@ -206,9 +194,7 @@ public class AppController {
             Model model,
             Authentication authentication) {
         addNavigationRoleAttributes(model, authentication);
-        if (authentication != null) {
-            model.addAttribute("name", authentication.getName());
-        }
+        AuthenticatedNameModel.addNameIfAuthenticated(model, authentication);
         return "voterresources";
     }
 
@@ -217,9 +203,7 @@ public class AppController {
             Model model,
             Authentication authentication) {
         addNavigationRoleAttributes(model, authentication);
-        if (authentication != null) {
-            model.addAttribute("name", authentication.getName());
-        }
+        AuthenticatedNameModel.addNameIfAuthenticated(model, authentication);
         return "voterregistration";
     }
 
@@ -228,6 +212,7 @@ public class AppController {
             Model model,
             Authentication authentication) {
         addNavigationRoleAttributes(model, authentication);
+        AuthenticatedNameModel.addNameIfAuthenticated(model, authentication);
         return "voterlookup";
     }
 
@@ -236,6 +221,7 @@ public class AppController {
             Model model,
             Authentication authentication) {
         addNavigationRoleAttributes(model, authentication);
+        AuthenticatedNameModel.addNameIfAuthenticated(model, authentication);
         return "pollingplaces";
     }
 

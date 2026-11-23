@@ -1,18 +1,14 @@
 package com.politicalpioneer.PartyMember;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import com.politicalpioneer.Party.Party;
 import com.politicalpioneer.User.User;
 
 import jakarta.persistence.*;
 
-//Creates composite primary key for partymembers
 @Embeddable
 class PartyMemberId implements Serializable {
     private Long userId;
@@ -49,13 +45,9 @@ class PartyMemberId implements Serializable {
 @Table(name = "party_member")
 public class PartyMember {
    
-    //References PartyMemberId class
     @JsonIgnore
     @EmbeddedId
     private PartyMemberId id;
-
-    //Passes / Maps User and Party Id to the composite id
-    //of the partymember class
 
     @JsonBackReference("user-member")
     @ManyToOne
@@ -96,8 +88,6 @@ public class PartyMember {
     this.status = "active";
     }
 
-    //Allows jackson to parse through composite key
-    //get and return the user and party info
     public PartyMemberId getId() {
         return id;
     }

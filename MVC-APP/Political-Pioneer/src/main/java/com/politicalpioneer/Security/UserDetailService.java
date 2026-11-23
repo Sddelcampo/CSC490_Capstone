@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.politicalpioneer.Admin.Admin;
 import com.politicalpioneer.Admin.AdminRepository;
 import com.politicalpioneer.User.User;
 import com.politicalpioneer.User.UserRepository;

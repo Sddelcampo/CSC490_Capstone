@@ -2,35 +2,22 @@ package com.politicalpioneer.ForumPost;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import com.politicalpioneer.Comment.Comment;
-import com.politicalpioneer.Comment.CommentService;
-import com.politicalpioneer.Party.Party;
-import com.politicalpioneer.Party.PartyService;
-import com.politicalpioneer.PartyMember.PartyMemberService;
-import com.politicalpioneer.ResourceNotFoundException;
-import com.politicalpioneer.User.User;
-import com.politicalpioneer.User.UserService;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+
+import com.politicalpioneer.*;
+import com.politicalpioneer.Comment.*;
+import com.politicalpioneer.Party.*;
+import com.politicalpioneer.PartyMember.PartyMemberService;
+import com.politicalpioneer.User.*;
 
 @Controller
 public class ForumPostController {
@@ -70,7 +57,7 @@ public class ForumPostController {
                         Comparator.nullsLast(Comparator.reverseOrder())))
                 .map(post -> toForumListView(post, authentication))
                 .toList();
-
+        addNavigationRoleAttributes(model, authentication);
         model.addAttribute("isOwner", isOwner);
         model.addAttribute("posts", posts);
         model.addAttribute("partyGroups", groupPostsByParty(posts));
@@ -110,13 +97,14 @@ public class ForumPostController {
         if (party.isEmpty()) {
             return "redirect:/createParty";
         }
-
+        addNavigationRoleAttributes(model, authentication);
         model.addAttribute("partyName", party.get().getPartyName());
         model.addAttribute("authorName", user.getFirstName() + " " + user.getLastName());
         model.addAttribute("recentPosts", forumService.getRecentForumPostsByPartyIdAndOwnerId(
                         party.get().getPartyId(), user.getUserId()).stream()
                 .map(this::toRecentPostView)
                 .toList());
+        AuthenticatedNameModel.addNameIfAuthenticated(model, authentication);
         return "createFP";
     }
 
@@ -139,12 +127,14 @@ public class ForumPostController {
     public String showForumPost(
             @PathVariable("id") Long id,
             Model model,
+
             Authentication authentication,
             @RequestParam(defaultValue = "false") boolean edit) {
         ForumPost forumPost = forumService.getForumPostById(id);
         ensureCanViewPost(forumPost, authentication);
         boolean isOwner = isOwner(authentication);
         boolean canEditPost = canEditPost(forumPost, authentication);
+        addNavigationRoleAttributes(model, authentication);
         model.addAttribute("post", toPostView(forumPost));
         model.addAttribute("isOwner", isOwner);
         model.addAttribute("canEditPost", canEditPost);
@@ -154,6 +144,7 @@ public class ForumPostController {
                         Comparator.nullsFirst(Comparator.naturalOrder())))
                 .map(this::toCommentView)
                 .toList());
+        AuthenticatedNameModel.addNameIfAuthenticated(model, authentication);
         return "forumpost";
     }
 
@@ -406,5 +397,24 @@ public class ForumPostController {
             return "Forum posts must be 10,000 characters or fewer.";
         }
         return null;
+    }
+
+    private void addNavigationRoleAttributes(Model model, Authentication authentication) {
+        boolean isAdmin = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("admin"));
+        boolean isOwner = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("owner"));
+        boolean isUser = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("user"));
+        boolean canCreateParty = false;
+        if (isOwner) {
+            User owner = userService.getUserByUserName(authentication.getName());
+            canCreateParty = !partyService.hasPartyByUserId(owner.getUserId());
+        }
+
+        model.addAttribute("isAdmin", isAdmin);
+        model.addAttribute("isOwner", isOwner);
+        model.addAttribute("isUser", isUser);
+        model.addAttribute("canCreateParty", canCreateParty);
     }
 }

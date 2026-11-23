@@ -32,7 +32,11 @@
         <div class="account-block">
           <div class="avatar-circle">&#128100;</div>
           <div>
-            <p class="welcome-text">Welcome, User!</p>
+            <#if Session.SPRING_SECURITY_CONTEXT??>
+              <p class="welcome-text">Welcome, ${name !"Guest!"}</p>
+            <#else>
+              <p class="welcome-text">Welcome, Guest!</p>
+            </#if>
             <div class="account-links">
               <!-- <a href="/acctlogin">Log In</a> Might be useless if we start at the login page-->
              <#if Session.SPRING_SECURITY_CONTEXT??>
@@ -76,7 +80,12 @@
             <#if isUser!false>
               <a href="/search">Find Parties</a>
             </#if>
-            <a href="/resources">Resources</a>
+
+            <#if !(isAdmin!false)>
+  <a href="/resources" >Resources</a>
+</#if>
+           
+            
             <a href="/events" class="active">Events</a>
             <#if isOwner!false><a href="/createFP">Create Forum Post</a></#if>
             <#if isOwner!false>

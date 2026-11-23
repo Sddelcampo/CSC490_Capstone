@@ -1,17 +1,14 @@
 package com.politicalpioneer.ForumPost;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import com.politicalpioneer.Comment.Comment;
 import com.politicalpioneer.Party.Party;
 import com.politicalpioneer.User.User;
 
 import jakarta.persistence.*;
-
 
 @Entity
 public class ForumPost {

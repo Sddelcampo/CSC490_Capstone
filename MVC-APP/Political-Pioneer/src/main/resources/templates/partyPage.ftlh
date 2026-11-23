@@ -21,9 +21,13 @@
                 <h2 class="box-header">Account &amp; Site Info</h2>
 
                 <div class="user-row">
-                    <img class="user-avatar" src="images/user-avatar.png" alt="" />
+                    <div class="avatar-circle">&#128100;</div>
                     <div>
-                        <p class="welcome-text">Welcome, User!</p>
+                        <#if Session.SPRING_SECURITY_CONTEXT??>
+                          <p class="welcome-text">Welcome, ${name !"Guest!"}</p>
+                        <#else>
+                          <p class="welcome-text">Welcome, Guest!</p>
+                        </#if>
                         <div class="user-links">
                             <a href="/logout">Log Out</a>
                             <a href="/account">My Account</a>
@@ -61,19 +65,13 @@
                 <div class="brand">TP2 <span>Portal</span></div>
 
                 <nav class="nav-links">
-                    <a href="/">Home</a>
+                    <a href="/home">Home</a>
                     <a href="/account">My Account</a>
-                    <a href="/platforms">Platforms</a>
                     <a href="/parties" class="active">Find Parties</a>
+                    <a href="/forum">Forum</a>
                     <a href="/resources">Resources</a>
-                    <a href="/events">Events</a>
                     <#if isOwner!false><a href="/createFP">Create Forum Post</a></#if>
                 </nav>
-
-                <form class="search-form" action="/search" method="get">
-                    <input type="text" name="q" placeholder="Search parties, platforms, events" />
-                    <button type="submit">Search</button>
-                </form>
             </header>
 
             <div class="breadcrumb">Home &gt; Find Parties &gt; Green Valley Civic Alliance</div>
@@ -148,7 +146,7 @@
                     <section class="box">
                         <h2 class="box-header">Announcements</h2>
 
-                        <#list announcements as announcement>
+                        <#list announcements?sort_by("createdAt")?reverse as announcement>
                             <div class="announcement">
                                 <p class="party-title">${announcement.title!"Untitled"}</p>
                                 <p class="meta-text">Published ${announcement.createdAt!""}</p>
@@ -165,10 +163,10 @@
                         <#if canViewForumPosts!false>
                             <#if forumPosts?has_content>
                                 <ul class="box-list">
-                                    <#list forumPosts as post>
+                                    <#list forumPosts?sort_by("createdAt")?reverse as post>
                                         <li>
                                             <a href="/forum/post/${post.id?c}">${post.title}</a>
-                                            — ${post.author}, ${post.createdAt}
+                                            — ${post.author} <br /> ${post.createdAt}
                                         </li>
                                     </#list>
                                 </ul>

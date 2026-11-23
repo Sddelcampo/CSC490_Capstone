@@ -1,7 +1,6 @@
 package com.politicalpioneer.Security;
 
 import java.util.ArrayList;
-import org.springframework.stereotype.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import com.politicalpioneer.Admin.Admin;
 import com.politicalpioneer.Admin.AdminRepository;
-import com.politicalpioneer.User.UserRepository;
 
 @Service
 public class AdminDetailService implements UserDetailsService {

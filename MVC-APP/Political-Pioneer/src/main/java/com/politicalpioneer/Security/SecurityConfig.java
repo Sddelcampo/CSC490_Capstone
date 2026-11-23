@@ -1,11 +1,10 @@
 package com.politicalpioneer.Security;
 
-// import static org.springframework.security.config.Customizer.withDefaults;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -15,12 +14,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 
 import jakarta.servlet.DispatcherType;
-
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
@@ -40,12 +33,13 @@ public class SecurityConfig {
     @Order(1)
     public SecurityFilterChain adminChain(HttpSecurity http) throws Exception {
         http
-            .securityMatcher("/adminLogin", "/admin", "/admin/**")
+            .securityMatcher("/adminLogin")
             .authenticationProvider(adminAuthProvider())
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(auth -> auth
                 .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
                 .requestMatchers("/adminLogin").permitAll()
+            .requestMatchers("/admin", "/admin/**").hasAuthority("admin")
                 .anyRequest().hasAuthority("admin"))
             .formLogin(form -> form
                 .loginPage("/adminLogin")
@@ -87,7 +81,7 @@ public class SecurityConfig {
                 .requestMatchers("/", "/home", "/user", "/users", "/user/userName/**", "/parties/**",
                     "/party/**", "/users/role/user", "/signup", "/platform",
                     "/resources", "/resources/**", "/events", "/aboutus", "/bugreport", "/contactdevteam", "/guide",
-                    "/userSignup", "/getAllAdmin", "/adminUsername/**", "/createAdmin", "/addAdmin", "/createParty", "/partyPage", "/joinParty/**").permitAll()
+                    "/userSignup", "/getAllAdmin", "/adminUsername/**", "/addAdmin", "/createParty", "/partyPage", "/joinParty/**", "/admin").permitAll()
                 .requestMatchers("/css/**","/js/**", "/images/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/user").permitAll()
                 .requestMatchers(HttpMethod.POST, "/account/profile").hasAnyAuthority("owner", "user", "admin")
