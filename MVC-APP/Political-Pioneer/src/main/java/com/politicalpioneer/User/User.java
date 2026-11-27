@@ -59,16 +59,19 @@ public class User {
     private List<Party> parties = new ArrayList<>();
 
     @JsonManagedReference("user-posts")
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<ForumPost> forumPost = new ArrayList<>();
 
     @JsonManagedReference("user-comments")
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Comment> comment = new ArrayList<>();
 
     @JsonManagedReference("user-member")
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<PartyMember> partyMembers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<QuestionnaireAnswer> questionnaireAnswers = new ArrayList<>();
 
     protected User() {
     };

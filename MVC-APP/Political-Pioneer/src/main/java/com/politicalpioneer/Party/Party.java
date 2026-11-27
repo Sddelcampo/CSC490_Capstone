@@ -11,6 +11,8 @@ import com.politicalpioneer.User.User;
 import com.politicalpioneer.Party.PartyAlignment.*;
 
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.type.SqlTypes;
 import org.locationtech.jts.geom.Point;
 
@@ -24,6 +26,7 @@ public class Party {
 
     @JsonBackReference("user-parties")
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "\"user\"", nullable = false)
     private User user;
 
@@ -45,7 +48,7 @@ public class Party {
     private Point location;
    
     @JsonManagedReference("party-member")
-    @OneToMany(mappedBy="party")
+    @OneToMany(mappedBy = "party", cascade = CascadeType.REMOVE)
     private List<PartyMember> partyMember = new ArrayList<>();
 
     @JsonManagedReference("party-ann")

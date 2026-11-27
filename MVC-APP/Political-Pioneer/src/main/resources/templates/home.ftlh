@@ -263,7 +263,7 @@
 
         <div class="footer">
           The Political Pioneer &mdash; a home for independent political organizing &middot;
-          <a href="/aboutus">About Us</a> &middot; <a href="#">Terms</a> &middot; <a href="/contactdevteam">Contact </a> &middot;<a href="/adminLogin"> Admin Login</a>
+          <a href="/aboutus">About Us</a> &middot; <a href="#">Terms</a> &middot; <a href="/contactdevteam">Contact </a> 
         </div>
 
       </div>
