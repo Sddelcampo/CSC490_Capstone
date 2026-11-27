@@ -1,8 +1,9 @@
 package com.politicalpioneer.Announcement;
 
-import jakarta.persistence.Entity;
-
 import java.time.LocalDateTime;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.politicalpioneer.Party.Party;
@@ -19,6 +20,7 @@ public class Announcement {
 
     @JsonBackReference("party-ann")
     @ManyToOne()
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name="party", nullable = false)
     private Party party;
 

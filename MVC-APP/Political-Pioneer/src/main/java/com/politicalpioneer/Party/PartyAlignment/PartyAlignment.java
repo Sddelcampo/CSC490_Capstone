@@ -1,5 +1,8 @@
 package com.politicalpioneer.Party.PartyAlignment;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.politicalpioneer.Party.Party;
 import com.politicalpioneer.User.UserAlignment.UserAlignment;
@@ -22,6 +25,7 @@ public class PartyAlignment {
     
     @JsonBackReference("party_alignment")
     @OneToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @MapsId
     @JoinColumn(name = "party_id")
     private Party party;

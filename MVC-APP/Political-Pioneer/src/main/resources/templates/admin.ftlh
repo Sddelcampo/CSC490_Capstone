@@ -132,11 +132,9 @@
                  
                   <td class="status-green">${o.status!"N/A"}</td>
                   <td class="actions-cell">
-                    <form class="inline-form" action="/admin/accounts/delete" method="post" onsubmit="return confirm('Permanently delete the owner account dwhitfield (owner of New Horizon Coalition)? This cannot be undone.');">
-                      <input type="hidden" name="csrf_token" value="">
-                      <input type="hidden" name="account_id" value="o101">
-                      <input type="hidden" name="account_type" value="owner">
-                      <button type="submit" class="red-button small-delete-button" aria-label="Delete owner dwhitfield">Delete Owner</button>
+                    <form class="inline-form" action="/admin/owner/${o.userId?c}/delete" method="post" >
+                     
+                      <button type="submit" class="red-button small-delete-button" >Delete Owner</button>
                     </form>
                   </td>
                 </tr>
@@ -194,10 +192,9 @@
                  
                   <td class="status-green">${u.status!"N/A"}</td>
                   <td class="actions-cell">
-                    <form class="inline-form" action="/admin/accounts/delete" method="post" onsubmit="return confirm('Permanently delete the user account jrivera? This cannot be undone.');">
-                      <input type="hidden" name="csrf_token" value="">
-                      <input type="hidden" name="account_id" value="u201">
-                      <input type="hidden" name="account_type" value="user">
+                    <form class="inline-form" action="/admin/user/${u.userId?c}/delete" method="post" >
+                     
+
                       <button type="submit" class="red-button small-delete-button" aria-label="Delete user jrivera">Delete User</button>
                     </form>
                   </td>

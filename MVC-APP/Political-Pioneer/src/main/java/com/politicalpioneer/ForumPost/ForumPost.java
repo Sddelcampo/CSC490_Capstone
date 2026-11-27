@@ -3,6 +3,9 @@ package com.politicalpioneer.ForumPost;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.fasterxml.jackson.annotation.*;
 import com.politicalpioneer.Comment.Comment;
 import com.politicalpioneer.Party.Party;
@@ -19,16 +22,18 @@ public class ForumPost {
 
     @JsonBackReference("party-forum")
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "party", nullable = false)
     private Party party;
 
     @JsonBackReference("user-posts")
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "\"user\"", nullable = false)
     private User user;
 
     @JsonManagedReference("post-ann")
-    @OneToMany(mappedBy="forumPost")
+    @OneToMany(mappedBy = "forumPost", cascade = CascadeType.REMOVE)
     private List<Comment> comment = new ArrayList<>();
     
     private String title;

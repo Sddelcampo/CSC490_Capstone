@@ -3,6 +3,9 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.fasterxml.jackson.annotation.*;
 import com.politicalpioneer.Party.Party;
 import com.politicalpioneer.User.User;
@@ -52,12 +55,14 @@ public class PartyMember {
     @JsonBackReference("user-member")
     @ManyToOne
     @MapsId("userId")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "\"user\"")
     private User user;
 
     @JsonBackReference("party-member")
     @ManyToOne
     @MapsId("partyId")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "party")
     private Party party;
 

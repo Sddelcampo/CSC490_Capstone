@@ -4,14 +4,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.politicalpioneer.AuthenticatedNameModel;
+import com.politicalpioneer.ForumPost.ForumPost;
 import com.politicalpioneer.Party.Party;
 import com.politicalpioneer.Party.PartyService;
 import com.politicalpioneer.User.User;
@@ -40,7 +43,7 @@ public class AdminController {
     List<User> owner = userService.getUserByRole(ownerRole);
     List<User> user = userService.getUserByRole(userRole);
     List<Party> parties = partyService.getAllParties();
-   Map<String, String> partyNameByOwnerId = new HashMap<>();
+    Map<String, String> partyNameByOwnerId = new HashMap<>();
 
     for (User ownerUser : owner) {
         String partyName = ownerUser.getParty().stream()
@@ -58,11 +61,31 @@ public class AdminController {
     model.addAttribute("party", parties);
     model.addAttribute("owner", owner);
     return "admin";
-}
+    }
 
 
+    @PostMapping("/admin/owner/{userId}/delete")
+    public Object deleteOwner(@PathVariable Long userId) {
+        User user = userService.getUserById(userId);
+        if(user == null) {
+             throw new AccessDeniedException("Cannot delete user, user not found");
+        }
+    
+        userService.deleteUserById(userId);
+        return "redirect:/admin";
+    }
 
     
+    @PostMapping("/admin/user/{userId}/delete")
+    public Object deleteUser(@PathVariable Long userId) {
+        User user = userService.getUserById(userId);
+        if(user == null) {
+             throw new AccessDeniedException("Cannot delete user, user not found");
+        }
+       
+        userService.deleteUserById(userId);
+        return "redirect:/admin";
+    }
 
 
     @PostMapping("/createAdmin")

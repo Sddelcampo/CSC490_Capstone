@@ -81,7 +81,7 @@ public class SecurityConfig {
                 .requestMatchers("/", "/home", "/user", "/users", "/user/userName/**", "/parties/**",
                     "/party/**", "/users/role/user", "/signup", "/platform",
                     "/resources", "/resources/**", "/events", "/aboutus", "/bugreport", "/contactdevteam", "/guide",
-                    "/userSignup", "/getAllAdmin", "/adminUsername/**", "/addAdmin", "/createParty", "/partyPage", "/joinParty/**", "/admin").permitAll()
+                    "/userSignup", "/getAllAdmin", "/adminUsername/**", "/addAdmin", "/createParty", "/partyPage", "/joinParty/**", "/admin", "/createAdmin").permitAll()
                 .requestMatchers("/css/**","/js/**", "/images/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/user").permitAll()
                 .requestMatchers(HttpMethod.POST, "/account/profile").hasAnyAuthority("owner", "user", "admin")

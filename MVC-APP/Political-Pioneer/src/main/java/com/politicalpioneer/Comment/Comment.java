@@ -1,6 +1,9 @@
 package com.politicalpioneer.Comment;
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.politicalpioneer.ForumPost.ForumPost;
 import com.politicalpioneer.User.User;
@@ -18,11 +21,13 @@ public class Comment {
     
     @ManyToOne
     @JsonBackReference("post-ann")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name="post", nullable = false)
     private ForumPost forumPost;
 
     @JsonBackReference("user-comments")
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name= "\"user\"", nullable = false)
     private User user;
 

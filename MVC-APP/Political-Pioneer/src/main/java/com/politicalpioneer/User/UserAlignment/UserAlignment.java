@@ -2,6 +2,9 @@ package com.politicalpioneer.User.UserAlignment;
 
 import com.politicalpioneer.User.*;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.*;
@@ -15,6 +18,7 @@ public class UserAlignment {
     
     @JsonBackReference("user_alignment")
     @OneToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @MapsId
     @JoinColumn(name = "user_id")
     private User user;
